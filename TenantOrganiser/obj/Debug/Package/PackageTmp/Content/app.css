@@ -1,0 +1,615 @@
+#nav-logo {
+  float: left;
+  font-size: 30px;
+  padding: 10px 5px 0px 0px;
+}
+#profile-pic {
+  display: block;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #333333;
+  margin: 0px auto 10px auto;
+}
+#account-panel {
+  padding: 0px auto 0px auto;
+  text-align: center;
+}
+#account-panel #user-fullname {
+  font-size: 15px;
+}
+#account-panel #icon-panel {
+  list-style-type: none;
+  padding: 15px 0px 0px 0px;
+}
+#account-panel #icon-panel li {
+  display: inline;
+  padding: 0px 7px 0px 7px;
+  font-size: 15px;
+}
+#account-panel #icon-panel a,
+#account-panel #icon-panel a:hover {
+  text-decoration: none;
+  color: #333333;
+}
+#header-text {
+  display: inline-block;
+}
+#nav-list {
+  list-style-type: none;
+  text-align: center;
+  padding: 0px 0px 0px 0px;
+}
+#nav-list li {
+  padding: 20px 0px 5px 0px;
+}
+#nav-list li span {
+  display: block;
+  padding-bottom: 10px;
+  font-size: 30px;
+}
+#nav-list a,
+#nav-list a:hover {
+  text-decoration: none;
+  color: #333333;
+}
+.nav-header {
+  padding: 10px 5px 0px 10px;
+}
+.nav-header p {
+  font-size: 11px;
+  margin: 0px 0px 0px 0px;
+}
+.nav-seperator {
+  border: 0;
+  height: 1px;
+  width: 90%;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+.sidebar {
+  width: 170px;
+  background-color: #add8e6;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+.sidebar footer {
+  font-size: 10px;
+  text-align: center;
+}
+@media screen and (max-height: 710px) {
+  #nav-list li span {
+    font-size: 20px;
+  }
+}
+.container {
+  margin: 20px 0px 0px 240px;
+}
+.container .page-header {
+  margin-bottom: 25px;
+}
+.container .module-spacer {
+  margin: 0px;
+}
+.container .module-panel {
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.container .module-panel .panel-table {
+  margin-top: 10px;
+}
+.container .module-panel .panel-table td {
+  padding: 0px 40px 10px 0px;
+}
+.container .module-panel .panel-table .glyphicon {
+  font-size: 15px;
+}
+.container .module-panel .panel-header {
+  margin: 0px 0px 20px 0px;
+}
+.container .module-panel .btn-primary {
+  margin: 10px 7px 10px 0px;
+}
+.container .module-panel .btn-primary .glyphicon {
+  margin-right: 4px;
+}
+.container .module-panel .module-nav-panel {
+  margin-top: 10px;
+}
+.container .module-panel .module-nav-panel .glyphicon {
+  font-size: 15px;
+}
+.container .module-panel .module-nav-panel strong {
+  padding: 0px 5px 0px 5px;
+}
+.panel-heading {
+  padding: 0px 0px 20px 0px;
+}
+.announce-date {
+  padding-top: 10px;
+  margin-bottom: 0px;
+  font-size: 11px;
+}
+.announce-box {
+  overflow: hidden;
+  padding: 7px;
+}
+/* Prevents image floating outside well */
+p {
+  margin: 0;
+}
+#announcement-panel {
+  height: 600px;
+  overflow: hidden;
+  margin-right: 40px;
+}
+#announcement-panel .glyphicon {
+  margin: 0px;
+  padding: 0px;
+  font-size: 14px;
+}
+#announcement-panel .input-group {
+  margin-bottom: 20px;
+}
+#announcement-panel .announce-picture {
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+#announcement-panel p {
+  padding-left: 60px;
+}
+#activity-panel {
+  height: 600px;
+  overflow: hidden;
+}
+#activity-panel .glyphicon {
+  font-size: 25px;
+}
+#activity-panel span {
+  float: left;
+}
+#activity-panel p {
+  padding-left: 35px;
+  vertical-align: middle;
+}
+.fader-container {
+  position: relative;
+}
+.div-fader {
+  pointer-events: none;
+  position: absolute;
+  height: 600px;
+  width: 100%;
+  top: 0;
+  box-shadow: 0 -230px 30px -200px #ffffff inset;
+}
+#add-bill-btn {
+  margin-bottom: 20px;
+}
+#add-bill-btn .glyphicon {
+  padding-right: 4px;
+}
+#add-bill-modal .form-group {
+  width: 100%;
+}
+#add-bill-modal .dropdown-button {
+  width: 90%;
+}
+#add-bill-modal input {
+  width: 100%;
+}
+.bill-panel {
+  height: 345px;
+}
+.bill-panel h3 {
+  display: inline;
+}
+.bill-panel .bill-manager-pic {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+.bill-panel .btn-delete {
+  float: right;
+}
+.bill-panel .invoice-ctrls {
+  margin: -15px 0px 0px 65px;
+}
+.bill-panel .panel-table td {
+  padding: 10px 0px 5px 0px;
+}
+.bill-panel .module-nav-panel {
+  position: absolute;
+  bottom: 20px;
+}
+#collection-date {
+  font-size: 18px;
+}
+#bin-collectors {
+  font-size: 12px;
+  margin-top: 15px;
+}
+#bin-info {
+  margin: 10px 0px 20px 0px;
+}
+#bin-info #bin-rota-icon {
+  padding-top: 10px;
+  font-size: 50px;
+  float: left;
+  color: black;
+}
+#bin-info #bin-title {
+  font-size: 35px;
+}
+#bin-info p {
+  padding-left: 70px;
+}
+.task-panel {
+  min-height: 289px;
+}
+.task-panel h3 {
+  margin-top: 0px;
+}
+#wish-list-table th:nth-last-child(1) {
+  text-align: center;
+}
+#wish-list-table tbody .item-purchased {
+  text-decoration: line-through;
+  opacity: 0.3;
+}
+#wish-list-table tbody td {
+  vertical-align: middle;
+  padding: 5px 0px 5px 0px;
+}
+#wish-list-table tbody td:nth-child(1) {
+  text-align: center;
+}
+#wish-list-table tbody td:nth-child(4) {
+  text-align: center;
+}
+#wish-list-table .close {
+  float: none !important;
+}
+#wish-list-panel .col-md-12 {
+  padding-left: 0px;
+}
+.rotate-90 {
+  -moz-transform: rotate(-180deg);
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  padding-bottom: 2px;
+}
+#areas-panel {
+  height: 345px;
+}
+#areas-panel .input-group {
+  margin-bottom: 5px;
+}
+#areas-panel #new-area-input {
+  margin: 20px 0px 20px 0px;
+}
+#clean-groups-panel {
+  overflow: visible;
+}
+#clean-groups-panel .btn-group-num {
+  width: 100px;
+}
+#clean-groups-panel td {
+  padding-bottom: 10px;
+}
+#clean-groups-panel td:nth-child(odd) {
+  padding-right: 70px;
+}
+#clean-date-panel {
+  overflow: visible;
+}
+#clean-date-panel .btn-group {
+  width: 100%;
+}
+#clean-date-panel #btn-clean-occurance {
+  width: 90%;
+}
+#clean-date-panel .cleaning-rota-action-panel {
+  margin-top: 15px;
+}
+#bin-groups-panel {
+  min-height: 307px;
+  overflow: visible;
+}
+#bin-groups-panel td:nth-child(odd) {
+  padding-right: 25px;
+}
+#bin-types-panel {
+  overflow: visible;
+}
+#bin-types-panel .form-group {
+  margin: 0px;
+}
+#bin-types-panel td:nth-child(3) {
+  width: 80px;
+}
+#bin-types-panel td {
+  text-align: center;
+  padding: 0px 21px 15px 0px;
+}
+#bin-types-panel .dropdown-menu {
+  min-width: 80px;
+}
+#bin-types-panel .square-dropdown {
+  float: left;
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+}
+#bin-types-panel .occurance-options {
+  text-align: left;
+  width: 120px;
+}
+#bin-types-panel .new-bin-type-row > td {
+  padding-top: 20px;
+}
+#bin-types-panel a:hover {
+  height: 23px;
+}
+#bin-types-panel .red {
+  background-color: red;
+}
+#bin-types-panel .black {
+  background-color: black;
+}
+#bin-types-panel .green {
+  background-color: green;
+}
+#bin-types-panel .pink {
+  background-color: pink;
+}
+#bin-types-panel .brown {
+  background-color: brown;
+}
+#bin-types-panel .input-bin-name {
+  min-width: 140px;
+}
+#bin-types-panel .input-bin-date {
+  min-width: 160px;
+}
+#invoice-settings-panel {
+  min-width: 397px;
+  overflow: visible;
+}
+#invoice-settings-panel table {
+  width: 100%;
+}
+#invoice-settings-panel table td {
+  padding: 5px 0px 5px 0px;
+}
+#invoice-settings-panel .invoice-value .form-control {
+  width: 70px;
+}
+#invoice-settings-panel .invoice-value {
+  width: 50px;
+}
+#invoice-settings-panel .del-invoice-tenant {
+  float: right;
+}
+#invoice-settings-panel .date {
+  width: 200px;
+}
+#invoice-settings-panel #invoice-name-row {
+  padding-bottom: 20px;
+}
+#invoice-settings-panel #invoice-name-row h3 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+#invoice-settings-panel #invoice-btn-bar {
+  margin-top: 10px;
+}
+#invoice-settings-panel #invoice-btn-bar .glyphicon-remove {
+  padding-right: 4px;
+}
+#invoice-settings-panel #invoice-btn-bar .btn-success {
+  margin: 10px 7px 10px 0px;
+}
+#invoice-settings-panel #invoice-btn-bar .btn-success .glyphicon {
+  margin-right: 4px;
+}
+#invoice-settings-panel #total-label {
+  margin-right: 20px;
+}
+#invoice-settings-panel .invoice-tenant-row .invoice-paid-cell {
+  vertical-align: top;
+}
+#invoice-settings-panel .invoice-tenant-row td {
+  padding-top: 0px;
+  vertical-align: central;
+}
+#invoice-settings-panel .invoice-tenant-row .cell-add-btn {
+  vertical-align: top;
+  float: right;
+}
+#invoice-settings-panel .invoice-tenant-row .dropdown-button {
+  width: 140px;
+}
+.house-settings-panel {
+  height: 185px;
+}
+.house-settings-panel table {
+  width: 100%;
+}
+.house-settings-panel table td {
+  padding-bottom: 10px;
+}
+.house-settings-panel table tr:nth-last-child(1) td {
+  padding-bottom: 0px;
+}
+.house-settings-panel .tenants-table td {
+  padding: 2px 0px 2px 0px;
+}
+.house-settings-panel .existing td:nth-child(odd) {
+  padding: 0px 20px 0px 0px;
+}
+.house-settings-panel .form-control {
+  float: right;
+}
+.house-settings-panel #tenants-heading {
+  margin-top: 15px;
+}
+.house-settings-panel #notification-row {
+  margin-bottom: 20px;
+}
+.house-settings-panel #email-notification-chkbox {
+  margin-left: 20px;
+}
+.house-settings-panel #profile-pic-select {
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+}
+#leave-house-btn {
+  margin: 0px 0px 20px 0px;
+}
+#leave-house-btn .btn-danger {
+  float: right;
+}
+#tenants-panel {
+  height: 322px;
+}
+#info-panel {
+  height: 322px;
+}
+#info-panel tr:nth-child(1) td {
+  padding-top: 10px;
+}
+#info-panel td {
+  padding-bottom: 20px;
+}
+#conversation-buttons {
+  height: 400px;
+  overflow: hidden;
+}
+#conversation-buttons .btn:nth-child(1) {
+  margin-bottom: 15px;
+}
+#conversation-buttons .btn-default {
+  width: 100%;
+  margin-top: 10px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#conversation-buttons .convo-btn {
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  text-overflow: ellipsis;
+}
+#conversation-panel {
+  height: 400px;
+}
+#conversation-panel #empty-convo-msg {
+  display: table;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+#conversation-panel #empty-convo-msg span {
+  vertical-align: middle;
+  display: table-cell;
+}
+#conversation-panel .well {
+  height: 100%;
+}
+#conversation-panel .conversation-recip {
+  width: 25px;
+  height: 25px;
+}
+#conversation-panel .btn-group {
+  display: inline;
+}
+#conversation-panel .conv-recip-name {
+  margin-left: 5px;
+  vertical-align: middle;
+}
+#conversation-panel .pager {
+  text-align: left;
+  margin-top: 0px;
+}
+#conversation-panel .pager span {
+  margin: 0px 5px 0px 5px;
+}
+#conversation-panel .pager li:nth-child(1) {
+  margin-left: 20px;
+}
+#conversation-panel .pager .close {
+  vertical-align: middle;
+  float: none !important;
+}
+#conversation-panel .panel {
+  height: 200px;
+  margin-top: 20px;
+  position: relative;
+  overflow: scroll;
+}
+#conversation-panel .panel .panel-body {
+  width: 100%;
+  height: inherit;
+}
+#conversation-panel .panel .panel-body p {
+  padding-bottom: 10px;
+}
+#btn-panel-wrapper {
+  padding: 0px;
+  margin: 0px;
+}
+.module-panel table {
+  width: 100%;
+}
+.module-panel td {
+  padding-bottom: 10px;
+}
+.module-panel #fb-login-btn {
+  background: url(images/fb/fb_login_active_404.png) no-repeat;
+  margin-bottom: 30px;
+  width: 202px;
+  height: 46px;
+}
+#register-panel,
+#login-panel {
+  height: 321px;
+}
+#register-panel .panel-header,
+#login-panel .panel-header {
+  margin: 0px 0px 30px 0px;
+}
+#house-tenants-panel {
+  text-align: center;
+  margin-top: 50px;
+}
+#house-tenants-panel .panel {
+  width: 180px;
+  display: inline-block;
+  margin: 0px 10px 20px 10px;
+}
+#house-tenants-panel .panel-heading {
+  text-align: center;
+  padding: 10px 0px 10px 0px !important;
+}
+#house-tenants-panel .panel-heading h3 {
+  vertical-align: middle;
+}
+#house-tenants-panel .panel-heading .glyphicon {
+  color: #333333;
+  font-size: 20px;
+  margin: 10px 0px 0px 0px;
+  text-shadow: -1px 0px 9px #969696;
+}
+#house-tenants-panel .profile-pic {
+  width: 150px;
+  height: 150px;
+}

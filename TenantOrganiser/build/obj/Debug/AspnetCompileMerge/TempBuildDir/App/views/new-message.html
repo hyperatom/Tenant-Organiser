@@ -1,0 +1,74 @@
+<div class="page-header">
+    <h2>Messages</h2>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div id="conversation-buttons" class="well">
+
+            <button class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span>New Message
+            </button>
+
+            <button class="btn btn-default">
+                <strong>Joss Whittle, Tom Walton:</strong> Hi Adam can you...
+            </button>
+
+            <button class="btn btn-default">
+                <strong>Toby Webster:</strong> Yea thats fine Adam any time...
+            </button>
+
+            <button class="btn btn-default">
+                <strong>Tom Milner:</strong> Can you ring the landlord as...
+            </button>
+
+            <button class="btn btn-default">
+                <strong>Chris Lewis:</strong> Hey are you in the house at the...
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div id="conversation-panel" class="well col-md-6 module-panel">
+        <div id="conv-recip-panel">
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Add Recipient <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Chris Lewis</a></li>
+                    <li><a href="#">Toby Webster</a></li>
+                    <li><a href="#">Tom Walton</a></li>
+                    <li><a href="#">Hannah Marriott</a></li>
+                </ul>
+            </div>
+
+            <ul class="pager">
+                <li><a href="#">
+                    <img id="conversation-recip" class="img-circle" src="img/profile-picture.jpg"><span>Adam Barrell</span>
+                    <button type="button" class="close" aria-hidden="true">&times;</button></a></li>
+                <li><a href="#">
+                    <img id="conversation-recip" class="img-circle" src="img/profile-picture-2.jpg"><span>Joss Whittle</span>
+                    <button type="button" class="close" aria-hidden="true">&times;</button></a></li>
+            </ul>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Type your message here...">
+            <span class="input-group-btn">
+                <button id="send-announce-btn" type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,1 @@
+define(function(){var e="api/breeze",r="/Content/images/profile_pictures/",i="generic.png";return{remoteServiceName:e,profilePicturesDirectory:r,genericProfilePictureFileName:i}});

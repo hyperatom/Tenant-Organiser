@@ -1,0 +1,1 @@
+define(["services/logger","services/datacontext","services/session"],function(e,n,t){function r(){return o().then(function(){e.log("Tenants View Activated",null,"tenants",!0)})}function o(){return n.getTenants(a,t.sessionUser().House().Id())}var a=new ko.observableArray,i={activate:r,title:"Tenants",tenantsList:a};return i});

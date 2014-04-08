@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="tenantorganiser.com" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Adam\\documents\\visual\ studio\ 2012\\Projects\\TenantOrganiser\\TenantOrganiser\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Adam\\documents\\visual\ studio\ 2012\\Projects\\TenantOrganiser\\TenantOrganiser\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="TenantOrganiser-Web.config Connection String" description="" value="Data Source=184.168.47.10;Initial Catalog=adam_barrell_tenantorganiser;Persist Security Info=True;User ID=adambarrell;Password=Abstract13!god" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Adam\\documents\\visual\ studio\ 2012\\Projects\\TenantOrganiser\\TenantOrganiser\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='TenantOrganiser']/@connectionString" />
+  </parameter>
+</parameters>

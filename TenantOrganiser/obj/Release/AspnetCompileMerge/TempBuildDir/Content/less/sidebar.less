@@ -1,0 +1,107 @@
+#nav-logo {
+	float: left;
+	font-size: 30px;
+	padding: 10px 5px 0px 0px;
+}
+
+#profile-pic {
+	display: block;
+	width: 80px;
+    height: 80px;
+	border: 1px solid @defaultFontColor;
+	margin: 0px auto 10px auto;
+}
+
+#account-panel {
+	padding: 0px auto 0px auto;
+	text-align: center;
+	
+	#user-fullname {
+		font-size: 15px;
+	}
+	
+	#icon-panel {
+		list-style-type: none;
+		padding: 15px 0px 0px 0px;
+		
+		li {
+			display: inline;
+			padding: 0px 7px 0px 7px;
+			font-size: 15px;
+		}
+		
+		a, a:hover {
+			text-decoration:none;
+			color: @defaultFontColor;
+		}
+	}
+}
+
+#header-text {
+	display: inline-block;
+}
+
+#nav-list {
+	list-style-type: none;
+	text-align: center;
+	padding: 0px 0px 0px 0px;
+	
+	li {
+		padding: 20px 0px 5px 0px;
+		
+		span {
+			display: block;
+			padding-bottom: 10px;
+			font-size: @navIconSize;
+		}
+	}
+	
+	a, a:hover {
+		text-decoration:none;
+		color: @defaultFontColor;
+	}
+}
+
+.nav-header {
+	padding: 10px 5px 0px 10px;
+	
+	p {
+		font-size: 11px;
+		margin: 0px 0px 0px 0px;
+	}
+}
+
+.nav-seperator {
+    border: 0;
+    height: 1px;
+	width: 90%;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+}
+
+.sidebar {
+	width: @sidebarWidth;
+	background-color: @sidebarBackground;
+	position: fixed;
+    left: 0;
+	top: 0;
+	bottom:0;
+	
+	footer {
+		font-size: 10px;
+		text-align: center;
+	}
+}
+
+@media screen and (max-height: 710px) {
+	
+	#nav-list {
+		li {
+			span {
+				font-size: 20px;
+			}
+		}
+	}
+}

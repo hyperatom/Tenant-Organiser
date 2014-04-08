@@ -1,0 +1,1 @@
+define(function(){function e(e){return e.__RequestVerificationToken=$("#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]").val(),e}var n={AddAntiForgeryToken:e};return n});

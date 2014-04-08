@@ -1,0 +1,41 @@
+<div class="page-header">
+    <h2>Wish List</h2>
+</div>
+
+<div id="wish-list-panel" class="well col-md-6 module-panel">
+
+    <table id="wish-list-table" class="table panel-table">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th>Item</th>
+                <th>Added</th>
+                <th>Purchased</th>
+            </tr>
+        </thead>
+
+        <tbody data-bind="foreach: wishListItems()">
+            <tr data-bind="css: { 'item-purchased': AquiredOn() }">
+                <td><button data-bind="click: $root.wishListItemRemoved" type="button" class="close" aria-hidden="true">&times;</button></td>
+                <td data-bind="text: ItemName()"></td>
+                <td data-bind="text: UserAdded().FullName()"></td>
+                <td>
+                    <button data-bind="click: $root.wishListItemPurchasedClicked" type="button" class="btn btn-default btn-xs btn-paid">
+                        <span data-bind="css: { 'glyphicon-unchecked': !AquiredOn(), 'glyphicon-check': AquiredOn() }" class="glyphicon"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="input-group col-md-12">
+        <input id="message-box" data-bind="value: newItemName, valueUpdate: 'keypress'" type="text" class="form-control" placeholder="Type an item name here...">
+        <span class="input-group-btn">
+            <button data-bind="click: wishListItemAdded" id="send-announce-btn" type="button" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        </span>
+    </div>
+
+</div>
