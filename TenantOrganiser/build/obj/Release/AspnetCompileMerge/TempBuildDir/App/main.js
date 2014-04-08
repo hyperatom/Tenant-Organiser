@@ -1,15 +1,9 @@
 ﻿requirejs.config({
-    shim: {
-        "facebook": {
-            exports: "FB"
-        }
-    },
     paths: {
         'text': '../Scripts/text',
         'durandal': '../Scripts/durandal',
         'plugins': '../Scripts/durandal/plugins',
-        'transitions': '../Scripts/durandal/transitions',
-        "facebook": "//connect.facebook.net/en_US/all"
+        'transitions': '../Scripts/durandal/transitions'
     }
 });
 
@@ -22,7 +16,7 @@ define(['durandal/app', 'durandal/viewLocator', 'durandal/system', 'plugins/rout
 function boot(app, viewLocator, system, router, logger) {
 
     // Enable debug message to show in the console 
-    system.debug(true);
+    system.debug(false);
 
     //specify which plugins to install and their configuration
     app.configurePlugins({

@@ -76,4 +76,3 @@ C:\Users\Adam\documents\visual studio 2012\Projects\TenantOrganiser\TenantOrgani
 C:\Users\Adam\documents\visual studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.csproj.GenerateResource.Cache
 C:\Users\Adam\documents\visual studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.dll
 C:\Users\Adam\documents\visual studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.pdb
-C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.csprojResolveAssemblyReference.cache
