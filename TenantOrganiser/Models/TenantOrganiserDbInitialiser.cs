@@ -22,7 +22,7 @@ namespace TenantOrganiser
             InitHouseRequests(context);
 
             InitWishListItems(context);
-            InitConversations(context);
+            //InitConversations(context);
 
             InitBillTypes(context);
             InitBillInvoices(context);
@@ -146,11 +146,11 @@ namespace TenantOrganiser
 
         private void InitBillTypes(TenantOrganiserDbContext context)
         {
-            User chris = context.Users.Where(u => u.FirstName == "Chris").SingleOrDefault();
+            User hannah = context.Users.Where(u => u.LastName == "Marriott").SingleOrDefault();
             User toby = context.Users.Where(u => u.FirstName == "Toby").SingleOrDefault();
             User tom = context.Users.Where(u => u.FirstName == "Hannah").Single();
 
-            context.BillTypes.Add(new BillType { Name = "Water Bill", Manager = chris });
+            context.BillTypes.Add(new BillType { Name = "Water Bill", Manager = hannah });
             context.BillTypes.Add(new BillType { Name = "Gas Bill", Manager = toby });
             context.BillTypes.Add(new BillType { Name = "Internet Bill", Manager = tom });
 
@@ -165,14 +165,17 @@ namespace TenantOrganiser
 
             BillType water = context.BillTypes.Where(b => b.Name == "Water Bill").SingleOrDefault();
             BillType gas = context.BillTypes.Where(b => b.Name == "Gas Bill").SingleOrDefault();
+            BillType internet = context.BillTypes.Where(b => b.Name == "Internet Bill").SingleOrDefault();
 
             BillInvoice waterInvoice1 = new BillInvoice { BillType = water, DueDate = DateTime.Parse("20/04/2014") };
             BillInvoice waterInvoice2 = new BillInvoice { BillType = water, DueDate = DateTime.Parse("11/05/2014") };
             BillInvoice gasInvoice1 = new BillInvoice { BillType = gas, DueDate = DateTime.Parse("05/06/2014") };
+            BillInvoice internetInvoice = new BillInvoice { BillType = internet, DueDate = DateTime.Parse("05/06/2013") };
 
             context.BillInvoices.Add(waterInvoice1);
             context.BillInvoices.Add(waterInvoice2);
             context.BillInvoices.Add(gasInvoice1);
+            context.BillInvoices.Add(internetInvoice);
 
             context.SaveChanges();
         }
@@ -185,10 +188,13 @@ namespace TenantOrganiser
 
             BillInvoice waterInvoice = context.BillInvoices.Where(b => b.BillType.Name == "Water Bill").First();
             BillInvoice gasInvoice = context.BillInvoices.Where(b => b.BillType.Name == "Gas Bill").First();
-            
+            BillInvoice internetInvoice = context.BillInvoices.Where(b => b.BillType.Name == "Internet Bill").First();
+
             context.InvoiceRecipients.Add(new InvoiceRecipient { User = tom, BillInvoice = waterInvoice, Amount = 10.65, Paid = false });
             context.InvoiceRecipients.Add(new InvoiceRecipient { User = toby, BillInvoice = waterInvoice, Amount = 22.05, Paid = true });
             context.InvoiceRecipients.Add(new InvoiceRecipient { User = hannah, BillInvoice = gasInvoice, Amount = 35.90, Paid = false });
+            context.InvoiceRecipients.Add(new InvoiceRecipient { User = toby, BillInvoice = gasInvoice, Amount = 44, Paid = true });
+            context.InvoiceRecipients.Add(new InvoiceRecipient { User = toby, BillInvoice = internetInvoice, Amount = 44, Paid = true });
 
             context.SaveChanges();
         }

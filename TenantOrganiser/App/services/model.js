@@ -2,7 +2,8 @@
 
     var model = {
         configureMetadataStore: configureMetadataStore,
-        userInitializer: userInitializer
+        userInitializer: userInitializer,
+        getNextBill: getNextBill
     };
 
     return model;
@@ -17,6 +18,53 @@
             'ActivityLog', null, activityLogInitializer);
         metadataStore.registerEntityTypeCtor(
             'Conversation', null, conversationInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'BillType', null, billTypeInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'BillInvoice', null, billInvoiceInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'InvoiceRecipient', null, invoiceRecipientInitializer);
+    }
+
+    function invoiceRecipientInitializer(invoiceRecipientObservable) {
+        invoiceRecipientObservable.PrettyAmount = ko.computed(function () {
+            return '£' + invoiceRecipientObservable.Amount().toFixed(2);
+        });
+    }
+    
+    function billInvoiceInitializer(invoiceObservable) {
+
+        invoiceObservable.PrettyDueDate = ko.computed(function () {
+            return moment(invoiceObservable.DueDate().toString()).format('MMMM Do YYYY').toString();
+        });
+    }
+
+    function billTypeInitializer(billTypeObservable) {
+        // Initialise the currently viewed invoice for the bill
+        billTypeObservable.currentInvoice = ko.observable(getNextBill(billTypeObservable));
+    }
+
+    function getNextBill(billTypeObservable) {
+        if (!billTypeObservable.BillInvoices())
+            return null;
+
+        // Initialise minimum date
+        var closestDate = moment("26/03/1992", "DD/MM/YYYY");
+
+        var results = $.grep(billTypeObservable.BillInvoices(), function (invoice) {
+            // Difference in time from due date to today
+            var diff1 = Math.abs(moment(invoice.DueDate()).diff(moment(), 'days'));
+            // Difference in time from minimum due date to today
+            var diff2 = Math.abs(moment(closestDate).diff(moment(), 'days'));
+
+            var isCloser = diff1 < diff2 ? true : false;
+            // Is the current difference smaller than the found minimum
+            closestDate = diff1 < diff2 ? invoice.DueDate() : closestDate;
+            return isCloser;
+        });
+
+        // Return the closest upcoming bill invoice which is the last element added
+        return results[results.length - 1];
     }
 
     function conversationInitializer(conversationObservable) {

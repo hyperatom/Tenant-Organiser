@@ -1,0 +1,48 @@
+﻿<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">
+            &times;
+        </button>
+        <h4 class="modal-title">Add a New Bill Type</h4>
+    </div>
+    <form data-bind="with: newBillType()" class="form-inline" role="form">
+        <div class="modal-body">
+            <dl>
+                <dt>
+                    <label>Bill Name</label>
+                </dt>
+                <dd>
+                    <input data-bind="value: Name" class="form-control" placeholder="Name of the new bill type">
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    <label>Manager</label>
+                </dt>
+                <dd>
+                    <div class="btn-group form-group">
+                        <button data-bind="text: Manager" type="button" class="btn btn-default dropdown-button"></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul data-bind="foreach: $root.tenantsList()" class="dropdown-menu" role="menu">
+                            <li><a data-bind="text: UserFullName, click: function (data, event) { $root.clickedCombo(UserFullName, $parentContext.$data) }"></a></li>
+                        </ul>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                Close
+            </button>
+            <button data-bind="click: $root.createdBillType" type="submit" class="btn btn-success" data-dismiss="modal">
+                Create
+            </button>
+        </div>
+    </form>
+</div>

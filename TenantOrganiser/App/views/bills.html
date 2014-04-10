@@ -10,12 +10,11 @@
 
     <div class="well col-md-5 module-panel bill-panel">
 
-        <img class="img-circle bill-manager-pic" data-bind="attr: { src: ProfilePicture }">
+        <img class="img-circle bill-manager-pic" data-bind="attr: { src: Manager().DisplayPictureFilePath }">
 
         <h3 data-bind="text: Name"></h3>
 
-
-        <button data-bind="click: $root.markBillForDelete" data-toggle="modal" data-target=".bs-modal-sm" type="button" class="close" aria-hidden="true">&times;</button>
+        <button data-bind="click: $root.deleteBill" type="button" class="close">&times;</button>
 
         <p class="invoice-ctrls">
             <button data-bind="click: $root.navToAddInvoice" type="button" class="btn btn-primary btn-xs btn-add">
@@ -26,30 +25,30 @@
             </button>
         </p>
 
-        <h4 data-bind="if: Invoices().length == 0">No Invoices To Display</h4>
+        <h4 data-bind="if: !currentInvoice">No Invoices To Display</h4>
 
-        <table data-bind="if: Invoices().length > 0" class="panel-table">
-            <tbody data-bind="foreach: Invoices()[InvoiceIndex()].Recipients()">
+        <table data-bind="if: currentInvoice" class="panel-table">
+            <tbody data-bind="foreach: currentInvoice().Recipients()">
                 <tr>
                     <td>
-                        <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-xs btn-paid">
-                            <span data-bind="attr: { class: GlyphClass }"></span>
+                        <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-sm btn-paid">
+                            <span class="glyphicon" data-bind="css: { 'glyphicon-check': Paid(), 'glyphicon-unchecked': !Paid() }"></span>
                         </button>
                     </td>
-                    <td data-bind="text: UserFullName">Adam Barrell</td>
-                    <td data-bind="text: Amount">&pound;30</td>
+                    <td data-bind="text: User().FullName">Adam Barrell</td>
+                    <td data-bind="text: PrettyAmount">&pound;30</td>
                 </tr>
             </tbody>
         </table>
 
-        <div data-bind="if: Invoices().length > 0" class="module-nav-panel">
-            <button data-bind="click: $root.navPreviousInvoice, enable: $root.isPreviousEnabled(InvoiceIndex(), Invoices().length)" type="button" class="btn btn-default btn-sm">
+        <div data-bind="if: BillInvoices().length > 0" class="module-nav-panel">
+            <button data-bind="click: $root.navPreviousInvoice, enable: $root.isPreviousEnabled($data)" type="button" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </button>
 
-            <span><strong data-bind="text: Invoices()[InvoiceIndex()].DueDate" class="text-info"></strong></span>
+            <span><strong data-bind="text: currentInvoice().PrettyDueDate" class="text-info"></strong></span>
 
-            <button data-bind="click: $root.navNextInvoice, enable: $root.isNextEnabled(InvoiceIndex(), Invoices().length)" type="button" class="btn btn-default btn-sm">
+            <button data-bind="click: $root.navNextInvoice, enable: $root.isNextEnabled($data)" type="button" class="btn btn-default btn-sm">
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
@@ -58,78 +57,4 @@
 
     <div class="col-md-1 module-spacer"></div>
 
-</div>
-
-<!-- Delete bill modal -->
-
-<div class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Delete Bill Type</h4>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this bill type and all of its associated invoices?
-            </div>
-            <div class="modal-footer">
-                <button data-bind="click: deleteBill" type="button" class="btn btn-success" data-dismiss="modal">Yes</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Add bill modal -->
-<div class="modal fade" id="add-bill-modal" tabindex="-1" role="dialog" aria-labelledby="registrationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">Add a New Bill Type</h4>
-            </div>
-            <form data-bind="with: newBillType()" class="form-inline" role="form">
-                <div class="modal-body">
-                    <dl>
-                        <dt>
-                            <label>Bill Name</label>
-                        </dt>
-                        <dd>
-                            <input data-bind="value: Name" class="form-control" placeholder="Name of the new bill type">
-                        </dd>
-                    </dl>
-
-                    <dl>
-                        <dt>
-                            <label>Manager</label>
-                        </dt>
-                        <dd>
-                            <div class="btn-group form-group">
-                                <button data-bind="text: Manager" type="button" class="btn btn-default dropdown-button"></button>
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul data-bind="foreach: $root.tenantsList()" class="dropdown-menu" role="menu">
-                                    <li><a data-bind="text: UserFullName, click: function (data, event) { $root.clickedCombo(UserFullName, $parentContext.$data) }"></a></li>
-                                </ul>
-                            </div>
-                        </dd>
-                    </dl>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        Close
-                    </button>
-                    <button data-bind="click: $root.createdBillType" type="submit" class="btn btn-success" data-dismiss="modal">
-                        Create
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>

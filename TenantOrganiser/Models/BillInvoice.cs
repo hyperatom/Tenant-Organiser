@@ -18,7 +18,7 @@ namespace TenantOrganiser
         [Required]
         public DateTime DueDate { get; set; }
 
-        public int BillTypeId { get; set; }
+        public int? BillTypeId { get; set; }
 
         [ForeignKey("BillTypeId")]
         public virtual BillType BillType { get; set; }

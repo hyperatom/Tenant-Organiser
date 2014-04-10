@@ -11,9 +11,12 @@
             if (initialised)
                 return;
 
-            return Q.all([getHouses(),        getUsers(),
-                          getConversations(), getConversationUsers(),
-                          getMessages()])
+            return getHouses()
+                .then(getUsers)
+                .then(getConversations)
+                .then(getConversationUsers)
+                .then(getMessages)
+                .then(getAllBillTypes)
 
                 .then(function () { initialised = true; });
         };
@@ -298,7 +301,7 @@
 
         var getConversations = function (convoObservable) {
 
-            var query = EntityQuery.from('Conversations').expand("Messages").expand("ConversationUsers");
+            var query = EntityQuery.from('Conversations').expand("Messages").expand("ConversationUsers").orderByDesc("DateStarted");
 
             function querySucceeded(data) {
 
@@ -399,6 +402,49 @@
                 .then(querySucceeded)
                 .fail(queryFailed);
         };
+        
+        var getAllBillTypes = function () {
+
+            var query = EntityQuery.from('BillTypes')
+                .expand("Manager")
+                .expand("BillInvoices")
+                .expand("BillInvoices.Recipients");
+
+            function querySucceeded(data) {
+                log('Retrieved [Bills] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
+
+        var getBillTypeById = function (billTypeObservable, id) {
+
+            return billTypeObservable(manager.getEntityByKey('BillType', id));
+        };
+
+        var getInvoiceById = function (invoiceObservable, id) {
+
+            return invoiceObservable(manager.getEntityByKey('BillInvoice', id));
+        };
+
+        var getBillTypesByHouse = function (billTypesObservable, HouseId) {
+
+            var query = EntityQuery.from('BillTypes').where('Manager.HouseId', '==', HouseId)
+                .expand("Manager")
+                .expand("BillInvoices")
+                .expand("BillInvoices.Recipients");
+
+            function querySucceeded(data) {
+                billTypesObservable(data.results);
+                log('Retrieved [Bills] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
 
         var createAnnouncement = function () {
             return manager.createEntity('CommunalMessage');
@@ -412,13 +458,39 @@
             return manager.createEntity('Message');
         };
 
+        var createConversation = function () {
+            return manager.createEntity('Conversation');
+        };
+
         var createConversationUser = function (convo, user) {
             return manager.createEntity('ConversationUser', { Conversation: convo, User: user });
         };
 
+        var createInvoiceRecipient = function (billInvoice) {
+            return manager.createEntity('InvoiceRecipient', { BillInvoice: billInvoice});
+        };
+
+        var createBillInvoice = function (billType) {
+            return manager.createEntity('BillInvoice', { BillType: billType });
+        };
+
+        var deleteInvoice = function (invoice) {
+            var invoiceToDelete = manager.getEntityByKey('BillInvoice', invoice.Id());
+
+            $.each(invoiceToDelete.Recipients(), function (i, recip) {
+                recip.entityAspect.setDeleted();
+            });
+
+            invoiceToDelete.entityAspect.setDeleted();
+
+            return saveChanges();
+        };
+
         var getConversationsByHouse = function (convoObservable, houseId) {
             
-            var query = EntityQuery.from('Conversations').where('ConversationUsers', breeze.FilterQueryOp.Any, "HouseId", "==", houseId);
+            var query = EntityQuery.from('Conversations')
+                .where('ConversationUsers', breeze.FilterQueryOp.Any, "User.HouseId", "==", houseId)
+                .orderByDesc("DateStarted");
 
             function querySucceeded(data) {
                 convoObservable(data.results);
@@ -508,14 +580,19 @@
 
             getUsers: getUsers,
             getHouses: getHouses,
+            getAllBillTypes: getAllBillTypes,
+            getBillTypesByHouse: getBillTypesByHouse,
 
             getUserById: getUserById,
 
             getTenants: getTenants,
             getPendingRequests: getPendingRequests,
             getJoinRequestsByUser: getJoinRequestsByUser,
+            getBillTypeById: getBillTypeById,
+            getInvoiceById: getInvoiceById,
 
             getConversations: getConversations,
+            getConversationsByHouse: getConversationsByHouse,
 
             getAnnouncements: getAnnouncements,
             createAnnouncement: createAnnouncement,
@@ -541,11 +618,15 @@
             createHouse: createHouse,
             createMessage: createMessage,
             createConversationUser: createConversationUser,
+            createConversation: createConversation,
+            createBillInvoice: createBillInvoice,
+            createInvoiceRecipient: createInvoiceRecipient,
 
             getUsersJoinRequest: getUsersJoinRequest,
             cancelHouseRequest: cancelHouseRequest,
 
-            deleteCommunalMessage: deleteCommunalMessage
+            deleteCommunalMessage: deleteCommunalMessage,
+            deleteInvoice: deleteInvoice
         };
 
         return datacontext;

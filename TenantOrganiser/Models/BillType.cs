@@ -18,5 +18,7 @@ namespace TenantOrganiser
 
         [ForeignKey("ManagerId")]
         public virtual User Manager { get; set; }
+
+        public virtual ICollection<BillInvoice> BillInvoices { get; set; }
     }
 }

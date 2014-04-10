@@ -21,6 +21,7 @@ namespace TenantOrganiser
                 .Include("~/scripts/bootstrap.js")
                 .Include("~/scripts/bootstrap-datepicker.js")
                 .Include("~/scripts/moment.js")
+                .Include("~/scripts/less-{version}.min.js")
               );
 
             // Include style sheets
@@ -33,8 +34,12 @@ namespace TenantOrganiser
                 .Include("~/Content/datepicker3.css")
                 .Include("~/Content/durandal.css")
                 .Include("~/Content/toastr.css")
-                .Include("~/Content/app.css") 
+                // UNCOMMENT AND COMPILE LESS INTO CSS FOR PRODUCTION
+                //.Include("~/Content/app.css")
               );
+
+            // COMMENT OUT FOR PRODUCTION
+            bundles.Add(new LessBundle("~/Content/less").Include("~/Content/less/style.less"));
         }
 
         public static void AddDefaultIgnorePatterns(IgnoreList ignoreList)
