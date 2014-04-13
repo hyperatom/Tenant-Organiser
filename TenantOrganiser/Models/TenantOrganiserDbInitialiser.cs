@@ -28,7 +28,6 @@ namespace TenantOrganiser
             InitBillInvoices(context);
             InitInvoiceRecipients(context);
 
-            InitCommunalAreas(context);
             InitCleaningRotas(context);
             InitCleaningLogs(context);
             InitBinRotas(context);
@@ -199,28 +198,15 @@ namespace TenantOrganiser
             context.SaveChanges();
         }
 
-        private void InitCommunalAreas(TenantOrganiserDbContext context)
+        private void InitCleaningRotas(TenantOrganiserDbContext context)
         {
             House kingEd = context.Houses.Where(h => h.HouseCode == "51KER").SingleOrDefault();
 
-            CommunalArea kitchen = new CommunalArea { Name = "Kitchen", House = kingEd };
-            CommunalArea bathroom = new CommunalArea { Name = "Bathroom", House = kingEd };
-            CommunalArea floors = new CommunalArea { Name = "Floors", House = kingEd };
-            CommunalArea livingRoom = new CommunalArea { Name = "Living Room", House = kingEd };
+            CleaningRota kitchen = new CleaningRota { Name = "Kitchen", StartDate = DateTime.Parse("26/03/2013"), Occurance = "Weekly", House = kingEd };
+            CleaningRota bathroom = new CleaningRota { Name = "Bathroom", StartDate = DateTime.Parse("26/03/2013"), Occurance = "Weekly", House = kingEd };
 
-            context.CommunalAreas.Add(kitchen);
-            context.CommunalAreas.Add(bathroom);
-            context.CommunalAreas.Add(floors);
-            context.CommunalAreas.Add(livingRoom);
-
-            context.SaveChanges();
-        }
-
-        private void InitCleaningRotas(TenantOrganiserDbContext context)
-        {
-            CommunalArea kitchen = context.CommunalAreas.Where(a => a.Name == "Kitchen").SingleOrDefault();
-
-            kitchen.CleaningRota = new CleaningRota { StartDate = DateTime.Parse("26/03/2013"), FrequencyDays = 4};
+            context.CleaningRotas.Add(kitchen);
+            context.CleaningRotas.Add(bathroom);
 
             context.SaveChanges();
         }
@@ -230,10 +216,10 @@ namespace TenantOrganiser
             User toby = context.Users.Where(u => u.FirstName == "Toby").SingleOrDefault();
             User tom = context.Users.Where(u => u.LastName == "Walton").SingleOrDefault();
 
-            CommunalArea kitchen = context.CommunalAreas.Where(a => a.Name == "Kitchen").SingleOrDefault();
+            CleaningRota kitchen = context.CleaningRotas.Where(a => a.Name == "Kitchen").SingleOrDefault();
 
-            context.CleaningLogs.Add(new CleaningLog { Date = DateTime.Parse("11/05/2014"), CommunalArea = kitchen, User = toby });
-            context.CleaningLogs.Add(new CleaningLog { Date = DateTime.Parse("11/05/2014"), CommunalArea = kitchen, User = tom });
+            context.CleaningLogs.Add(new CleaningLog { Date = DateTime.Parse("11/05/2014"), CleaningRota = kitchen, User = toby });
+            context.CleaningLogs.Add(new CleaningLog { Date = DateTime.Parse("11/05/2014"), CleaningRota = kitchen, User = tom });
 
             context.SaveChanges();
         }
@@ -274,8 +260,8 @@ namespace TenantOrganiser
         {
             House ker = context.Houses.Where(h => h.HouseCode == "51KER").SingleOrDefault();
 
-            context.BinRotas.Add(new BinRota { Name = "Green Bins", FrequencyDays = 14, Colour = "green", StartDate = DateTime.Parse("26/03/2011"), House = ker });
-            context.BinRotas.Add(new BinRota { Name = "Black Bins", FrequencyDays = 7, Colour = "black", StartDate = DateTime.Parse("05/02/2011"), House = ker });
+            context.BinRotas.Add(new BinRota { Name = "Green Bins", Occurance = "Fortnightly", Colour = "green", StartDate = DateTime.Parse("26/03/2011"), House = ker });
+            context.BinRotas.Add(new BinRota { Name = "Black Bins", Occurance = "Weekly", Colour = "black", StartDate = DateTime.Parse("05/02/2011"), House = ker });
 
             context.SaveChanges();
         }

@@ -20,12 +20,12 @@ namespace TenantOrganiser
         
         public int UserId { get; set; }
 
-        public int CommunalAreaId { get; set; }
+        public int CleaningRotaId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
-        [ForeignKey("CommunalAreaId")]
-        public virtual CommunalArea CommunalArea { get; set; }
+        [ForeignKey("CleaningRotaId")]
+        public virtual CleaningRota CleaningRota { get; set; }
     }
 }

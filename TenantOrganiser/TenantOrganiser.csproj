@@ -175,6 +175,7 @@
     <Compile Include="App_Start\HotTowelConfig.cs" />
     <Compile Include="App_Start\HotTowelRouteConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <None Include="Content\less\join-house.less" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BreezeController.cs" />
     <Compile Include="Controllers\HotTowelController.cs" />
@@ -194,7 +195,6 @@
     <Compile Include="Models\BinRota.cs" />
     <Compile Include="Models\CleaningLog.cs" />
     <Compile Include="Models\CleaningRota.cs" />
-    <Compile Include="Models\CommunalArea.cs" />
     <Compile Include="Models\CommunalMessage.cs" />
     <Compile Include="Models\Conversation.cs" />
     <Compile Include="Models\ConversationUser.cs" />

@@ -17,6 +17,8 @@
                 .then(getConversationUsers)
                 .then(getMessages)
                 .then(getAllBillTypes)
+                .then(getBinRotas)
+                .then(getCleaningRotas)
 
                 .then(function () { initialised = true; });
         };
@@ -265,6 +267,40 @@
                 .fail(queryFailed);
         };
 
+        var getBinRotas = function (binRotasObservable) {
+
+            var query = EntityQuery.from('BinRotas');
+
+            function querySucceeded(data) {
+
+                if (binRotasObservable)
+                    binRotasObservable(data.results);
+
+                log('Retrieved [Bin Rotas] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
+
+        var getCleaningRotas = function (cleaningRotasObservable) {
+
+            var query = EntityQuery.from('CleaningRotas');
+
+            function querySucceeded(data) {
+
+                if (cleaningRotasObservable)
+                    cleaningRotasObservable(data.results);
+
+                log('Retrieved [Cleaning Rotas] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
+
         var getMessages = function (messagesObservable) {
 
             var query = EntityQuery.from('Messages').expand("Conversation").expand("UserSent");
@@ -333,6 +369,34 @@
                 .fail(queryFailed);
         };
 
+        var getBinRotasByHouse = function (binRotasObservable, houseId) {
+
+            var query = EntityQuery.from('BinRotas').where('HouseId', '==', houseId);
+
+            function querySucceeded(data) {
+                binRotasObservable(data.results);
+                log('Retrieved [Bin Rotas] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
+
+        var getCleaningRotasByHouse = function (cleaningRotasObservable, houseId) {
+
+            var query = EntityQuery.from('CleaningRotas').where('HouseId', '==', houseId);
+
+            function querySucceeded(data) {
+                cleaningRotasObservable(data.results);
+                log('Retrieved [Cleaning Rotas] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
+
         var getAnnouncements = function (announcementsObservable, houseId) {
 
             var query = EntityQuery.from('CommunalMessages').where('HouseId', '==', houseId).orderByDesc('SentDate');
@@ -391,7 +455,25 @@
 
         var getTenants = function (tenantsObservable, HouseId) {
 
-            var query = EntityQuery.from('Users').where('House.Id', '==', HouseId).expand("House");
+            var query = EntityQuery.from('Users').where('House.Id', '==', HouseId)
+                .expand("House")
+                .expand("UserSettings");
+
+            function querySucceeded(data) {
+                tenantsObservable(data.results);
+                log('Retrieved [Tenants] from remote data source', data, true);
+            }
+
+            return manager.executeQuery(query)
+                .then(querySucceeded)
+                .fail(queryFailed);
+        };
+
+        var getTenantsByBinRotaGroup = function (tenantsObservable, HouseId) {
+
+            var query = EntityQuery.from('Users').where('House.Id', '==', HouseId)
+                .expand("House")
+                .expand("UserSettings");
 
             function querySucceeded(data) {
                 tenantsObservable(data.results);
@@ -474,6 +556,18 @@
             return manager.createEntity('BillInvoice', { BillType: billType });
         };
 
+        var createBillType = function () {
+            return manager.createEntity('BillType');
+        };
+
+        var createBinRota = function (house) {
+            return manager.createEntity('BinRota', { House: house });
+        };
+
+        var createCleaningRota = function (house) {
+            return manager.createEntity('CleaningRota', { House: house });
+        };
+
         var deleteInvoice = function (invoice) {
             var invoiceToDelete = manager.getEntityByKey('BillInvoice', invoice.Id());
 
@@ -552,13 +646,15 @@
         }
 
         function getValidationMessages(error) {
+    
             try {
                 // For each entity with a validation error
-                return error.entitiesWithErrors.map(function (entity) {
+                return error.entityErrors.map(function (entity) {
+                    return entity.errorMessage;
                     // Extract each validation error and append it to the map array
-                    return entity.entityAspect.getValidationErrors().map(function (valError) {
+                    /*return entity.entityAspect.getValidationErrors().map(function (valError) {
                         return valError.errorMessage;
-                    }).join('<br />'); // Add a line break to the end of each array element
+                    }).join('<br />'); // Add a line break to the end of each array element*/
                 }).join('<br />');
             }
             catch (e) { }
@@ -590,6 +686,8 @@
             getJoinRequestsByUser: getJoinRequestsByUser,
             getBillTypeById: getBillTypeById,
             getInvoiceById: getInvoiceById,
+            getBinRotasByHouse: getBinRotasByHouse,
+            getCleaningRotasByHouse: getCleaningRotasByHouse,
 
             getConversations: getConversations,
             getConversationsByHouse: getConversationsByHouse,
@@ -621,6 +719,9 @@
             createConversation: createConversation,
             createBillInvoice: createBillInvoice,
             createInvoiceRecipient: createInvoiceRecipient,
+            createBillType: createBillType,
+            createBinRota: createBinRota,
+            createCleaningRota: createCleaningRota,
 
             getUsersJoinRequest: getUsersJoinRequest,
             cancelHouseRequest: cancelHouseRequest,

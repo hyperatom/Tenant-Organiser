@@ -51,7 +51,7 @@
     <hr class="nav-seperator" />
 
     <table>
-        <tbody data-bind="with: newInvoiceRecipient()">
+        <tbody data-bind="with: newInvoiceRecipient">
             <tr class="invoice-tenant-row">
                 <td class="invoice-paid-cell">
                     <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-paid">
@@ -62,7 +62,7 @@
                 <td class="invoice-recip">
                     <!-- Split button -->
                     <div class="btn-group form-group">
-                        <button data-bind="text: User().FullName()" type="button" class="btn btn-default dropdown-button">Select a recipient</button>
+                        <button data-bind="text: User().FullName()" type="button" class="btn btn-default dropdown-button"></button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>

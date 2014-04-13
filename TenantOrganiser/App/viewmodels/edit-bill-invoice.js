@@ -60,11 +60,13 @@
                 initNewRecipient();
 
                 var amount = 0;
+
                 ko.utils.arrayForEach(invoiceRecipients(), function (recip) {
                     recip.Amount.subscribe(recipientAmountChanged);
-                    amount += parseInt(recip.Amount());
+                    amount += recip.Amount();
                 });
-                totalAmount(amount);
+
+                totalAmount(amount.toFixed(2));
 
                 dueDate(moment(billInvoice().DueDate()).format('DD/MM/YYYY'));
 
@@ -102,17 +104,18 @@
         }
 
         function invoiceSaved() {
+            datacontext.saveChanges().then(saveSuccess);
 
-            router.navigate('#bills');
-
-            logger.logSuccess('Invoice Saved!', null, 'edit-bill-invoice', true);
+            function saveSuccess() {
+                router.navigate('#bills');
+                logger.logSuccess('Invoice Saved!', null, 'edit-bill-invoice', true);
+            }
         }
 
         function invoiceDeleted() {
 
             ko.utils.arrayForEach(invoiceRecipients().slice(), function (recip) {
                 if (recip) {
-                    console.log(recip);
                     invoiceRecipients.remove(recip);
                     recip.entityAspect.setDeleted();
                 }
@@ -120,7 +123,6 @@
 
             billInvoice().entityAspect.setDeleted();
 
-            //invoice.BillType(null);
             return datacontext.saveChanges().then(function () {
                 router.navigate('#bills');
                 logger.logSuccess('Invoice Deleted!', null, 'edit-bill-invoice', true);
@@ -129,7 +131,20 @@
 
         function invoiceUndone() {
 
+            invoiceRecipients([]);
             datacontext.rejectChanges();
+            invoiceRecipients(billInvoice().Recipients().slice());
+
+            initNewRecipient();
+
+            var amount = 0;
+
+            ko.utils.arrayForEach(invoiceRecipients(), function (recip) {
+                recip.Amount.subscribe(recipientAmountChanged);
+                amount += recip.Amount();
+            });
+
+            totalAmount(amount.toFixed(2));
 
             dueDate(moment(billInvoice().DueDate()).format('DD/MM/YYYY'));
 
@@ -142,10 +157,10 @@
 
             var total = 0;
 
-            ko.utils.arrayForEach(invoiceRecipients(), function (recip) { console.log(total += parseInt(recip.Amount())); });
+            ko.utils.arrayForEach(invoiceRecipients(), function (recip) { total += recip.Amount(); });
 
             if (totalAmountChanging == false)
-                totalAmount(total);
+                totalAmount(total.toFixed(2));
 
             recipientAmountChanging = false;
         }
@@ -158,7 +173,7 @@
                 var sharedAmount = newValue / size;
 
                 totalAmountChanging = true;
-                ko.utils.arrayForEach(invoiceRecipients(), function (recip) { recip.Amount(sharedAmount) });
+                ko.utils.arrayForEach(invoiceRecipients(), function (recip) { recip.Amount(sharedAmount.toFixed(2)) });
                 totalAmountChanging = false;
             }
         }
@@ -176,9 +191,20 @@
                 return;
             }
 
-            recipient.Amount.subscribe(recipientAmountChanged);
-            invoiceRecipients.push(newInvoiceRecipient);
-            recipient.Amount.notifySubscribers();
+            var newRecip = datacontext.createInvoiceRecipient(billInvoice());
+
+            try {
+                newRecip.User(recipient.User());
+                newRecip.Amount(recipient.Amount());
+            } catch (e) {
+                newRecip.entityAspect.setDeleted();
+                logger.logError("This recipient has already been added.", null, 'add-bill-invoice', true);
+                return;
+            }
+
+            invoiceRecipients.push(newRecip);
+            newRecip.Amount.subscribe(recipientAmountChanged);
+            newRecip.Amount.notifySubscribers();
 
             initNewRecipient();
         }
@@ -186,6 +212,8 @@
         function removeRecipient(recipient) {
 
             invoiceRecipients.remove(recipient);
+            recipient.entityAspect.setDeleted();
+            //billInvoice().Recipients.remove(recipient);
             recipient.Amount.notifySubscribers();
         }
 

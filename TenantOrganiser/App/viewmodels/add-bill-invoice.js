@@ -73,7 +73,8 @@
         }
 
         function initNewBillInvoice() {
-            return billInvoice(datacontext.createBillInvoice(billType()));
+            //datacontext.createBillInvoice(billType())
+            return billInvoice({ BillType: billType(), Recipients : ko.observableArray() });
         }
 
         function initNewRecipient() {
@@ -105,8 +106,10 @@
                 return;
             }
 
+            var newInvoice = datacontext.createBillInvoice(billType());
+
             // Format to american style since breeze requires this
-            billInvoice().DueDate(moment(dueDate(), 'DD/MM/YYYY').format('MM/DD/YYYY'));
+            newInvoice.DueDate(moment(dueDate(), 'DD/MM/YYYY').format('MM/DD/YYYY'));
 
             // Creates new bill invoice allowing us to attach navigation properites
             return datacontext.saveChanges().then(createRecipients);
@@ -114,12 +117,11 @@
             function createRecipients() {
 
                 $.each(invoiceRecipients(), function(i, recip) {
-                    var newRecip = datacontext.createInvoiceRecipient(billInvoice());
+                    var newRecip = datacontext.createInvoiceRecipient(newInvoice);
   
                     newRecip.Amount(recip.Amount());
                     newRecip.Paid(recip.Paid());
                     newRecip.User(recip.User());
-                    newRecip.BillInvoice(billInvoice());
                 });
 
                 return datacontext.saveChanges().then(function() {

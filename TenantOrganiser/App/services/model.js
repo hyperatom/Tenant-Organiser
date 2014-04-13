@@ -24,6 +24,12 @@
             'BillInvoice', null, billInvoiceInitializer);
         metadataStore.registerEntityTypeCtor(
             'InvoiceRecipient', null, invoiceRecipientInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'UserSettings', null, userSettingsInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'BinRota', null, binRotaInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'CleaningRota', null, cleaningRotaInitializer);
     }
 
     function invoiceRecipientInitializer(invoiceRecipientObservable) {
@@ -178,6 +184,91 @@
                 return config.profilePicturesDirectory + config.genericProfilePictureFileName;
 
             return config.profilePicturesDirectory + userObservable.DisplayPictureFileName();
+        });
+    }
+
+    function userSettingsInitializer(userSettingsObservable) {
+
+        userSettingsObservable.PrettyBinRotaGroup = ko.computed(function () {
+            if (!userSettingsObservable.BinCollectionRotaGroup())
+                return "No Group";
+
+            return "Group " + userSettingsObservable.BinCollectionRotaGroup();
+        });
+
+        userSettingsObservable.PrettyCleaningRotaGroup = ko.computed(function () {
+            if (!userSettingsObservable.CleaningRotaGroup())
+                return "No Group";
+
+            return "Group " + userSettingsObservable.CleaningRotaGroup();
+        });
+    }
+
+    function binRotaInitializer(binRotaObservable) {
+
+        binRotaObservable.OccuranceDays = ko.computed({
+
+            read: function () {
+                switch (binRotaObservable.Occurance()) {
+                    case "Daily": return 1;
+                    case "Weekly": return 7;
+                    case "Fortnightly": return 14;
+                    case "Monthly": return; // Special case, begin on X day of each month
+                }
+            },
+
+            write: function (value) {
+                switch (value) {
+                    case 1: return "Daily";
+                    case 7: return "Weekly";
+                    case 14: return "Fortnightly";
+                }
+            }
+        });
+
+        binRotaObservable.PrettyStartDate = ko.computed({
+
+            read: function () {
+                return moment(binRotaObservable.StartDate()).format("DD/MM/YYYY").toString();
+            },
+
+            write: function (value) {
+                binRotaObservable.StartDate(moment(value, "DD/MM/YYYY").toString());
+            }
+        });
+    }
+
+    function cleaningRotaInitializer(cleaningRotaObservable) {
+
+        cleaningRotaObservable.OccuranceDays = ko.computed({
+
+            read: function () {
+                switch (cleaningRotaObservable.Occurance()) {
+                    case "Daily": return 1;
+                    case "Weekly": return 7;
+                    case "Fortnightly": return 14;
+                    case "Monthly": return; // Special case, begin on X day of each month
+                }
+            },
+
+            write: function (value) {
+                switch (value) {
+                    case 1: return "Daily";
+                    case 7: return "Weekly";
+                    case 14: return "Fortnightly";
+                }
+            }
+        });
+
+        cleaningRotaObservable.PrettyStartDate = ko.computed({
+
+            read: function () {
+                return moment(cleaningRotaObservable.StartDate()).format("DD/MM/YYYY").toString();
+            },
+
+            write: function (value) {
+                cleaningRotaObservable.StartDate(moment(value, "DD/MM/YYYY").toString());
+            }
         });
     }
 });

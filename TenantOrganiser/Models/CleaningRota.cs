@@ -14,9 +14,19 @@ namespace TenantOrganiser
         public int Id { get; set; }
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
         public DateTime StartDate { get; set; }
 
         [Required]
-        public int FrequencyDays { get; set; }
+        public string Occurance { get; set; }
+
+        public int HouseId { get; set; }
+
+        [ForeignKey("HouseId")]
+        public virtual House House { get; set; }
+
+        public virtual ICollection<CleaningLog> CleaningLogs { get; set; }
     }
 }

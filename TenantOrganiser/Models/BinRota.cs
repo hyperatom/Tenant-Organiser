@@ -21,7 +21,7 @@ namespace TenantOrganiser
         public DateTime StartDate { get; set; }
 
         [Required]
-        public int FrequencyDays { get; set; }
+        public string Occurance { get; set; }
 
         public int HouseId { get; set; }
 

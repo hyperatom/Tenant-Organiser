@@ -20,7 +20,6 @@ namespace TenantOrganiser
         public DbSet<BillInvoice> BillInvoices { get; set; }
         public DbSet<InvoiceRecipient> InvoiceRecipients { get; set; }
 
-        public DbSet<CommunalArea> CommunalAreas { get; set; }
         public DbSet<CleaningRota> CleaningRotas { get; set; }
         public DbSet<CleaningLog> CleaningLogs { get; set; }
         public DbSet<BinRota> BinRotas { get; set; }
