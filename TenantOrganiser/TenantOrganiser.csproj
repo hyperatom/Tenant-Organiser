@@ -188,6 +188,10 @@
     <Compile Include="Migrations\201404062001028_InitialCreate.Designer.cs">
       <DependentUpon>201404062001028_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404150924419_Changes.cs" />
+    <Compile Include="Migrations\201404150924419_Changes.Designer.cs">
+      <DependentUpon>201404150924419_Changes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActivityLog.cs" />
     <Compile Include="Models\BillInvoice.cs" />
@@ -371,6 +375,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201404062001028_InitialCreate.resx">
       <DependentUpon>201404062001028_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404150924419_Changes.resx">
+      <DependentUpon>201404150924419_Changes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

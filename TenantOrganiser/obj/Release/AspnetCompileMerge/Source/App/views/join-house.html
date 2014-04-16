@@ -4,12 +4,12 @@
 
 <button class="btn btn-primary" data-bind="click: logoutClicked">Logout</button>
 
-<div class="row col-md-12">
-    <p>Thanks for registering, lets get started setting up your house...</p>
+<div id="reg-thanks" class="row">
+    <h3>Thanks for registering, lets get started setting up your house...</h3>
 </div>
 
 <div data-bind="if: houseJoinRequest">
-    <div class="well col-md-5 module-panel">
+    <div class="well col-md-5 house-join-panel">
 
         <h3 class="panel-header">Pending Join Requests</h3>
 
@@ -50,14 +50,14 @@
 </div>
 
 <div data-bind="if: !houseJoinRequest()">
-    <div class="well col-md-5 module-panel">
+    <div class="well col-md-5 house-join-panel">
 
         <h3 class="panel-header">Join an existing house</h3>
 
         <form class="form-horizontal" role="form">
             <div class="form-group">
                 <label for="inputJoinHouseCode" class="col-sm-3 control-label">House Code</label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <input data-bind="value: joinHouseCode" class="form-control" id="inputJoinHouseCode" placeholder="E.g. 51KER">
                 </div>
             </div>
@@ -72,7 +72,7 @@
     </div>
 </div>
 
-<div class="well col-md-5 col-md-offset-1 module-panel">
+<div class="well col-md-5 col-md-offset-1 house-join-panel">
 
     <h3 class="panel-header">Create a new house</h3>
 

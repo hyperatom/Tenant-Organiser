@@ -16,7 +16,7 @@ define(['durandal/app', 'durandal/viewLocator', 'durandal/system', 'plugins/rout
 function boot(app, viewLocator, system, router, logger) {
 
     // Enable debug message to show in the console 
-    system.debug(false);
+    system.debug(true);
 
     //specify which plugins to install and their configuration
     app.configurePlugins({

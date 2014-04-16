@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/lessStyles")
     <script type="text/javascript">
         if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
             var msViewportStyle = document.createElement("style");
@@ -29,7 +30,14 @@
     </div>
 
     @Scripts.Render("~/scripts/vendor")
-    <script type="text/javascript" src="~/Scripts/require.js" data-main="@Url.Content("~/App/main")"></script>
+    @if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        <script type="text/javascript" src="~/Scripts/require.js" data-main="@Url.Content("~/App/main")"></script>
+    }
+    else
+    {
+        <script type="text/javascript" src="~/Scripts/require.js" data-main="@Url.Content("~/App/main-built")"></script>
+    }
 
 </body>
 </html>

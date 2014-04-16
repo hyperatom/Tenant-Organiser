@@ -51,7 +51,9 @@
         }
 
         function joinExistingHouseClicked() {
-            return datacontext.joinHouse(session.sessionUser, joinHouseCode()).then(refreshHouseJoinRequest);
+            return datacontext.joinHouse(session.sessionUser, joinHouseCode()).then(function () {
+                return refreshHouseJoinRequest();
+            });
         }
 
         function cancelRequestClicked(data) {

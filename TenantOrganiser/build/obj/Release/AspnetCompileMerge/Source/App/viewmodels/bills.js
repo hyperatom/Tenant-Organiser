@@ -1,172 +1,151 @@
-﻿define(['services/logger', 'plugins/router'], function (logger, router) {
+﻿define(['services/logger', 'durandal/app', 'plugins/router', 'services/datacontext', 'services/session', 'services/model', './create-bill-modal'],
+    function (logger, app, router, datacontext, session, model, CustomModal) {
 
-    var bills = new ko.observableArray();
-    var billMarkedForDelete = null;
+        var bills = new ko.observableArray();
 
-    var newBillType = new ko.observableArray();
-    var tenantsList = new ko.observableArray();
+        var newBillType = new ko.observableArray();
+        var tenantsList = new ko.observableArray();
 
-    var initialised = false;
+        var initialised = false;
 
-    var vm = {
-        activate: activate,
-        title: 'Bills View',
-        bills: bills,
+        var vm = {
+            activate: activate,
+            title: 'Bills View',
+            bills: bills,
+            addBill: addBill,
 
-        newBillType: newBillType,
-        tenantsList: tenantsList,
+            newBillType: newBillType,
+            tenantsList: tenantsList,
 
-        navPreviousInvoice: navPreviousInvoice,
-        navNextInvoice: navNextInvoice,
-        isPreviousEnabled: isPreviousEnabled,
-        isNextEnabled: isNextEnabled,
+            navPreviousInvoice: navPreviousInvoice,
+            navNextInvoice: navNextInvoice,
+            isPreviousEnabled: isPreviousEnabled,
+            isNextEnabled: isNextEnabled,
 
-        checkboxClicked: checkboxClicked,
-        clickedCombo: clickedCombo,
+            checkboxClicked: checkboxClicked,
 
-        createdBillType: createdBillType,
+            deleteBill: deleteBill,
 
-        markBillForDelete: markBillForDelete,
-        deleteBill: deleteBill,
+            navToAddInvoice: navToAddInvoice,
+            navToEditInvoice: navToEditInvoice
+        };
 
-        navToAddInvoice: navToAddInvoice,
-        navToEditInvoice: navToEditInvoice
-    };
+        return vm;
 
-    return vm;
-
-    function activate() {
-
-        if (initialised == false) {
-            getBills(bills);
-            initTenantsList(tenantsList);
-            initNewBillType(newBillType);
-            initialised = true;
+        function activate() {
+            return Q.all([refreshBills(), refreshTenants()]).then(function () {
+                logger.log('Bills View Activated', null, 'bills', true);
+            });
         }
 
-        logger.log('Bills View Activated', null, 'bills', true);
+        function refreshBills() {
+            return datacontext.getBillTypesByHouse(bills, session.sessionUser().HouseId()).then(function () {
 
-        return true;
-    }
+                $.each(bills(), function (i, bill) {
+                    bill.BillInvoices().sort(function (left, right) {
+                        return left.DueDate() < right.DueDate() ? -1 : 1;
+                    });
 
-    function createdBillType(bill) {
-        console.log(bill);
-        bills.push(bill);
-    }
-
-    function markBillForDelete(data) {
-
-        billMarkedForDelete = data;
-    }
-
-    function deleteBill() {
-
-        var billName = billMarkedForDelete.Name;
-
-        bills.remove(billMarkedForDelete);
-        billMarkedForDelete = null;
-
-        logger.logSuccess(billName.concat(' bill has been deleted.'), null, 'bills', true);
-    }
-
-    function navToEditInvoice(bill) {
-
-        router.navigate('/#edit-bill-invoice/' + bill.Name());
-    }
-
-    function navToAddInvoice(bill) {
-
-        router.navigate('/#add-bill-invoice/' + bill.Name());
-    }
-
-    function checkboxClicked(data) {
-
-        if (data.GlyphClass() == "glyphicon glyphicon-unchecked") {
-
-            data.GlyphClass("glyphicon glyphicon-check");
-            logger.logSuccess(data.UserFullName.concat(' has now paid.'), null, 'bills', true);
-
-        } else if (data.GlyphClass() == "glyphicon glyphicon-check") {
-
-            data.GlyphClass("glyphicon glyphicon-unchecked");
-            logger.logSuccess(data.UserFullName.concat(' has now un-paid.'), null, 'bills', true);
+                    // Makes sure the current invoice is up to date when user has returned from creating invoice
+                    bill.currentInvoice(model.getNextBill(bill));
+                });
+            });
         }
-    }
 
-    function navPreviousInvoice(data) {
+        function refreshTenants() {
+            return datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
+        }
 
-        data.InvoiceIndex(data.InvoiceIndex()-1);
-    }
+        function createdBillType(bill) {
+            console.log(bill);
+            bills.push(bill);
+        }
 
-    function navNextInvoice(data) {
+        function addBill() {
+            CustomModal.show().then(function (result) {
+                if (result) {
+                    console.log(result);
+                    return refreshBills();
+                }
+            });
+        }
 
-        data.InvoiceIndex(data.InvoiceIndex()+1);
-    }
+        function deleteBill(bill) {
+
+            return app.showMessage(
+                'Are you sure you want to delete this bill and all of its invoices?',
+                'Delete ' + bill.Name(),
+                ['Yes', 'No']).then(processResponse);
+
+            function processResponse(response) {
+                if (response === 'Yes') {
+                    var billEntity = bill;
+                    bills.remove(bill);
+                    billEntity.entityAspect.setDeleted();
+                    return datacontext.saveChanges().then(function () {
+                        logger.logSuccess(billEntity.Name().concat(' bill has been deleted.'), null, 'bills', true);
+                    });
+                }
+            }
+        }
+
+        function navToEditInvoice(bill) {
+
+            router.navigate('#edit-bill-invoice/' + bill.currentInvoice().Id());
+        }
+
+        function navToAddInvoice(bill) {
+
+            router.navigate('#add-bill-invoice/' + bill.Id());
+        }
+
+        function checkboxClicked(recipient) {
+
+            if (!recipient.Paid()) {
+                recipient.Paid(true)
+                return datacontext.saveChanges().then(function () {
+                    logger.logSuccess(recipient.User().FullName().concat(' has now paid.'), null, 'bills', true);
+                });
+
+            } else {
+                recipient.Paid(false)
+                return datacontext.saveChanges().then(function () {
+                    logger.logSuccess(recipient.User().FullName().concat(' has now un-paid.'), null, 'bills', true);
+                });
+            }
+        }
+
+        function navPreviousInvoice(invoice) {
+            // Get index of currently viewed invoice from main invoices array
+            var index = invoice.BillInvoices().indexOf(invoice.currentInvoice());
+            invoice.currentInvoice(invoice.BillInvoices()[index - 1]);
+        }
+
+        function navNextInvoice(invoice) {
+            // Get index of currently viewed invoice from main invoices array
+            var index = invoice.BillInvoices().indexOf(invoice.currentInvoice());
+            invoice.currentInvoice(invoice.BillInvoices()[index + 1]);
+        }
 
 
-    function isPreviousEnabled(index, numInvoices) {
+        function isPreviousEnabled(billType) {
 
-        if (numInvoices <= 0 || index <= 0)
-            return false;
-        else
+            if (billType.BillInvoices().indexOf(billType.currentInvoice()) === 0)
+                return false;
+
             return true;
-    }
+        }
 
-    function isNextEnabled(index, numInvoices) {
+        function isNextEnabled(billType) {
+            if (billType.BillInvoices().indexOf(billType.currentInvoice()) === (billType.BillInvoices().length - 1))
+                return false;
 
-        if (numInvoices <= 0 || index + 1 >= numInvoices)
-            return false;
+            return true;
+        }
 
-        return true;
-    }
+        function clickedCombo(clicked, buttonLabel, event) {
 
-    function getBills(observableBills) {
+            buttonLabel.Manager(clicked);
+        }
 
-        observableBills.push({ ProfilePicture: '../Content/images/profile-picture.jpg', Manager: 'Adam', Name: ko.observable('Gas & Electric'), Invoices: getInvoices(), InvoiceIndex: ko.observable(0) });
-        observableBills.push({ ProfilePicture: '../Content/images/profile-picture-2.jpg', Manager: 'Chris', Name: ko.observable('Water'), Invoices: getInvoices(), InvoiceIndex: ko.observable(0) });
-        observableBills.push({ ProfilePicture: '../Content/images/profile-picture-3.jpg', Manager: 'Joss', Name: ko.observable('Internet'), Invoices: getInvoices(), InvoiceIndex: ko.observable(0) });
-    }
-
-    function getInvoices() {
-        
-        var observableInvoices = ko.observableArray();
-
-        observableInvoices.push({ DueDate: '15th September', Recipients: getInvoiceRecipients() });
-        observableInvoices.push({ DueDate: '20th September', Recipients: getInvoiceRecipients() });
-        observableInvoices.push({ DueDate: '8th October', Recipients: getInvoiceRecipients() });
-
-        return observableInvoices;
-    }
-
-    function getInvoiceRecipients() {
-
-        var observableInvoiceRecipients = ko.observableArray();
-
-        observableInvoiceRecipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: 'Adam Barrell', Amount: '£'.concat(Math.floor((Math.random() * 100) + 9)) });
-        observableInvoiceRecipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-check'), UserFullName: 'Joss Whittle', Amount: '£'.concat(Math.floor((Math.random() * 100) + 9)) });
-        observableInvoiceRecipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: 'Toby Webster', Amount: '£'.concat(Math.floor((Math.random() * 100) + 9)) });
-        observableInvoiceRecipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: 'Tom Walton', Amount: '£'.concat(Math.floor((Math.random() * 100) + 9)) });
-        observableInvoiceRecipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-check'), UserFullName: 'Chris Lewis', Amount: '£'.concat(Math.floor((Math.random() * 100) + 9)) });
-
-        return observableInvoiceRecipients;
-    }
-
-    function clickedCombo(clicked, buttonLabel, event) {
-
-        buttonLabel.Manager(clicked);
-    }
-
-    function initTenantsList(list) {
-
-        list.push({ UserFullName: 'Adam Barrell' });
-        list.push({ UserFullName: 'Joss Whittle' });
-        list.push({ UserFullName: 'Tom Milner' });
-        list.push({ UserFullName: 'Toby Webster' });
-    }
-
-    function initNewBillType(observableBill) {
-
-        observableBill({ ProfilePicture: '../Content/images/profile-picture.jpg', Manager: ko.observable('Select a Manager'), Name: ko.observable(''), Invoices: ko.observableArray(), InvoiceIndex: ko.observable(0) });
-    }
-
-});
+    });

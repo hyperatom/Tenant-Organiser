@@ -1,35 +1,30 @@
 <div class="page-header">
-    <h2>Bill Invoice</h2>
+    <h2 data-bind="text: pageHeader"></h2>
 </div>
 
-<div id="invoice-settings-panel" class="well col-md-5 module-panel">
+<div id="invoice-settings-panel" class="well col-md-6 module-panel">
 
     <table>
-        <tr>
-            <td id="invoice-name-row" colspan="3">
-                <h3 data-bind="text: billName"></h3>
-            </td>
-        </tr>
 
-        <tbody data-bind="foreach: invoiceRecipients()">
+        <tbody data-bind="foreach: invoiceRecipients">
 
             <tr class="invoice-tenant-row">
                 <td class="invoice-paid-cell">
                     <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-paid">
-                        <span data-bind="attr: { class: GlyphClass }"></span>
+                        <span class="glyphicon" data-bind="css: { 'glyphicon-check': Paid(), 'glyphicon-unchecked': !Paid() }"></span>
                     </button>
                 </td>
 
                 <td class="invoice-recip">
                     <!-- Split button -->
                     <div class="btn-group form-group">
-                        <button data-bind="text: UserFullName" type="button" class="btn btn-default dropdown-button"></button>
+                        <button data-bind="text: User().FullName" type="button" class="btn btn-default dropdown-button">Select a recipient</button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul data-bind="foreach: $root.tenantsList()" class="dropdown-menu" role="menu">
-                            <li><a data-bind="text: UserFullName, click: function (data, event) { $root.clickedCombo(UserFullName, $parentContext.$data) }"></a></li>
+                            <li><a data-bind="text: FullName, click: function (data, event) { $root.clickedCombo(data, $parentContext.$data) }"></a></li>
                         </ul>
                     </div>
                 </td>
@@ -60,20 +55,20 @@
             <tr class="invoice-tenant-row">
                 <td class="invoice-paid-cell">
                     <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-paid">
-                        <span data-bind="attr: { class: GlyphClass() }"></span>
+                        <span class="glyphicon" data-bind="css: { 'glyphicon-check': Paid(), 'glyphicon-unchecked': !Paid() }"></span>
                     </button>
                 </td>
 
                 <td class="invoice-recip">
                     <!-- Split button -->
                     <div class="btn-group form-group">
-                        <button data-bind="text: UserFullName()" type="button" class="btn btn-default dropdown-button">Select a recipient</button>
+                        <button data-bind="text: User().FullName()" type="button" class="btn btn-default dropdown-button">Select a recipient</button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
-                        <ul data-bind="foreach: $root.tenantsList()" class="dropdown-menu" role="menu">
-                            <li><a data-bind="text: UserFullName, click: function (data, event) { $root.clickedCombo(UserFullName, $parentContext.$data) }"></a></li>
+                        <ul data-bind="foreach: $root.tenantsList" class="dropdown-menu" role="menu">
+                            <li><a data-bind="text: FullName, click: function (data, event) { $root.clickedCombo(data, $parentContext.$data) }"></a></li>
                         </ul>
                     </div>
                 </td>
@@ -121,7 +116,7 @@
 
                     <td>
                         <div class="form-group">
-                            <div class="input-group date" data-date-format="d MM 'yy">
+                            <div class="input-group date" data-date-format="dd/mm/yyyy">
                                 <input data-bind="value: dueDate" type="text" class="form-control" placeholder="Select a date" />
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
@@ -133,11 +128,11 @@
     </form>
 
     <div id="invoice-btn-bar">
-        <button data-bind="click: invoiceCreated" type="Save" class="btn btn-success">
+        <button data-bind="click: invoiceCreated, enable: invoiceRecipients().length > 0" class="btn btn-success">
             <span class="glyphicon glyphicon-floppy-disk"></span>Create
         </button>
 
-        <button data-bind="click: invoiceUndone" type="Save" class="btn btn-primary">
+        <button data-bind="click: invoiceUndone, enable: invoiceRecipients().length > 0" class="btn btn-primary">
             <span class="glyphicon glyphicon-repeat rotate-90"></span>Undo
         </button>
     </div>

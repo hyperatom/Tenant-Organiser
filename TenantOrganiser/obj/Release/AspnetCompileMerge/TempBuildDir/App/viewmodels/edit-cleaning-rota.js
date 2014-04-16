@@ -1,170 +1,153 @@
-﻿define(['services/logger'], function (logger) {
+﻿define(['services/logger', 'services/datacontext', 'services/session'],
+    function (logger, datacontext, session) {
 
-    var communalAreas = new ko.observableArray();
-    var tenantGroups = new ko.observableArray();
-    var rotaGroups = new ko.observableArray();
+        var tenants = new ko.observableArray();
+        var rotaGroups = new ko.observableArray();
 
-    var startDate = new ko.observable("26 March '14");
+        var communalAreas = new ko.observableArray();
+        var newAreaType = new ko.observable();
 
-    var rotaOccurance = new ko.observable('Weekly');
-    var occuranceOptions = new ko.observableArray();
+        var occuranceOptions = new ko.observableArray();
 
-    var newCommunalArea = new ko.observable();
+        var vm = {
+            activate: activate,
+            title: 'Edit Cleaning Rota',
+            attached: viewAttached,
+            hasChanges: datacontext.hasChanges,
 
-    var vm = {
-        activate: activate,
-        title: 'Edit Cleaning Rota',
-        attached: viewAttached,
+            tenants: tenants,
+            rotaGroups: rotaGroups,
 
-        tenantGroups: tenantGroups,
-        rotaGroups: rotaGroups,
+            occuranceOptions: occuranceOptions,
 
-        startDate: startDate,
+            communalAreas: communalAreas,
+            newAreaType: newAreaType,
 
-        communalAreas: communalAreas,
-        newCommunalArea: newCommunalArea,
+            groupOptionClicked: groupOptionClicked,
+            occuranceOptionsClicked: occuranceOptionsClicked,
 
-        occuranceOptions: occuranceOptions,
+            deleteAreaClicked: deleteAreaClicked,
+            addAreaClicked: addAreaClicked,
+            saveAreasClicked: saveAreasClicked,
+            undoAreasClicked: undoAreasClicked
+        };
 
-        addAreaClicked: addAreaClicked,
-        removeAreaClicked: removeAreaClicked,
-
-        saveAreasClicked: saveAreasClicked,
-        undoAreasClicked: undoAreasClicked,
-
-        saveSettingsClicked: saveSettingsClicked,
-        undoSettingsClicked: undoSettingsClicked,
-
-        groupOptionClicked: groupOptionClicked,
-        rotaOccurance: rotaOccurance,
-        occuranceOptionClicked: occuranceOptionClicked
-    };
-
-    return vm;
+        return vm;
 
 
-    function activate() {
+        function activate() {
 
-        communalAreas(initCommunalAreas().slice());
-        tenantGroups(initTenantGroups().slice());
-        rotaGroups(getRotaGroupNames().slice());
-        occuranceOptions(initOccuranceOptions().slice());
+            return Q.all([refreshTenants(), refreshCleaningRotas()]).then(function () {
+                rotaGroups(getRotaGroupNames().slice());
+                newAreaType(initNewAreaType());
+                occuranceOptions(initOccuranceOptions().slice());
 
-        logger.log('Edit Cleaning Rota View Activated', null, 'edit-cleaning-rota', true);
+                logger.log('Edit Bin Rota View Activated', null, 'edit-bin-rota', true);
+            });
+        }
 
-        return true;
-    }
+        function refreshTenants() {
+            return datacontext.getTenants(tenants, session.sessionUser().HouseId());
+        }
 
-    function viewAttached() {
+        function refreshCleaningRotas() {
+            return datacontext.getCleaningRotasByHouse(communalAreas, session.sessionUser().HouseId());
+        }
 
-        $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
-    }
+        function viewAttached() {
+            $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
+        }
 
-    function saveSettingsClicked() {
+        function saveAreasClicked() {
+            return datacontext.saveChanges().then(function () {
+                logger.logSuccess('Bin Types Saved!', null, 'edit-cleaning-rota', true);
+            });
+        }
 
-        logger.logSuccess('Settings Saved!', null, 'edit-cleaning-rota', true);
-    }
+        function undoAreasClicked() {
+            datacontext.rejectChanges();
+            refreshCleaningRotas();
+            viewAttached();
+            logger.log('Communal Areas Reset!', null, 'edit-cleaning-rota', true);
 
-    function undoSettingsClicked() {
+        }
 
-        startDate("26 March '14");
-        rotaOccurance('Weekly');
+        function occuranceOptionsClicked(selectedOccurance, cleaningRota) {
 
-        logger.log('Settings Reset!', null, 'edit-cleaning-rota', true);
-    }
+            cleaningRota.Occurance(selectedOccurance.Name);
+        }
 
-    function occuranceOptionClicked(occuranceSelected, data, event) {
+        function deleteAreaClicked(data) {
 
-        rotaOccurance(occuranceSelected);
-    }
+           // $.each(data.CleaningLogs(), function (i, log) {
+            //    log.entityAspect.setDeleted();
+           // });
 
-    function initOccuranceOptions() {
+            data.entityAspect.setDeleted();
+            communalAreas.remove(data);
+        }
 
-        var options = new ko.observableArray();
+        function addAreaClicked(data) {
 
-        options.push({ OptionName: "Weekly" });
-        options.push({ OptionName: "Fortnightly" });
-        options.push({ OptionName: "Monthly" });
+            if (!newAreaType().Name()) {
+                logger.logError('An area name is required.', null, 'edit-cleaning-rota', true);
+                return
+            }
 
-        return options;
-    }
+            if (!newAreaType().PrettyStartDate()) {
+                logger.logError('A rota start date is required.', null, 'edit-cleaning-rota', true);
+                return
+            }
 
-    function groupOptionClicked(tenantRow, groupSelected, data, event) {
+            var newCleaningRota = datacontext.createCleaningRota(session.sessionUser().House());
 
-        tenantRow.Group(groupSelected);
+            newCleaningRota.Name(newAreaType().Name());
+            newCleaningRota.Occurance(newAreaType().Occurance());
+            newCleaningRota.PrettyStartDate(newAreaType().PrettyStartDate());
 
-        logger.logSuccess('Group Change Saved!', null, 'edit-cleaning-rota', true);
-    }
+            communalAreas.push(newCleaningRota);
+            newAreaType(initNewAreaType());
+            // Rebind view attachment events
+            viewAttached();
+        }
 
-    function getRotaGroupNames() {
+        function initOccuranceOptions() {
 
-        var groups = new ko.observableArray();
+            var options = new ko.observableArray();
 
-        groups.push({ Name: 'Group 1' });
-        groups.push({ Name: 'Group 2' });
-        groups.push({ Name: 'Group 3' });
-        groups.push({ Name: 'Group 4' });
-        groups.push({ Name: 'Group 5' });
-        groups.push({ Name: 'Group 6' });
+            options.push({ Name: 'Daily' });
+            options.push({ Name: 'Weekly' });
+            options.push({ Name: 'Fortnightly' });
+            options.push({ Name: 'Monthly' });
 
-        return groups;
-    }
+            return options;
+        }
 
-    function getRandomRotaGroupName() {
+        function getRotaGroupNames() {
 
-        var groups = getRotaGroupNames();
-        var randIndex = Math.floor((Math.random() * groups().length));
+            var groups = new ko.observableArray([{ Id: null, Name: 'No Group' }]);
 
-        return groups()[randIndex].Name;
-    }
+            $.each(tenants(), function (i, tenant) {
+                groups.push({ Id: (i + 1), Name: 'Group ' + (i + 1) });
+            });
 
-    function initTenantGroups() {
+            return groups;
+        }
 
-        var groups = new ko.observableArray();
+        function initNewAreaType() {
 
-        groups.push({ TenantName: 'Adam Barrell', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Tom Walton', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Chris Lewis', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Tom Milner', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Toby Webster', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Joss Whittle', Group: ko.observable(getRandomRotaGroupName()) });
+            return data =
+                {
+                    Name: new ko.observable(''),
+                    Occurance: new ko.observable('Weekly'),
+                    PrettyStartDate: new ko.observable(''),
+                };
+        }
 
-        return groups;
-    }
-
-    function saveAreasClicked() {
-
-        logger.logSuccess('Communal Areas Saved!', null, 'edit-cleaning-rota', true);
-    }
-
-    function undoAreasClicked() {
-
-        communalAreas(initCommunalAreas().slice());
-        logger.log('Communal Areas Reset!', null, 'edit-cleaning-rota', true);
-    }
-
-    function initCommunalAreas() {
-
-        var areas = new ko.observableArray();
-
-        areas.push({ Name: "Kitchen" });
-        areas.push({ Name: "Bathroom" });
-        areas.push({ Name: "Floors" });
-        areas.push({ Name: "Living Room" });
-
-        return areas;
-    }
-
-    function addAreaClicked(data) {
-
-        communalAreas.push({ Name: newCommunalArea() });
-        newCommunalArea('');
-    }
-
-    function removeAreaClicked(data) {
-
-        communalAreas.remove(data);
-    }
-
-
-});
+        function groupOptionClicked(selectedGroup, tenant) {
+            tenant.UserSettings().CleaningRotaGroup(selectedGroup.Id);
+            return datacontext.saveChanges().then(function () {
+                logger.logSuccess('Group Change Saved!', null, 'edit-cleaning-rota', true);
+            });
+        }
+    });

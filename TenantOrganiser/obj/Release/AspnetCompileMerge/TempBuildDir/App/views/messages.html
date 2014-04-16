@@ -7,7 +7,7 @@
     <div class="col-md-4">
         <div id="conversation-buttons" class="well">
 
-            <button data-bind="click: newConvoClicked" class="btn btn-primary">
+            <button data-bind="click: createNewConversation" class="btn btn-primary">
                 <span class="glyphicon glyphicon-plus"></span>
                 <span>New Conversation</span>
             </button>
@@ -46,6 +46,10 @@
                         <li><a data-bind="text: FullName, click: $root.recipientAdded"></a></li>
                     </ul>
                 </div>
+
+                <button data-bind="click: leaveConversation" class="btn btn-danger pull-right">
+                    <span>Leave</span>
+                </button>
 
                 <ul data-bind="foreach: activeConversation().ConversationUsers()" class="pager">
                     <li><a href="#">

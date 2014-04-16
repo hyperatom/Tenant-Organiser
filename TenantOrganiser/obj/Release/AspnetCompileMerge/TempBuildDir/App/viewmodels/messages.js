@@ -1,31 +1,29 @@
-﻿define(['services/logger', 'services/datacontext', 'services/session'],
+﻿/*jslint browser: true*/
+/*global define, ko, requirejs, $, ko, Q*/
+
+define(['services/logger', 'services/datacontext', 'services/session'],
     function (logger, datacontext, session) {
 
         var tenantsList = new ko.observableArray();
         var conversationsList = new ko.observableArray();
-
         var activeConversation = new ko.observable();
-
         var composingMessage = new ko.observable();
 
         var vm = {
             activate: activate,
             title: 'Messages',
 
-            attached: viewAttached,
-
             tenantsList: tenantsList,
             conversationsList: conversationsList,
             activeConversation: activeConversation,
             conversationClicked: conversationClicked,
+            createNewConversation: createNewConversation,
+            leaveConversation: leaveConversation,
 
             recipientAdded: recipientAdded,
-            recipientRemoved: recipientRemoved,
 
             composingMessage: composingMessage,
-            messageSent: messageSent,
-
-            newConvoClicked: newConvoClicked
+            messageSent: messageSent
         };
 
         return vm;
@@ -33,39 +31,52 @@
 
         function activate() {
 
-            datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
-            datacontext.getConversations(conversationsList, session.sessionUser().HouseId());
-
             logger.log('Messages View Activated', null, 'messages', true);
 
-            return true;
+            return Q.all([refreshTenants(), refreshConversations()]);
         }
 
-        function viewAttached() { }
+        function refreshTenants() {
+            return datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
+        }
+
+        function refreshConversations() {
+            return datacontext.getConversationsByHouse(conversationsList, session.sessionUser().HouseId()).then(filterConversations);
+        }
+
+        function filterConversations() {
+            // Only include conversations the session user is in
+            conversationsList(conversationsList().filter(isSessionUserIncluded));
+
+            function isSessionUserIncluded(conversation) {
+
+                // Check if user is a part of the conversation
+                var results = $.grep(conversation.ConversationUsers(), isSessionUser);
+
+                function isSessionUser(convoUser) {
+                    return convoUser.UserId() === session.sessionUser().Id();
+                }
+
+                // If the session user was part of the conversation return true
+                return results.length > 0;
+            }
+        }
 
         function removeRecipsFromTenantsList() {
 
-            console.log(activeConversation());
+            // Remove all tenants who are already recipients of convo
+            tenantsList(tenantsList().filter(filterTenants));
 
-            $.each(tenantsList(), function (i, tenant) {
-                $.each(activeConversation().ConversationUsers(), function (j, convoUser) {
-                    
-                    if (convoUser.UserId() === tenant.Id()) {
-                        console.log(tenant);
-                        tenantsList.remove(tenant);
-                        return true;
-                    }
-                });
-            });
-        }
+            function filterTenants(tenant) {
+                var results = $.grep(activeConversation().ConversationUsers(), isTenantRecipient);
 
-        function newConvoClicked() {
-
-            var conv = new Conversation(new ko.observableArray(), new ko.observableArray([{ Name: 'Adam', ProfilePicUrl: '../../Content/images/profile-picture.jpg' }]));
-
-            conversationsList.push(conv);
-
-            conversationClicked(conv);
+                function isTenantRecipient(convoUser) {
+                    return convoUser.UserId() === tenant.Id();
+                }
+                
+                // If user is not in the active convo, include them in tenants list
+                return results.length === 0;
+            }
         }
 
         function checkEnterKeyPressed(event) {
@@ -88,7 +99,7 @@
                 msg.Conversation(activeConversation());
                 msg.UserSent(session.sessionUser());
 
-                return datacontext.saveChanges().then(messageSaved);
+                return datacontext.saveChanges().then(messageSaved).then(refreshConversations);
 
                 function messageSaved() {
                     // Refresh chat box to show sent message
@@ -120,35 +131,53 @@
             scrollChatBox();
         }
 
-        function recipientRemoved(data) {
-
-            activeConversation().recipients.remove(data);
-        }
-
-        function generateRecipientsString(myString) {
-
-            return 'Hello: ' + myString;
-        }
-
         function recipientAdded(data) {
-
             var convoUser = datacontext.createConversationUser(activeConversation(), data);
 
-            datacontext.saveChanges();
+            return datacontext.saveChanges();
         }
 
-        function getTenantsList() {
+        function createNewConversation() {
+            var newConvo = datacontext.createConversation(session.sessionUser);
+            newConvo.DateStarted(moment().toString());
+            datacontext.createConversationUser(newConvo, session.sessionUser());
 
-            var list = new ko.observableArray();
+            function showCreatedConvo() {
+                conversationClicked(newConvo);
+            }
 
-            list.push({ Name: 'Adam Barrell', ProfilePicUrl: '../../Content/images/profile-picture.jpg' });
-            list.push({ Name: 'Chris Lewis', ProfilePicUrl: '../../Content/images/profile-picture-2.jpg' });
-            list.push({ Name: 'Toby Webster', ProfilePicUrl: '../../Content/images/profile-picture-3.jpg' });
-            list.push({ Name: 'Tom Walton', ProfilePicUrl: '../../Content/images/profile-picture-2.jpg' });
-            list.push({ Name: 'Hannah Marriott', ProfilePicUrl: '../../Content/images/profile-picture.jpg' });
-            list.push({ Name: 'Joss Whittle', ProfilePicUrl: '../../Content/images/profile-picture-3.jpg' });
-
-            return list;
+            return datacontext.saveChanges().then(showCreatedConvo).then(refreshConversations);
         }
 
+        function leaveConversation() {
+            // Get the convo user which the session user is part of
+            var results = $.grep(activeConversation().ConversationUsers(), isSessionUser);
+
+            function isSessionUser(convoUser) {
+                return convoUser.UserId() === session.sessionUser().Id();
+            }
+
+            var convo = activeConversation();
+            activeConversation(null);
+
+            // If session user was the only one left, delete convo
+            if (convo.ConversationUsers().length === 1) {
+                // Remove all messages associated with the conversation
+                if (convo.Messages().length > 0) {
+                    $.each(convo.Messages().slice(), deleteMessage)
+
+                    function deleteMessage(i, msg) {
+                        msg.entityAspect.setDeleted();
+                    }
+                }
+
+                convo.entityAspect.setDeleted();
+            } else {
+                convo.ConversationUsers.remove(results[0]);
+            }
+
+            results[0].entityAspect.setDeleted();
+
+            return datacontext.saveChanges().then(refreshConversations);
+        }
     });

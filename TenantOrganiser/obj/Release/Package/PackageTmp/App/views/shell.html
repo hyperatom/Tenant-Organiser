@@ -1,0 +1,13 @@
+﻿<div data-bind="if: sessionUser().House">
+    <nav class="sidebar">
+        <!--ko compose: { model: 'viewmodels/nav', activate: true } --><!--/ko-->
+    </nav>
+</div>
+
+<div class="container">
+    <!--ko router: {
+            cacheViews: false,
+            afterCompose: router.afterCompose, 
+            transition: 'entrance'} -->
+    <!--/ko-->
+</div>

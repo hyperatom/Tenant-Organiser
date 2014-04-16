@@ -82,3 +82,5 @@ C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrgani
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\bin\System.Web.Optimization.xml
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\bin\System.Web.Optimization.Less.pdb
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\bin\System.Web.Optimization.Less.xml
+C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Release\TenantOrganiser.Migrations.Changes.resources
+C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Release\TenantOrganiser.csprojResolveAssemblyReference.cache

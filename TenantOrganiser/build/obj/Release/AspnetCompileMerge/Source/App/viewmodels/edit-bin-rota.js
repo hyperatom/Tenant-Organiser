@@ -1,190 +1,183 @@
-﻿define(['services/logger'], function (logger) {
+﻿define(['services/logger', 'services/datacontext', 'services/session'],
+    function (logger, datacontext, session) {
 
-    var tenantGroups = new ko.observableArray();
-    var rotaGroups = new ko.observableArray();
+        var tenants = new ko.observableArray();
+        var rotaGroups = new ko.observableArray();
+        var binColourOptions = new ko.observableArray();
 
-    var binColourOptions = new ko.observableArray();
+        var binTypes = new ko.observableArray();
+        var newBinType = new ko.observable();
 
-    var binTypes = new ko.observableArray();
-    var newBinType = new ko.observable();
+        var occuranceOptions = new ko.observableArray();
 
-    var occuranceOptions = new ko.observableArray();
+        var vm = {
+            activate: activate,
+            title: 'Edit Bin Rota',
+            attached: viewAttached,
+            hasChanges: datacontext.hasChanges,
 
-    var vm = {
-        activate: activate,
-        title: 'Edit Bin Rota',
-        attached: viewAttached,
+            tenants: tenants,
+            rotaGroups: rotaGroups,
 
-        tenantGroups: tenantGroups,
-        rotaGroups: rotaGroups,
+            binColourOptions: binColourOptions,
+            binColourOptionsClicked: binColourOptionsClicked,
 
-        binColourOptions: binColourOptions,
-        binColourOptionsClicked: binColourOptionsClicked,
+            occuranceOptions: occuranceOptions,
 
-        occuranceOptions: occuranceOptions,
+            binTypes: binTypes,
+            newBinType: newBinType,
 
-        binTypes: binTypes,
-        newBinType: newBinType,
+            groupOptionClicked: groupOptionClicked,
+            occuranceOptionsClicked: occuranceOptionsClicked,
 
-        groupOptionClicked: groupOptionClicked,
-        occuranceOptionsClicked: occuranceOptionsClicked,
+            deleteBinTypeClicked: deleteBinTypeClicked,
+            addBinTypeClicked: addBinTypeClicked,
+            saveBinTypesClicked: saveBinTypesClicked,
+            undoBinTypesClicked: undoBinTypesClicked
+        };
 
-        deleteBinTypeClicked: deleteBinTypeClicked,
-        addBinTypeClicked: addBinTypeClicked,
-        saveBinTypesClicked: saveBinTypesClicked,
-        undoBinTypesClicked: undoBinTypesClicked
-    };
+        return vm;
 
-    return vm;
 
+        function activate() {
 
-    function activate() {
+            return Q.all([refreshTenants(), refreshBinRotas()]).then(function () {
+                rotaGroups(getRotaGroupNames().slice());
+                binColourOptions(initBinColourOptions().slice());
+                newBinType(initNewBinType());
+                occuranceOptions(initOccuranceOptions().slice());
 
-        tenantGroups(initTenantGroups().slice());
-        rotaGroups(getRotaGroupNames().slice());
-        binTypes(initBinTypes().slice());
+                logger.log('Edit Bin Rota View Activated', null, 'edit-bin-rota', true);
+            });
+        }
 
-        binColourOptions(initBinColourOptions().slice());
+        function refreshTenants() {
+            return datacontext.getTenants(tenants, session.sessionUser().HouseId());
+        }
 
-        newBinType(initNewBinType());
+        function refreshBinRotas() {
+            return datacontext.getBinRotasByHouse(binTypes, session.sessionUser().HouseId());
+        }
 
-        occuranceOptions(initOccuranceOptions());
+        function viewAttached() {
+            $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
+        }
 
-        logger.log('Edit Bin Rota View Activated', null, 'edit-bin-rota', true);
+        function binColourOptionsClicked(selectedColour, binRota) {
 
-        return true;
-    }
+            binRota.Colour(selectedColour.Name);
+        }
 
-    function viewAttached() {
+        function initBinColourOptions() {
 
-        $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
-    }
+            var options = new ko.observableArray();
 
-    function binColourOptionsClicked(binType, colourClicked, data, event) {
+            options.push({ Name: 'black' });
+            options.push({ Name: 'red' });
+            options.push({ Name: 'green' });
+            options.push({ Name: 'pink' });
+            options.push({ Name: 'brown' });
 
-        binType.Colour(colourClicked);
-    }
+            return options;
+        }
 
-    function initBinColourOptions() {
+        function saveBinTypesClicked() {
+            return datacontext.saveChanges().then(function () {
+                logger.logSuccess('Bin Types Saved!', null, 'edit-bin-rota', true);
+            });
+        }
 
-        var options = new ko.observableArray();
+        function undoBinTypesClicked() {
+            datacontext.rejectChanges();
+            refreshBinRotas();
+            viewAttached();
+            logger.log('Bin Types Reset!', null, 'edit-bin-rota', true);
 
-        options.push({ Name: 'black' });
-        options.push({ Name: 'red' });
-        options.push({ Name: 'green' });
-        options.push({ Name: 'pink' });
-        options.push({ Name: 'brown' });
+        }
 
-        return options;
-    }
+        function occuranceOptionsClicked(selectedOccurance, binRota) {
 
-    function saveBinTypesClicked() {
+            binRota.Occurance(selectedOccurance.Name);
+        }
 
-        logger.logSuccess('Bin Types Saved!', null, 'edit-bin-rota', true);
-    }
+        function deleteBinTypeClicked(data) {
+            data.entityAspect.setDeleted();
+            binTypes.remove(data);
+        }
 
-    function undoBinTypesClicked() {
+        function addBinTypeClicked(data) {
 
-        binTypes(initBinTypes().slice());
-        viewAttached();
+            if (!newBinType().Name()) {
+                logger.logError('A bin name is required.', null, 'edit-bin-rota', true);
+                return 
+            }
 
-        logger.log('Bin Types Reset!', null, 'edit-bin-rota', true);
-    }
+            if (!newBinType().PrettyStartDate()) {
+                logger.logError('A rota start date is required.', null, 'edit-bin-rota', true);
+                return
+            }
 
-    function occuranceOptionsClicked(binTypeRow, occuranceSelected, data, event) {
+            var newBinRota = datacontext.createBinRota(session.sessionUser().House());
 
-        console.log(binTypeRow);
-        binTypeRow.Occurance(occuranceSelected);
-    }
+            newBinRota.Name(newBinType().Name());
+            newBinRota.Occurance(newBinType().Occurance());
+            newBinRota.PrettyStartDate(newBinType().PrettyStartDate());
+            newBinRota.Colour(newBinType().Colour());
 
-    function deleteBinTypeClicked(data, event) {
+            binTypes.push(newBinRota);
+            newBinType(initNewBinType());
+            // Rebind view attachment events
+            viewAttached();
+        }
 
-        binTypes.remove(data);
-    }
+        function initOccuranceOptions() {
 
-    function addBinTypeClicked(data) {
+            var options = new ko.observableArray();
 
-        binTypes.push(newBinType());
+            options.push({ Name: 'Daily' });
+            options.push({ Name: 'Weekly' });
+            options.push({ Name: 'Fortnightly' });
+            options.push({ Name: 'Monthly' });
 
-        newBinType(initNewBinType());
+            return options;
+        }
 
-        // Rebind view attachment events
-        viewAttached();
-    }
+        function getRotaGroupNames() {
 
-    function initOccuranceOptions() {
+            var groups = new ko.observableArray([{ Id: null, Name: 'No Group' }]);
 
-        var options = new ko.observableArray();
+            $.each(tenants(), function (i, tenant) {
+                groups.push({ Id: (i + 1), Name: 'Group ' + (i + 1) });
+            });
 
-        options.push({ Name: 'Weekly' });
-        options.push({ Name: 'Fortnightly' });
-        options.push({ Name: 'Monthly' });
+            return groups;
+        }
 
-        return options;
-    }
+        function initNewBinType() {
 
-    function initNewBinType() {
+            return data =
+                {
+                    Name: new ko.observable(''),
+                    Occurance: new ko.observable('Weekly'),
+                    PrettyStartDate: new ko.observable(''),
+                    Colour: new ko.observable('black')
+                };
+        }
 
-        return data = 
-            {
-                Name: ko.observable(''),
-                Occurance: ko.observable('Weekly'),
-                StartDate: ko.observable(""),
-                Colour: ko.observable('black')
-            };
-    }
+        function groupOptionClicked(selectedGroup, tenant) {
+            console.log(tenant);
+            tenant.UserSettings().BinCollectionRotaGroup(selectedGroup.Id);
 
-    function initBinTypes() {
+            return datacontext.saveChanges().then(function () {
+                logger.logSuccess('Group Change Saved!', null, 'edit-cleaning-rota', true);
+            });
+        }
 
-        var types = new ko.observableArray();
+        function getRandomRotaGroupName() {
 
-        types.push({ Name: ko.observable('Black & Pink'), Occurance: ko.observable('Weekly'), StartDate: ko.observable("23 September '13"), Colour: ko.observable('pink') });
-        types.push({ Name: ko.observable('Green'), Occurance: ko.observable('Weekly'), StartDate: ko.observable("1 October '13"), Colour: ko.observable('green') });
+            var groups = getRotaGroupNames();
+            var randIndex = Math.floor((Math.random() * groups().length));
 
-        return types;
-    }
-
-    function groupOptionClicked(tenantRow, groupSelected, data, event) {
-
-        tenantRow.Group(groupSelected);
-
-        logger.logSuccess('Group Change Saved!', null, 'edit-cleaning-rota', true);
-    }
-
-    function getRotaGroupNames() {
-
-        var groups = new ko.observableArray();
-
-        groups.push({ Name: 'Group 1' });
-        groups.push({ Name: 'Group 2' });
-        groups.push({ Name: 'Group 3' });
-        groups.push({ Name: 'Group 4' });
-        groups.push({ Name: 'Group 5' });
-        groups.push({ Name: 'Group 6' });
-
-        return groups;
-    }
-
-    function getRandomRotaGroupName() {
-
-        var groups = getRotaGroupNames();
-        var randIndex = Math.floor((Math.random() * groups().length));
-
-        return groups()[randIndex].Name;
-    }
-
-    function initTenantGroups() {
-
-        var groups = new ko.observableArray();
-
-        groups.push({ TenantName: 'Adam Barrell', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Tom Walton', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Chris Lewis', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Tom Milner', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Toby Webster', Group: ko.observable(getRandomRotaGroupName()) });
-        groups.push({ TenantName: 'Joss Whittle', Group: ko.observable(getRandomRotaGroupName()) });
-
-        return groups;
-    }
-
-});
+            return groups()[randIndex].Name;
+        }
+    });

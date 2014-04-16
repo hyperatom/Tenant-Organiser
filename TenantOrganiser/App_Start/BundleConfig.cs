@@ -34,12 +34,11 @@ namespace TenantOrganiser
                 .Include("~/Content/datepicker3.css")
                 .Include("~/Content/durandal.css")
                 .Include("~/Content/toastr.css")
-                // UNCOMMENT AND COMPILE LESS INTO CSS FOR PRODUCTION
-                //.Include("~/Content/app.css")
+                .Include("~/Content/app.css")
               );
 
             // COMMENT OUT FOR PRODUCTION
-            bundles.Add(new LessBundle("~/Content/less").Include("~/Content/less/style.less"));
+            //bundles.Add(new LessBundle("~/Content/lessStyles").Include("~/Content/less/style.less"));
         }
 
         public static void AddDefaultIgnorePatterns(IgnoreList ignoreList)

@@ -79,7 +79,7 @@ C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrgani
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.Migrations.InitialCreate.resources
+C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.Migrations.Changes.resources
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.csproj.GenerateResource.Cache
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.dll
 C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.pdb
-C:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\TenantOrganiser\obj\Debug\TenantOrganiser.csprojResolveAssemblyReference.cache
