@@ -26,19 +26,16 @@ namespace TenantOrganiser
 
             // Include style sheets
             bundles.Add(
-              new StyleBundle("~/Content/css")
-                .Include("~/Content/ie10mobile.css")
-                .Include("~/Content/bootstrap.css")
-                .Include("~/Content/bootstrap-theme.css")
-                .Include("~/Content/datepicker.css")
-                .Include("~/Content/datepicker3.css")
-                .Include("~/Content/durandal.css")
-                .Include("~/Content/toastr.css")
-                .Include("~/Content/app.css")
+              new StyleBundle("~/Content/styles")
+                .Include("~/Content/vendor/ie10mobile.css")
+                .Include("~/Content/vendor/bootstrap.css")
+                .Include("~/Content/vendor/bootstrap-theme.css")
+                .Include("~/Content/vendor/datepicker.css")
+                .Include("~/Content/vendor/datepicker3.css")
+                .Include("~/Content/vendor/durandal.css")
+                .Include("~/Content/vendor/toastr.css")
+                .Include("~/Content/css/*.css")
               );
-
-            // COMMENT OUT FOR PRODUCTION
-            //bundles.Add(new LessBundle("~/Content/lessStyles").Include("~/Content/less/style.less"));
         }
 
         public static void AddDefaultIgnorePatterns(IgnoreList ignoreList)

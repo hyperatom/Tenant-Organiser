@@ -72,6 +72,7 @@
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -184,13 +185,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201404062001028_InitialCreate.cs" />
-    <Compile Include="Migrations\201404062001028_InitialCreate.Designer.cs">
-      <DependentUpon>201404062001028_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201404161020159_InitialCreate.cs" />
+    <Compile Include="Migrations\201404161020159_InitialCreate.Designer.cs">
+      <DependentUpon>201404161020159_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201404150924419_Changes.cs" />
-    <Compile Include="Migrations\201404150924419_Changes.Designer.cs">
-      <DependentUpon>201404150924419_Changes.cs</DependentUpon>
+    <Compile Include="Migrations\201404161447240_FacebookUser.cs" />
+    <Compile Include="Migrations\201404161447240_FacebookUser.Designer.cs">
+      <DependentUpon>201404161447240_FacebookUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -260,15 +261,28 @@
     <Content Include="App\views\tasks.html" />
     <Content Include="App\views\tenants.html" />
     <Content Include="App\views\wish-list.html" />
-    <Content Include="Content\app.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\datepicker.css" />
-    <Content Include="Content\datepicker3.css" />
-    <Content Include="Content\durandal.css" />
-    <Content Include="Content\ie10mobile.css" />
+    <Content Include="Content\vendor\bootstrap-theme.css" />
+    <Content Include="Content\vendor\bootstrap-theme.min.css" />
+    <Content Include="Content\vendor\bootstrap.css" />
+    <Content Include="Content\vendor\bootstrap.min.css" />
+    <Content Include="Content\css\account-settings.css" />
+    <Content Include="Content\css\bill-invoice.css" />
+    <Content Include="Content\css\bills.css" />
+    <Content Include="Content\css\container.css" />
+    <Content Include="Content\css\edit-bin-rota.css" />
+    <Content Include="Content\css\edit-cleaning-rota.css" />
+    <Content Include="Content\css\home.css" />
+    <Content Include="Content\css\join-house.css" />
+    <Content Include="Content\css\login.css" />
+    <Content Include="Content\css\messages.css" />
+    <Content Include="Content\css\sidebar.css" />
+    <Content Include="Content\css\tasks.css" />
+    <Content Include="Content\css\tenants.css" />
+    <Content Include="Content\css\wish-list.css" />
+    <Content Include="Content\vendor\datepicker.css" />
+    <Content Include="Content\vendor\datepicker3.css" />
+    <Content Include="Content\vendor\durandal.css" />
+    <Content Include="Content\vendor\ie10mobile.css" />
     <Content Include="Content\images\fb\fb_login_active_404.png" />
     <Content Include="Content\images\fb\fb_login_pressed_404.png" />
     <Content Include="Content\images\icon.png" />
@@ -278,13 +292,13 @@
     <Content Include="Content\images\profile_pictures\profile-picture-2.jpg" />
     <Content Include="Content\images\profile_pictures\profile-picture-3.jpg" />
     <Content Include="Content\images\profile_pictures\profile-picture.jpg" />
-    <Content Include="Content\toastr.css" />
-    <Content Include="Content\toastr.min.css" />
+    <Content Include="Content\vendor\toastr.css" />
+    <Content Include="Content\vendor\toastr.min.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\almond-custom.js" />
-    <Content Include="Content\toastr.less" />
+    <Content Include="Content\vendor\toastr.less" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -304,13 +318,14 @@
     <Content Include="Scripts\durandal\transitions\entrance.js" />
     <Content Include="Scripts\durandal\viewEngine.js" />
     <Content Include="Scripts\durandal\viewLocator.js" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\vendor\bootstrap-theme.css.map" />
+    <Content Include="Content\vendor\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\tenantorganiser.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="App\fb.js" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\less-1.5.1.js" />
@@ -328,10 +343,8 @@
     <Content Include="Content\less\login.less" />
     <Content Include="Content\less\messages.less" />
     <Content Include="Content\less\sidebar.less" />
-    <Content Include="Content\less\style.less" />
     <Content Include="Content\less\tasks.less" />
     <Content Include="Content\less\tenants.less" />
-    <Content Include="Content\less\variables.less" />
     <Content Include="Content\less\wish-list.less" />
     <None Include="Scripts\breeze.intellisense.js" />
     <Content Include="Scripts\breeze.debug.js" />
@@ -373,11 +386,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201404062001028_InitialCreate.resx">
-      <DependentUpon>201404062001028_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201404161020159_InitialCreate.resx">
+      <DependentUpon>201404161020159_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201404150924419_Changes.resx">
-      <DependentUpon>201404150924419_Changes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201404161447240_FacebookUser.resx">
+      <DependentUpon>201404161447240_FacebookUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

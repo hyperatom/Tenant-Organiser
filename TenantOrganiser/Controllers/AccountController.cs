@@ -178,7 +178,7 @@ namespace ToDoList.Controllers
         //
         // POST: /Account/Disassociate
 
-       /* [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Disassociate(string provider, string providerUserId)
         {
@@ -222,7 +222,7 @@ namespace ToDoList.Controllers
         //
         // POST: /Account/Manage
 
-        [HttpPost]
+      /*  [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Manage(LocalPasswordModel model)
         {
@@ -280,7 +280,7 @@ namespace ToDoList.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
+        }*/
 
         //
         // POST: /Account/ExternalLogin
@@ -412,7 +412,6 @@ namespace ToDoList.Controllers
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
 
-        #region Helpers
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -447,7 +446,7 @@ namespace ToDoList.Controllers
             {
                 OAuthWebSecurity.RequestAuthentication(Provider, ReturnUrl);
             }
-        }*/
+        }
 
         private IEnumerable<string> GetErrorsFromModelState()
         {

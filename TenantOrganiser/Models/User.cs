@@ -20,11 +20,13 @@ namespace TenantOrganiser
         [Required]
         public string LastName { get; set; }
 
-        [Required]
-        
+        [Required]    
         public string Email { get; set; }
 
         [Required]
+        public bool IsFacebookUser { get; set; }
+
+        // Not required because Facebook users have no password
         public string Password { get; set; }
 
         public bool EmailNotifications { get; set; }

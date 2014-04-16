@@ -1,0 +1,20 @@
+.module-panel table {
+  width: 100%;
+}
+.module-panel td {
+  padding-bottom: 10px;
+}
+.module-panel #fb-login-btn {
+  background: url(images/fb/fb_login_active_404.png) no-repeat;
+  margin-bottom: 30px;
+  width: 202px;
+  height: 46px;
+}
+#register-panel,
+#login-panel {
+  height: 321px;
+}
+#register-panel .panel-header,
+#login-panel .panel-header {
+  margin: 0px 0px 30px 0px;
+}
