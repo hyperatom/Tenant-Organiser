@@ -21,6 +21,7 @@ exports.config = function(weyland) {
                     'durandal': '../Scripts/durandal',
                     'plugins': '../Scripts/durandal/plugins',
                     'transitions': '../Scripts/durandal/transitions',
+                    'facebook': '../Scripts/facebook',
                     'knockout': 'empty:',
                     'bootstrap': 'empty:',
                     'jquery': 'empty:'

@@ -1,19 +1,27 @@
 ﻿requirejs.config({
+    shim: {
+        'facebook': {
+            exports: 'FB'
+        }
+    },
     paths: {
         'text': '../Scripts/text',
         'durandal': '../Scripts/durandal',
         'plugins': '../Scripts/durandal/plugins',
-        'transitions': '../Scripts/durandal/transitions'
+        'transitions': '../Scripts/durandal/transitions',
+        'facebook': '../Scripts/facebook'
     }
 });
 
+require(['services/fbhelper']);
 define('jquery', function () { return jQuery; });
 define('knockout', ko);
+
 
 define(['durandal/app', 'durandal/viewLocator', 'durandal/system', 'plugins/router', 'services/logger'], boot);
 
 
-function boot(app, viewLocator, system, router, logger) {
+function boot(app, viewLocator, system, router, logger, fb) {
 
     // Enable debug message to show in the console 
     system.debug(true);

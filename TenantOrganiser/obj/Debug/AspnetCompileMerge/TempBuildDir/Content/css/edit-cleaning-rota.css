@@ -1,0 +1,40 @@
+.rotate-90 {
+  -moz-transform: rotate(-180deg);
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  padding-bottom: 2px;
+}
+#areas-panel {
+  height: 345px;
+}
+#areas-panel .input-group {
+  margin-bottom: 5px;
+}
+#areas-panel #new-area-input {
+  margin: 20px 0px 20px 0px;
+}
+#clean-groups-panel {
+  overflow: visible;
+}
+#clean-groups-panel .btn-group-num {
+  width: 100px;
+}
+#clean-groups-panel td {
+  padding-bottom: 10px;
+}
+#clean-groups-panel td:nth-child(odd) {
+  padding-right: 70px;
+}
+#clean-date-panel {
+  overflow: visible;
+}
+#clean-date-panel .btn-group {
+  width: 100%;
+}
+#clean-date-panel #btn-clean-occurance {
+  width: 90%;
+}
+#clean-date-panel .cleaning-rota-action-panel {
+  margin-top: 15px;
+}

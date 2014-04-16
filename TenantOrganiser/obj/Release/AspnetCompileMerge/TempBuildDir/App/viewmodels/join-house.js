@@ -1,5 +1,5 @@
-﻿define(['services/logger', 'plugins/router', 'services/session', 'services/datacontext'],
-    function (logger, router, session, datacontext) {
+﻿define(['services/logger', 'plugins/router', 'services/session', 'services/datacontext', 'services/fbhelper'],
+    function (logger, router, session, datacontext, fb) {
 
         var pageHeader = new ko.observable();
 
@@ -47,6 +47,10 @@
         }
 
         function logoutClicked() {
+
+            if (session.sessionUser().IsFacebookUser())
+                fb.logout()
+
             return session.logout().then(function () { router.navigate('#login') });
         }
 

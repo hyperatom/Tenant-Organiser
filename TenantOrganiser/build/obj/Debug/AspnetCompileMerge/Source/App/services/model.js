@@ -2,7 +2,8 @@
 
     var model = {
         configureMetadataStore: configureMetadataStore,
-        userInitializer: userInitializer
+        userInitializer: userInitializer,
+        getNextBill: getNextBill
     };
 
     return model;
@@ -17,6 +18,59 @@
             'ActivityLog', null, activityLogInitializer);
         metadataStore.registerEntityTypeCtor(
             'Conversation', null, conversationInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'BillType', null, billTypeInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'BillInvoice', null, billInvoiceInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'InvoiceRecipient', null, invoiceRecipientInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'UserSettings', null, userSettingsInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'BinRota', null, binRotaInitializer);
+        metadataStore.registerEntityTypeCtor(
+            'CleaningRota', null, cleaningRotaInitializer);
+    }
+
+    function invoiceRecipientInitializer(invoiceRecipientObservable) {
+        invoiceRecipientObservable.PrettyAmount = ko.computed(function () {
+            return '£' + invoiceRecipientObservable.Amount().toFixed(2);
+        });
+    }
+    
+    function billInvoiceInitializer(invoiceObservable) {
+
+        invoiceObservable.PrettyDueDate = ko.computed(function () {
+            return moment(invoiceObservable.DueDate().toString()).format('MMMM Do YYYY').toString();
+        });
+    }
+
+    function billTypeInitializer(billTypeObservable) {
+        // Initialise the currently viewed invoice for the bill
+        billTypeObservable.currentInvoice = ko.observable(getNextBill(billTypeObservable));
+    }
+
+    function getNextBill(billTypeObservable) {
+        if (!billTypeObservable.BillInvoices())
+            return null;
+
+        // Initialise minimum date
+        var closestDate = moment("26/03/1992", "DD/MM/YYYY");
+
+        var results = $.grep(billTypeObservable.BillInvoices(), function (invoice) {
+            // Difference in time from due date to today
+            var diff1 = Math.abs(moment(invoice.DueDate()).diff(moment(), 'days'));
+            // Difference in time from minimum due date to today
+            var diff2 = Math.abs(moment(closestDate).diff(moment(), 'days'));
+
+            var isCloser = diff1 < diff2 ? true : false;
+            // Is the current difference smaller than the found minimum
+            closestDate = diff1 < diff2 ? invoice.DueDate() : closestDate;
+            return isCloser;
+        });
+
+        // Return the closest upcoming bill invoice which is the last element added
+        return results[results.length - 1];
     }
 
     function conversationInitializer(conversationObservable) {
@@ -130,6 +184,91 @@
                 return config.profilePicturesDirectory + config.genericProfilePictureFileName;
 
             return config.profilePicturesDirectory + userObservable.DisplayPictureFileName();
+        });
+    }
+
+    function userSettingsInitializer(userSettingsObservable) {
+
+        userSettingsObservable.PrettyBinRotaGroup = ko.computed(function () {
+            if (!userSettingsObservable.BinCollectionRotaGroup())
+                return "No Group";
+
+            return "Group " + userSettingsObservable.BinCollectionRotaGroup();
+        });
+
+        userSettingsObservable.PrettyCleaningRotaGroup = ko.computed(function () {
+            if (!userSettingsObservable.CleaningRotaGroup())
+                return "No Group";
+
+            return "Group " + userSettingsObservable.CleaningRotaGroup();
+        });
+    }
+
+    function binRotaInitializer(binRotaObservable) {
+
+        binRotaObservable.OccuranceDays = ko.computed({
+
+            read: function () {
+                switch (binRotaObservable.Occurance()) {
+                    case "Daily": return 1;
+                    case "Weekly": return 7;
+                    case "Fortnightly": return 14;
+                    case "Monthly": return; // Special case, begin on X day of each month
+                }
+            },
+
+            write: function (value) {
+                switch (value) {
+                    case 1: return "Daily";
+                    case 7: return "Weekly";
+                    case 14: return "Fortnightly";
+                }
+            }
+        });
+
+        binRotaObservable.PrettyStartDate = ko.computed({
+
+            read: function () {
+                return moment(binRotaObservable.StartDate()).format("DD/MM/YYYY").toString();
+            },
+
+            write: function (value) {
+                binRotaObservable.StartDate(moment(value, "DD/MM/YYYY").toString());
+            }
+        });
+    }
+
+    function cleaningRotaInitializer(cleaningRotaObservable) {
+
+        cleaningRotaObservable.OccuranceDays = ko.computed({
+
+            read: function () {
+                switch (cleaningRotaObservable.Occurance()) {
+                    case "Daily": return 1;
+                    case "Weekly": return 7;
+                    case "Fortnightly": return 14;
+                    case "Monthly": return; // Special case, begin on X day of each month
+                }
+            },
+
+            write: function (value) {
+                switch (value) {
+                    case 1: return "Daily";
+                    case 7: return "Weekly";
+                    case 14: return "Fortnightly";
+                }
+            }
+        });
+
+        cleaningRotaObservable.PrettyStartDate = ko.computed({
+
+            read: function () {
+                return moment(cleaningRotaObservable.StartDate()).format("DD/MM/YYYY").toString();
+            },
+
+            write: function (value) {
+                cleaningRotaObservable.StartDate(moment(value, "DD/MM/YYYY").toString());
+            }
         });
     }
 });

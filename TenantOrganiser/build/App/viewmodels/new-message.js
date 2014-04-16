@@ -1,1 +1,1 @@
-define(["services/logger"],function(e){function n(){return e.log("New Message View Activated",null,"new-message",!0),!0}var t={activate:n,title:"New Message"};return t});
+define(["services/logger"],function(e){function t(){return e.log("New Message View Activated",null,"new-message",!0),!0}var n={activate:t,title:"New Message"};return n});

@@ -3,6 +3,8 @@
 
         var subscriptions = [];
 
+        var isFacebookUser = new ko.observable();
+
         var hasHouseChanged = new ko.observable(false);
         var hasUserInfoChanged = new ko.observable(false);
 
@@ -58,13 +60,17 @@
             rejectTenant: rejectTenant,
 
             leaveHouseConfirmed: leaveHouseConfirmed,
-            pictureUploaded: pictureUploaded
+            pictureUploaded: pictureUploaded,
+
+            isFacebookUser: isFacebookUser
         };
 
         return vm;
 
 
         function activate() {
+
+            isFacebookUser(session.sessionUser().IsFacebookUser());
 
             return Q.all([refreshHouseJoinRequests(), refreshTenantsList()]).then(function () {
 

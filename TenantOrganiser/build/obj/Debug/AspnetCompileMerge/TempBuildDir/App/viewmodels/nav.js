@@ -1,4 +1,5 @@
-﻿define(['services/logger', 'plugins/router', 'services/session'], function (logger, router, session) {
+﻿define(['services/logger', 'plugins/router', 'services/session', 'services/fbhelper'],
+    function (logger, router, session, fb) {
 
     var vm = {
         activate: activate,
@@ -31,8 +32,9 @@
 
     function logoutClicked() {
 
-        session.logout().then(function () {
-            router.navigate('#login');
-        });
+        if (session.sessionUser().IsFacebookUser())
+            fb.logout();
+
+        return session.logout().then(function () { router.navigate('#login') });
     }
 });

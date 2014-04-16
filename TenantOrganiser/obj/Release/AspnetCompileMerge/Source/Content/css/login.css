@@ -4,15 +4,12 @@
 .module-panel td {
   padding-bottom: 10px;
 }
-.module-panel #fb-login-btn {
-  background: url(images/fb/fb_login_active_404.png) no-repeat;
-  margin-bottom: 30px;
-  width: 202px;
-  height: 46px;
+.module-panel .fb-login-button {
+  margin-bottom: 40px !important;
 }
 #register-panel,
 #login-panel {
-  height: 321px;
+  height: 400px;
 }
 #register-panel .panel-header,
 #login-panel .panel-header {

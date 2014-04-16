@@ -14,6 +14,10 @@ namespace TenantOrganiser.Security
             {
                 User user = new TenantOrganiserDbContext().Users.Where(u => u.Email == email && u.Password == password).SingleOrDefault();
 
+                // Facebook users cannot log in this way
+                if (user.IsFacebookUser)
+                    return false;
+
                 if (user != null)
                     return true;
             }

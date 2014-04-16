@@ -1,210 +1,237 @@
-﻿define(['services/logger', 'plugins/router'], function (logger, router) {
+﻿define(['services/logger', 'plugins/router', 'services/datacontext', 'services/session'],
+    function (logger, router, datacontext, session) {
 
-    var initialised = false;
+        var initialised = false;
 
-    var invoiceRecipients = new ko.observableArray();
-    var newInvoiceRecipient = new ko.observableArray();
-    var tenantsList = new ko.observableArray();
+        var pageHeader = new ko.observable();
+        var billType = new ko.observable();
+        var billInvoice = new ko.observable();
+        var dueDate = new ko.observable();
 
-    var billName = new ko.observable('');
+        var invoiceRecipients = new ko.observableArray();
+        var newInvoiceRecipient = new ko.observableArray();
+        var tenantsList = new ko.observableArray();
 
-    var totalAmount = new ko.observable(0);
-    var dueDate = new ko.observable("26 March '14");
+        var billName = new ko.observable('');
 
-    var recipientAmountChanging = false;
-    var totalAmountChanging = false;
+        var totalAmount = new ko.observable(0);
 
-    var vm = {
-        activate: activate,
-        title: 'Add Bill Invoice View',
-        attached: viewAttached,
+        var recipientAmountChanging = false;
+        var totalAmountChanging = false;
 
-        billName: billName,
+        var vm = {
+            activate: activate,
+            title: 'Add Bill Invoice View',
+            attached: viewAttached,
 
-        clickedCombo: clickedCombo,
-        checkboxClicked: checkboxClicked,
+            pageHeader: pageHeader,
+            billType: billType,
+            billInvoice: billInvoice,
+            dueDate: dueDate,
 
-        invoiceRecipients: invoiceRecipients,
-        newInvoiceRecipient: newInvoiceRecipient,
+            billName: billName,
 
-        totalAmount: totalAmount,
-        dueDate: dueDate,
+            clickedCombo: clickedCombo,
+            checkboxClicked: checkboxClicked,
 
-        addNewRecipient: addNewRecipient,
-        removeRecipient: removeRecipient,
+            invoiceRecipients: invoiceRecipients,
+            newInvoiceRecipient: newInvoiceRecipient,
 
-        invoiceSaved: invoiceSaved,
-        invoiceDeleted: invoiceDeleted,
-        invoiceUndone: invoiceUndone,
+            totalAmount: totalAmount,
 
-        tenantsList: tenantsList
-    };
+            addNewRecipient: addNewRecipient,
+            removeRecipient: removeRecipient,
 
-    return vm;
+            invoiceSaved: invoiceSaved,
+            invoiceDeleted: invoiceDeleted,
+            invoiceUndone: invoiceUndone,
 
-    function activate(billname) {
-
-        invoiceRecipients.removeAll();
-        initTenantsList(tenantsList);
-        initNewRecipient(newInvoiceRecipient);
-        initInvoiceRecipients(invoiceRecipients);
-
-        var amount = 0;
-        ko.utils.arrayForEach(invoiceRecipients(), function (recip) { amount += parseInt(recip.Amount()); });
-        totalAmount(amount);
-
-        billName(billname);
-
-        logger.log('Add Bill Invoice Activated', null, 'edit-bill-invoice', true);
-
-        return true;
-    }
-
-    function viewAttached() {
-
-        ko.observable.fn.beforeAndAfterSubscribe = function (callback, target) {
-            var _oldValue;
-            target.subscribe(function (oldValue) {
-                _oldValue = oldValue;
-            }, null, 'beforeChange');
-            target.subscribe(function (newValue) {
-                callback(target, _oldValue, newValue);
-            });
+            tenantsList: tenantsList
         };
 
-        $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
+        return vm;
 
-        ko.observable.fn.beforeAndAfterSubscribe(totalAmountChanged, totalAmount);
-    }
+        function activate(invoiceId) {
 
-    function invoiceSaved() {
+            return Q.all([refreshTenants(), refreshInvoice(invoiceId), refreshBillType()]).then(function () {
+                pageHeader("Edit " + billType().Name() + " Invoice");
+                invoiceRecipients(billInvoice().Recipients().slice());
 
-        router.navigate('#bills');
+                initNewRecipient();
 
-        logger.logSuccess('Invoice Saved!', null, 'edit-bill-invoice', true);
-    }
+                var amount = 0;
 
-    function invoiceDeleted() {
+                ko.utils.arrayForEach(invoiceRecipients(), function (recip) {
+                    recip.Amount.subscribe(recipientAmountChanged);
+                    amount += recip.Amount();
+                });
 
-        router.navigate('#bills');
+                totalAmount(amount.toFixed(2));
 
-        logger.logSuccess('Invoice Deleted!', null, 'edit-bill-invoice', true);
-    }
+                dueDate(moment(billInvoice().DueDate()).format('DD/MM/YYYY'));
 
-    function invoiceUndone() {
-
-        invoiceRecipients.removeAll();
-        initInvoiceRecipients(invoiceRecipients);
-
-        dueDate("28 March '14");
-
-        logger.log('Changes undone!', null, 'edit-bill-invoice', true);
-    }
-
-    function recipientAmountChanged(newValue) {
-
-        recipientAmountChanging = true;
-
-        var total = 0;
-
-        ko.utils.arrayForEach(invoiceRecipients(), function (recip) { console.log(total += parseInt(recip.Amount())); });
-
-        if (totalAmountChanging == false)
-            totalAmount(total);
-
-        recipientAmountChanging = false;
-    }
-
-    function totalAmountChanged(target, oldValue, newValue) {
-
-        var size = invoiceRecipients().length;
-
-        if (oldValue != newValue && newValue != "" && size > 0 && recipientAmountChanging == false) {
-            var sharedAmount = newValue / size;
-
-            console.log('yes');
-
-            totalAmountChanging = true;
-            ko.utils.arrayForEach(invoiceRecipients(), function (recip) { recip.Amount(sharedAmount) });
-            totalAmountChanging = false;
+                logger.log('Add Bill Invoice Activated', null, 'edit-bill-invoice', true);
+            });
         }
-    }
 
-    function addNewRecipient() {
-
-        var recip = { GlyphClass: ko.observable(newInvoiceRecipient().GlyphClass()), UserFullName: ko.observable(newInvoiceRecipient().UserFullName()), Amount: ko.observable(newInvoiceRecipient().Amount()) };
-
-        recip.Amount.subscribe(recipientAmountChanged);
-
-        invoiceRecipients.push(recip);
-
-        recip.Amount.notifySubscribers();
-
-        newInvoiceRecipient().GlyphClass('glyphicon glyphicon-unchecked');
-        newInvoiceRecipient().UserFullName('Select a recipient');
-        newInvoiceRecipient().Amount('');
-    }
-
-    function removeRecipient(recipient) {
-
-        invoiceRecipients.remove(recipient);
-        recipient.Amount.notifySubscribers();
-    }
-
-    function initTenantsList(list) {
-
-        list.push({ UserFullName: 'Adam Barrell' });
-        list.push({ UserFullName: 'Joss Whittle' });
-        list.push({ UserFullName: 'Tom Milner' });
-        list.push({ UserFullName: 'Toby Webster' });
-    }
-
-    function initNewRecipient(observableRecipient) {
-
-        observableRecipient({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: ko.observable('Select a recipient'), Amount: ko.observable('') });
-    }
-
-    function clickedCombo(clicked, buttonLabel, event) {
-
-        console.log(clicked);
-
-        buttonLabel.UserFullName(clicked);
-    }
-
-    function checkboxClicked(data) {
-
-        console.log(data);
-
-        if (data.GlyphClass() == "glyphicon glyphicon-unchecked") {
-
-            data.GlyphClass("glyphicon glyphicon-check");
-            logger.logSuccess(data.UserFullName().concat(' has now paid.'), null, 'bills', true);
-
-        } else if (data.GlyphClass() == "glyphicon glyphicon-check") {
-
-            data.GlyphClass("glyphicon glyphicon-unchecked");
-            logger.logSuccess(data.UserFullName().concat(' has now un-paid.'), null, 'bills', true);
+        function refreshTenants() {
+            return datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
         }
-    }
 
-    function initInvoiceRecipients(recipients) {
+        function refreshInvoice(id) {
+            return datacontext.getInvoiceById(billInvoice, id);
+        }
 
-        recipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: ko.observable('Adam Barrell'), Amount: ko.observable('72') });
-        recipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-check'), UserFullName: ko.observable('Joss Whittle'), Amount: ko.observable('33') });
-        recipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: ko.observable('Toby Webster'), Amount: ko.observable('90') });
-        recipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-unchecked'), UserFullName: ko.observable('Tom Walton'), Amount: ko.observable('70') });
-        recipients.push({ GlyphClass: ko.observable('glyphicon glyphicon-check'), UserFullName: ko.observable('Chris Lewis'), Amount: ko.observable('44') });
+        function refreshBillType() {
+            return billType(billInvoice().BillType());
+        }
 
-        recipients()[0].Amount.subscribe(recipientAmountChanged);
-        recipients()[1].Amount.subscribe(recipientAmountChanged);
-        recipients()[2].Amount.subscribe(recipientAmountChanged);
-        recipients()[3].Amount.subscribe(recipientAmountChanged);
-        recipients()[4].Amount.subscribe(recipientAmountChanged);
+        function viewAttached() {
 
-        recipients()[0].Amount.notifySubscribers();
-        recipients()[1].Amount.notifySubscribers();
-        recipients()[2].Amount.notifySubscribers();
-        recipients()[3].Amount.notifySubscribers();
-        recipients()[4].Amount.notifySubscribers();
-    }
-});
+            ko.observable.fn.beforeAndAfterSubscribe = function (callback, target) {
+                var _oldValue;
+                target.subscribe(function (oldValue) {
+                    _oldValue = oldValue;
+                }, null, 'beforeChange');
+                target.subscribe(function (newValue) {
+                    callback(target, _oldValue, newValue);
+                });
+            };
+
+            $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
+
+            ko.observable.fn.beforeAndAfterSubscribe(totalAmountChanged, totalAmount);
+        }
+
+        function invoiceSaved() {
+            datacontext.saveChanges().then(saveSuccess);
+
+            function saveSuccess() {
+                router.navigate('#bills');
+                logger.logSuccess('Invoice Saved!', null, 'edit-bill-invoice', true);
+            }
+        }
+
+        function invoiceDeleted() {
+
+            ko.utils.arrayForEach(invoiceRecipients().slice(), function (recip) {
+                if (recip) {
+                    invoiceRecipients.remove(recip);
+                    recip.entityAspect.setDeleted();
+                }
+            });
+
+            billInvoice().entityAspect.setDeleted();
+
+            return datacontext.saveChanges().then(function () {
+                router.navigate('#bills');
+                logger.logSuccess('Invoice Deleted!', null, 'edit-bill-invoice', true);
+            });
+        }
+
+        function invoiceUndone() {
+
+            invoiceRecipients([]);
+            datacontext.rejectChanges();
+            invoiceRecipients(billInvoice().Recipients().slice());
+
+            initNewRecipient();
+
+            var amount = 0;
+
+            ko.utils.arrayForEach(invoiceRecipients(), function (recip) {
+                recip.Amount.subscribe(recipientAmountChanged);
+                amount += recip.Amount();
+            });
+
+            totalAmount(amount.toFixed(2));
+
+            dueDate(moment(billInvoice().DueDate()).format('DD/MM/YYYY'));
+
+            logger.log('Changes undone!', null, 'edit-bill-invoice', true);
+        }
+
+        function recipientAmountChanged(newValue) {
+
+            recipientAmountChanging = true;
+
+            var total = 0;
+
+            ko.utils.arrayForEach(invoiceRecipients(), function (recip) { total += recip.Amount(); });
+
+            if (totalAmountChanging == false)
+                totalAmount(total.toFixed(2));
+
+            recipientAmountChanging = false;
+        }
+
+        function totalAmountChanged(target, oldValue, newValue) {
+
+            var size = invoiceRecipients().length;
+
+            if (oldValue != newValue && newValue != "" && size > 0 && recipientAmountChanging == false) {
+                var sharedAmount = newValue / size;
+
+                totalAmountChanging = true;
+                ko.utils.arrayForEach(invoiceRecipients(), function (recip) { recip.Amount(sharedAmount.toFixed(2)) });
+                totalAmountChanging = false;
+            }
+        }
+
+        function addNewRecipient(recipient) {
+
+            // Validate new recipient
+            if (!recipient.Amount()) {
+                logger.logError("Please enter a bill amount for the new recipient.", null, 'add-bill-invoice', true);
+                return;
+            }
+
+            if (recipient.User().FullName() === "Select a recipient") {
+                logger.logError("Please choose a recipient from the combo box.", null, 'add-bill-invoice', true);
+                return;
+            }
+
+            var newRecip = datacontext.createInvoiceRecipient(billInvoice());
+
+            try {
+                newRecip.User(recipient.User());
+                newRecip.Amount(recipient.Amount());
+            } catch (e) {
+                newRecip.entityAspect.setDeleted();
+                logger.logError("This recipient has already been added.", null, 'add-bill-invoice', true);
+                return;
+            }
+
+            invoiceRecipients.push(newRecip);
+            newRecip.Amount.subscribe(recipientAmountChanged);
+            newRecip.Amount.notifySubscribers();
+
+            initNewRecipient();
+        }
+
+        function removeRecipient(recipient) {
+
+            invoiceRecipients.remove(recipient);
+            recipient.entityAspect.setDeleted();
+            //billInvoice().Recipients.remove(recipient);
+            recipient.Amount.notifySubscribers();
+        }
+
+        function initNewRecipient() {
+            newInvoiceRecipient({ User: ko.observable({ FullName: ko.observable('Select a recipient') }), BillInvoice: billInvoice(), Paid: ko.observable(false), Amount: ko.observable() });
+        }
+
+        function clickedCombo(tenant, newInvoiceRecipient) {
+            newInvoiceRecipient.User(tenant);
+        }
+
+        function checkboxClicked(recip) {
+            if (!recip.Paid()) {
+                recip.Paid(true);
+                logger.logSuccess(recip.User().FullName().concat(' has now paid.'), null, 'edit-bill-invoice', true);
+            } else {
+                recip.Paid(false);
+                logger.logSuccess(recip.User().FullName().concat(' has now un-paid.'), null, 'edit-bill-invoice', true);
+            }
+        }
+    });

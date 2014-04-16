@@ -75,21 +75,21 @@
                 <td>
                     <label>Email:</label></td>
                 <td>
-                    <input data-bind="value: email, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
+                    <input data-bind="value: email, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="text" class="form-control" /></td>
             </tr>
 
             <tr>
                 <td>
                     <label>Password:</label></td>
                 <td>
-                    <input data-bind="value: password1, valueUpdate: 'afterkeydown'" type="password" class="form-control" /></td>
+                    <input data-bind="value: password1, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="password" class="form-control" /></td>
             </tr>
 
             <tr>
                 <td>
                     <label>Retype Password:</label></td>
                 <td>
-                    <input data-bind="value: password2, valueUpdate: 'afterkeydown'" type="password" class="form-control" /></td>
+                    <input data-bind="value: password2, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="password" class="form-control" /></td>
             </tr>
 
             <tr>

@@ -79,6 +79,16 @@
             });
         };
 
+        var facebookLogin = function (token) {
+
+            return $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "account/facebooklogin",
+                data: { token: token }
+            });
+        };
+
         var logout = function () {
 
             return $.ajax({
@@ -706,6 +716,7 @@
             getLoggedInUser: getLoggedInUser,
 
             login: login,
+            facebookLogin: facebookLogin,
             logout: logout,
             register: register,
             changePassword: changePassword,

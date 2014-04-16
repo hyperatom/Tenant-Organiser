@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Web.WebPages.OAuth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,9 @@ namespace TenantOrganiser
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            //OAuthWebSecurity.RegisterFacebookClient(
-            //    appId: "",
-            //    appSecret: "");
+            OAuthWebSecurity.RegisterFacebookClient(
+                appId: "533178160135622",
+                appSecret: "2a2aff70663859147d3bc0eb0f7fe7b2");
 
             //OAuthWebSecurity.RegisterGoogleClient();
         }
