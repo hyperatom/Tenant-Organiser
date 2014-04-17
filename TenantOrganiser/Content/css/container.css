@@ -9,11 +9,12 @@
 }
 .container .module-nav-panel {
   position: absolute;
-  bottom: 10px;
+  bottom: 30px;
 }
 .container .module-panel {
   overflow: hidden;
-  margin-bottom: 40px;
+  /* Override Bootstrap well margin */
+  margin-bottom: 20px !important;
 }
 .container .module-panel .panel-table {
   margin-top: 10px;

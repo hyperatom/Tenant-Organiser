@@ -2,153 +2,161 @@
     <h2>Account Settings</h2>
 </div>
 
-<div id="leave-house-btn" class="col-md-9 row">
-    <button data-toggle="modal" data-target="#leave-house-modal" class="btn btn-danger">
-        <span class="glyphicon glyphicon-remove"></span>
-        <span>Leave House</span>
-    </button>
+<div class="row">
+    <div id="leave-house-btn" class="col-xs-12">
+        <button data-toggle="modal" data-target="#leave-house-modal" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span>
+            <span>Leave House</span>
+        </button>
+    </div>
 </div>
 
-<div class="well col-md-4 module-panel house-settings-panel">
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    <label>House Name:</label></td>
-                <td>
-                    <input data-bind="value: houseName, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
-            </tr>
+<div class="row settings-row-one">
+    <div class="col-md-6 module-panel">
+        <div class="well house-settings-panel">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>House Name:</label></td>
+                        <td>
+                            <input data-bind="value: houseName, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
+                    </tr>
 
-            <tr>
-                <td>
-                    <label>House Code:</label></td>
-                <td>
-                    <input data-bind="value: houseCode, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
-            </tr>
+                    <tr>
+                        <td>
+                            <label>House Code:</label></td>
+                        <td>
+                            <input data-bind="value: houseCode, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
+                    </tr>
 
-            <tr>
-                <td></td>
-                <td>
-                    <button data-bind="click: saveHousePanelClicked, enable: hasHouseChanged" class="btn btn-success">
-                        <span class="glyphicon glyphicon-floppy-disk"></span>Save
-                    </button>
-                    <button data-bind="click: undoHousePanelClicked, enable: hasHouseChanged" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-repeat rotate-90"></span>Undo
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button data-bind="click: saveHousePanelClicked, enable: hasHouseChanged" class="btn btn-success">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>Save
+                            </button>
+                            <button data-bind="click: undoHousePanelClicked, enable: hasHouseChanged" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-repeat rotate-90"></span>Undo
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
+    <div class="col-md-6 module-panel">
+        <div class="well house-settings-panel">
+            <form id="notification-row" class="form-inline" role="form">
+                <label>Email Notifications:</label>
+                <input id="email-notification-chkbox" type="checkbox" data-bind="checked: emailNotifications" />
+            </form>
+
+            <label>Display Picture:</label>
+
+            <br />
+
+            <img id="profile-pic-select" class="img-circle" data-bind="attr: { src: displayPictureURL }">
+
+            <button data-toggle="modal" data-target="#fb-pic-modal" class="btn btn-primary">Facebook</button>
+            <button data-toggle="modal" data-target="#file-pic-modal" class="btn btn-primary">File</button>
+            <button data-toggle="modal" data-target="#url-pic-modal" class="btn btn-primary">URL</button>
+        </div>
+    </div>
 </div>
+<div class="row settings-row-two">
+    <div id="info-panel" class="col-md-6 module-panel">
+        <div class="well house-settings-panel">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Full Name:</label></td>
+                        <td>
+                            <input data-bind="value: fullName, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
+                    </tr>
 
-<div class="col-md-1"></div>
+                    <tr>
+                        <td>
+                            <label>Email:</label></td>
+                        <td>
+                            <input data-bind="value: email, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="text" class="form-control" /></td>
+                    </tr>
 
-<div class="well col-md-4 module-panel house-settings-panel">
-    <form id="notification-row" class="form-inline" role="form">
-        <label>Email Notifications:</label>
-        <input id="email-notification-chkbox" type="checkbox" data-bind="checked: emailNotifications" />
-    </form>
+                    <tr>
+                        <td>
+                            <label>Password:</label></td>
+                        <td>
+                            <input data-bind="value: password1, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="password" class="form-control" /></td>
+                    </tr>
 
-    <label>Display Picture:</label>
+                    <tr>
+                        <td>
+                            <label>Retype Password:</label></td>
+                        <td>
+                            <input data-bind="value: password2, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="password" class="form-control" /></td>
+                    </tr>
 
-    <br />
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button data-bind="click: saveUserInfoClicked, enable: hasUserInfoChanged" class="btn btn-success">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                                <span>Save</span>
+                            </button>
+                            <button data-bind="click: undoUserInfoClicked, enable: hasUserInfoChanged" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-repeat"></span>
+                                <span>Undo</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <img id="profile-pic-select" class="img-circle" data-bind="attr: { src: displayPictureURL }">
+    <div class="col-md-6 module-panel">
+        <div class="well house-settings-panel">
 
-    <button data-toggle="modal" data-target="#fb-pic-modal" class="btn btn-primary">Facebook</button>
-    <button data-toggle="modal" data-target="#file-pic-modal" class="btn btn-primary">File</button>
-    <button data-toggle="modal" data-target="#url-pic-modal" class="btn btn-primary">URL</button>
-</div>
+            <h4 class="panel-header">Pending Requests</h4>
 
-<div id="info-panel" class="well col-md-4 module-panel house-settings-panel">
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    <label>Full Name:</label></td>
-                <td>
-                    <input data-bind="value: fullName, valueUpdate: 'afterkeydown'" type="text" class="form-control" /></td>
-            </tr>
+            <table class="tenants-table">
+                <tbody data-bind="foreach: pendingRequests">
+                    <tr>
+                        <td>
+                            <button data-bind="click: $root.acceptTenant" class="btn btn-xs btn-success">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                            <button data-bind="click: $root.rejectTenant" class="btn btn-xs btn-danger">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <label data-bind="text: User().FullName()"></label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <tr>
-                <td>
-                    <label>Email:</label></td>
-                <td>
-                    <input data-bind="value: email, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="text" class="form-control" /></td>
-            </tr>
+            <h4 id="tenants-heading">Tenants</h4>
 
-            <tr>
-                <td>
-                    <label>Password:</label></td>
-                <td>
-                    <input data-bind="value: password1, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="password" class="form-control" /></td>
-            </tr>
-
-            <tr>
-                <td>
-                    <label>Retype Password:</label></td>
-                <td>
-                    <input data-bind="value: password2, valueUpdate: 'afterkeydown', enable: !isFacebookUser()" type="password" class="form-control" /></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td>
-                    <button data-bind="click: saveUserInfoClicked, enable: hasUserInfoChanged" class="btn btn-success">
-                        <span class="glyphicon glyphicon-floppy-disk"></span>
-                        <span>Save</span>
-                    </button>
-                    <button data-bind="click: undoUserInfoClicked, enable: hasUserInfoChanged" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-repeat"></span>
-                        <span>Undo</span>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="col-md-1"></div>
-
-<div id="tenants-panel" class="well col-md-4 module-panel house-settings-panel">
-
-    <h4 class="panel-header">Pending Requests</h4>
-
-    <table class="tenants-table">
-        <tbody data-bind="foreach: pendingRequests">
-            <tr>
-                <td>
-                    <button data-bind="click: $root.acceptTenant" class="btn btn-xs btn-success">
-                        <span class="glyphicon glyphicon-ok"></span>
-                    </button>
-                    <button data-bind="click: $root.rejectTenant" class="btn btn-xs btn-danger">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
-                </td>
-                <td>
-                    <label data-bind="text: User().FullName()"></label>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h4 id="tenants-heading">Tenants</h4>
-
-    <table class="tenants-table existing">
-        <tbody data-bind="foreach: tenants">
-            <tr>
-                <td>
-                    <button data-bind="click: $root.markDeleteTenant" data-toggle="modal" data-target="#delete-tenant-modal" class="btn btn-xs btn-danger">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
-                </td>
-                <td>
-                    <label data-bind="text: FullName"></label>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <table class="tenants-table existing">
+                <tbody data-bind="foreach: tenants">
+                    <tr>
+                        <td>
+                            <button data-bind="click: $root.markDeleteTenant" data-toggle="modal" data-target="#delete-tenant-modal" class="btn btn-xs btn-danger">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <label data-bind="text: FullName"></label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Delete Tenant Modal -->

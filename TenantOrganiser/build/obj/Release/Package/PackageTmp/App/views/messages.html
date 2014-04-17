@@ -1,0 +1,83 @@
+<div class="page-header">
+    <h2>Messages</h2>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div id="conversation-buttons" class="well">
+
+            <button data-bind="click: createNewConversation" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span>New Conversation</span>
+            </button>
+
+            <!-- ko foreach: conversationsList -->
+            <button class="btn btn-default" data-bind="click: $root.conversationClicked, css: { active: $data == $root.activeConversation() }">
+                <strong data-bind="text: RecipientsString()"></strong> 
+                <!-- ko if: Messages().length > 0 -->
+                <span class="convo-btn" data-bind="text: Messages()[Messages().length-1].Content()"></span>
+                <!-- /ko -->
+            </button>
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div id="conversation-panel" class="col-md-6 module-panel">
+        <div class="well">
+
+            <!-- ko if: !activeConversation()-->
+            <div id="empty-convo-msg">
+                
+                <span>No conversations are being viewed. <BR />Select a conversation to view, or create a new one.</span>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: activeConversation -->
+            <div id="conv-recip-panel">
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        Add Recipient <span class="caret"></span>
+                    </button>
+                    <ul data-bind="foreach: tenantsList()" class="dropdown-menu" role="menu">
+                        <li><a data-bind="text: FullName, click: $root.recipientAdded"></a></li>
+                    </ul>
+                </div>
+
+                <button data-bind="click: leaveConversation" class="btn btn-danger pull-right">
+                    <span>Leave</span>
+                </button>
+
+                <ul data-bind="foreach: activeConversation().ConversationUsers()" class="pager">
+                    <li><a href="#">
+                        <img class="conversation-recip img-circle" data-bind="attr: { src: User().DisplayPictureFilePath }">
+                        <span data-bind="text: User().FullName"></span>
+                        </a>
+                    </li>                    
+                </ul>
+            </div>
+
+            <div id="convo-panel" class="panel panel-default">
+                <div id="convo-scroller" data-bind="foreach: activeConversation().Messages()" class="panel-body">
+                    
+                    <p><strong data-bind="text: UserSent().FirstName"></strong>: <span data-bind="text: Content"></span></p>
+                   
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input id="message-box" data-bind="value: composingMessage, valueUpdate:'afterkeydown'" type="text" class="form-control" placeholder="Type your message here...">
+                <span class="input-group-btn">
+                    <button data-bind="click: messageSent" id="send-announce-btn" type="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </span>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+
+</div>

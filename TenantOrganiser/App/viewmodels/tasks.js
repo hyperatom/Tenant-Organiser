@@ -128,18 +128,25 @@
         */
         function getRotasByDate(rotaType, rotas, date, rotasObservable) {
             rotasObservable([]);
+
             ko.utils.arrayForEach(rotas, function (rota) {
-                var start = moment(rota.StartDate());
-                var testDate = moment(date);
-                var diff = Math.abs(testDate.diff(start, 'days'));
+                var diff = getDateDifference(rota.StartDate(), date);
 
                 // If bin collection occurs on the navigated day
                 if ((diff % rota.OccuranceDays()) === 0) {
-                    setTaskTenants(rotaType, houseTenants(), rota, diff);
+                    setTaskTenants(rotaType, houseTenants(), rota, diff, date, rotasObservable().length);
+                    console.log(rotasObservable().length);
                     rotasObservable.push(rota);
                 }
             });
         }
+
+        function getDateDifference(startDate, endDate) {
+            var start = moment(startDate);
+            var testDate = moment(endDate);
+            return Math.abs(testDate.diff(start, 'days'));
+        }
+
 
         // Increment the chosenGroupNum with modulus every time a bin rota
         // date comes around! When we invoke this method, we enter a 'date'
@@ -177,16 +184,44 @@
             }
         }
 
-        function setTaskTenants(rotaType, tenants, rota, diff) {
+        function setTaskTenants(rotaType, tenants, rota, diff, date, occurances) {
             var distinctGroups = (rotaType === 'bin') ? getDistinctBinRotaGroups(tenants) : getDistinctCleaningRotaGroups(tenants);
 
             if (!rota.TaskTenants)
-                rota.TaskTenants = new ko.observable("");
+                rota.TaskTenants = new ko.observable("Nobody Assigned");
 
             if (distinctGroups.length === 0)
                 return;
 
-            var index = diff % distinctGroups.length;
+            var totalOccurances = 0;
+
+            // For each rota, add the number of occurances up until current date
+
+            if (rotaType === 'bin') {
+                $.each(AllBinRotas(), function (i, rota) {
+                    totalOccurances += Math.floor(getDateDifference(rota.StartDate(), date) / rota.OccuranceDays());
+                });
+
+                // IMPORTANT - Prevents the same group being chosen if two rotas on same test date
+                //var index = CurrentBinRotas().indexOf(rota);
+                totalOccurances += occurances;
+
+                console.log("Bin Occurances: " + occurances);
+            } else {
+                $.each(AllCleaningRotas(), function (i, rota) {
+                    totalOccurances += Math.floor(getDateDifference(rota.StartDate(), date) / rota.OccuranceDays());
+                });
+
+                // IMPORTANT - Prevents the same group being chosen if two rotas on same test date
+                //var index = CurrentCleaningRotas().indexOf(rota);
+                totalOccurances += occurances;
+
+                console.log("Cleaning Occurances: " + occurances);
+            }
+
+            // Modulus the answer by the number of distinct groups to assign
+
+            var index = totalOccurances % distinctGroups.length;
             var selectedGroup = distinctGroups[index];
 
             var selectedTenantNames = '';

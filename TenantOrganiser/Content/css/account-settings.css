@@ -1,5 +1,8 @@
-.house-settings-panel {
+.settings-row-one > .module-panel > .house-settings-panel {
   height: 185px;
+}
+.settings-row-two > .module-panel > .house-settings-panel {
+  height: 355px;
 }
 .house-settings-panel table {
   width: 100%;
@@ -14,6 +17,7 @@
   padding: 2px 0px 2px 0px;
 }
 .house-settings-panel .existing td:nth-child(odd) {
+  /* Separates delete button */
   padding: 0px 20px 0px 0px;
 }
 .house-settings-panel .form-control {
@@ -38,12 +42,6 @@
 }
 #leave-house-btn .btn-danger {
   float: right;
-}
-#tenants-panel {
-  height: 322px;
-}
-#info-panel {
-  height: 322px;
 }
 #info-panel tr:nth-child(1) td {
   padding-top: 10px;

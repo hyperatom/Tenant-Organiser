@@ -1,0 +1,102 @@
+﻿<div class="page-header">
+    <h2 data-bind="text: pageHeader"></h2>
+</div>
+
+<button class="btn btn-primary" data-bind="click: logoutClicked">Logout</button>
+
+<div id="reg-thanks" class="row">
+    <h3>Thanks for registering, lets get started setting up your house...</h3>
+</div>
+
+<div data-bind="if: houseJoinRequest">
+    <div class="well col-md-5 house-join-panel">
+
+        <h3 class="panel-header">Pending Join Requests</h3>
+
+        <p>
+            The following requests are awaiting review from a member of the house.
+        </p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>House</td>
+                    <td>Code</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span id="joinRequestHouseIcon" class="glyphicon glyphicon-home"></span>
+                    </td>
+                    <td>
+                        <span id="joinRequestHouseName" data-bind="text: houseJoinRequest().House().HouseName()"></span>
+                    </td>
+                    <td>
+                        <span id="joinRequestHouseCode" data-bind="text: houseJoinRequest().House().HouseCode()"></span>
+                    </td>
+                    <td>
+                        <button data-bind="click: cancelRequestClicked" class="btn btn-danger btn-xs">
+                            <span id="joinRequestCancelIcon" class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div data-bind="if: !houseJoinRequest()">
+    <div class="well col-md-5 house-join-panel">
+
+        <h3 class="panel-header">Join an existing house</h3>
+
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="inputJoinHouseCode" class="col-sm-3 control-label">House Code</label>
+                <div class="col-sm-5">
+                    <input data-bind="value: joinHouseCode" class="form-control" id="inputJoinHouseCode" placeholder="E.g. 51KER">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-10">
+                    <button data-bind="click: joinExistingHouseClicked" type="submit" class="btn btn-primary">Join</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="well col-md-5 col-md-offset-1 house-join-panel">
+
+    <h3 class="panel-header">Create a new house</h3>
+
+    <form class="form-horizontal" role="form">
+
+        <div class="form-group">
+            <label for="inputCreateHouseName" class="col-sm-4 control-label">House Name</label>
+            <div class="col-sm-8">
+                <input data-bind="value: createHouseName" class="form-control" id="inputCreateHouseName" placeholder="E.g. 51 King Edwards Road">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputCreateHouseCode" class="col-sm-4 control-label">House Code</label>
+            <div class="col-sm-8">
+                <input data-bind="value: createHouseCode" class="form-control" id="inputCreateHouseCode" placeholder="E.g. 51KER">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-10">
+                <button data-bind="click: createNewHouseClicked" type="submit" class="btn btn-success">Create</button>
+            </div>
+        </div>
+    </form>
+
+</div>

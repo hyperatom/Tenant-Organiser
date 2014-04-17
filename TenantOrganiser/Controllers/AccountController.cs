@@ -68,8 +68,9 @@ namespace TenantOrganiser.Controllers
 
             JObject jArray = JObject.Parse(data);
 
-            // If the token was invalid, just return false
-            if (jArray["error"] != null) {
+            // If the token was invalid or the facebook user had no email, return false
+            if (jArray["error"] != null || jArray["email"] == null)
+            {
                 return Json(false);
             }
 
