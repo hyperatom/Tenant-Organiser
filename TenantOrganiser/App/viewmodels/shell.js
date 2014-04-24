@@ -64,6 +64,7 @@
                 { route: 'edit-cleaning-rota', moduleId: 'edit-cleaning-rota', nav: true },
                 { route: 'login', moduleId: 'login', nav: true },
                 { route: 'messages', moduleId: 'messages', nav: true },
+                { route: 'messages/:recipId', moduleId: 'messages', nav: true },
                 { route: 'new-message', moduleId: 'new-message', nav: true },
                 { route: 'tasks', moduleId: 'tasks', nav: true },
                 { route: 'tenants', moduleId: 'tenants', nav: true },

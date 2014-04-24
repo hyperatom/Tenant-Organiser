@@ -11,6 +11,7 @@
 
         var vm = {
             activate: activate,
+            deactivate: deactivate,
             title: 'Login',
             attached: viewAttached,
 
@@ -37,6 +38,11 @@
             return true;
         }
 
+        function deactivate() {
+            loginEmail('');
+            loginPassword('');
+        }
+
         function viewAttached() {
             fb.init();
         }
@@ -47,8 +53,9 @@
 
 
         function loginClicked() {
+            var hash = CryptoJS.SHA256(loginPassword()).toString();
 
-            session.login(loginEmail, loginPassword).then(function (data) {
+            session.login(loginEmail, hash).then(function (data) {
 
                 // If no data returned just return
                 if (!data) {
@@ -105,12 +112,13 @@
                 return;
             }
 
+            var hash = CryptoJS.SHA256(registerPassword1()).toString();
             var firstName = fullNameArray[0],
                 // Get last name declared
                 lastName = fullNameArray[fullNameArray.length - 1];
 
             // Attempt registration
-            return session.register(firstName, lastName, registerEmail(), registerPassword1(), printRegistrationErrors)
+            return session.register(firstName, lastName, registerEmail(), hash, printRegistrationErrors)
                 // If registration was successful
                 // OR user registered with his own pre-existing account
                 .then(function (sessionUser) {

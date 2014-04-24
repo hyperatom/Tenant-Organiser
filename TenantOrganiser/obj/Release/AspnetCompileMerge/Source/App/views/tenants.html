@@ -2,14 +2,16 @@
     <h2>Tenants</h2>
 </div>
 
-<div id="house-tenants-panel" class="row col-lg-12" data-bind="foreach: tenantsList()">
+<div id="house-tenants-panel" class="row col-lg-12" data-bind="foreach: tenantsList">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 data-bind="text: FullName()" class="panel-title"></h3>
-        <a href="#messages"><span class="glyphicon glyphicon-envelope"></span></a>
+        <h3 data-bind="text: FullName" class="panel-title"></h3>
+        <a data-bind="click: $root.composeMessageToTenant">
+            <span class="glyphicon glyphicon-envelope"></span>
+        </a>
       </div>
       <div class="panel-body">
-        <img data-bind="attr: { src: DisplayPictureFilePath() }" class="profile-pic img-circle" />
+        <img data-bind="attr: { src: DisplayPictureFilePath }" class="profile-pic img-circle" />
       </div>
     </div>
 </div>

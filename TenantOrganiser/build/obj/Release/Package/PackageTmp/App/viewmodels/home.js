@@ -76,7 +76,10 @@
         messageEntity.User(session.sessionUser());
         messageEntity.House(session.sessionUser().House());
 
+        $('#message-box').prop('disabled', true);
+
         return datacontext.saveChanges().then(function () {
+            $('#message-box').prop('disabled', false);
             messageInput('');
         }).then(refreshAnnouncements);
     }

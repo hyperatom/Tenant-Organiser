@@ -9,12 +9,21 @@ using TenantOrganiser.Filters;
 using TenantOrganiser.Models;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Drawing;
+using System.Net.Http;
+using System.Web;
+using System.IO;
 namespace TenantOrganiser.Controllers
 {
     [Authorize]
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private static int PROFILE_PIC_WIDTH = 200;
+        private static int PROFILE_PIC_HEIGHT = 200;
+
         //
         // GET: /Account/Session
 
@@ -99,7 +108,7 @@ namespace TenantOrganiser.Controllers
             using (WebClient Client = new WebClient())
             {
                 Client.DownloadFile(
-                    "https://graph.facebook.com/" + id + "/picture?type=normal",
+                    "https://graph.facebook.com/" + id + "/picture?type=large",
                     Server.MapPath("~/Content/images/profile_pictures/" + id + ".jpg"));
             }
 
@@ -110,7 +119,8 @@ namespace TenantOrganiser.Controllers
                 Password = "",
                 FirstName = firstName,
                 LastName = lastName,
-                UserSettings = new UserSettings { EmailNotifications = true },
+                EmailNotifications = true,
+                UserSettings = new UserSettings(),
                 IsFacebookUser = true,
                 DisplayPictureFileName = id.ToString() + ".jpg"
             };
@@ -121,6 +131,33 @@ namespace TenantOrganiser.Controllers
             FormsAuthentication.SetAuthCookie(email, false);
 
             return Json(true);
+        }
+
+        [HttpPost]
+        public JsonResult ChangeEmail(string newEmail)
+        {
+            if (ModelState.IsValid)
+            {
+                string origEmail = User.Identity.Name;
+
+                TenantOrganiserDbContext ctx = new TenantOrganiserDbContext();
+                User user = ctx.Users.Where(p => p.Email == origEmail).SingleOrDefault();
+
+                bool emailExists = ctx.Users.Where(p => p.Email == newEmail).Count() > 0;
+
+                if (emailExists)
+                    return Json(false);
+
+                user.Email = newEmail;
+
+                ctx.SaveChanges();
+
+                return Login(newEmail, user.Password);
+            }
+
+            // If we got this far, something failed
+            // return Json(new { errors = GetErrorsFromModelState() });
+            return Json(false);
         }
 
         [AllowAnonymous]
@@ -142,7 +179,131 @@ namespace TenantOrganiser.Controllers
             }
 
             // If we got this far, something failed
-           // return Json(new { errors = GetErrorsFromModelState() });
+            // return Json(new { errors = GetErrorsFromModelState() });
+            return Json(false);
+        }
+
+        [HttpPost]
+        public JsonResult UploadFacebookPicture(string username)
+        {
+            using (WebClient Client = new WebClient())
+            {
+                try
+                {
+                    string loggedInUsername = User.Identity.Name.ToString();
+                    TenantOrganiserDbContext ctx = new TenantOrganiserDbContext();
+                    User user = ctx.Users.Where(p => p.Email == loggedInUsername).SingleOrDefault();
+
+                    string usernameHash = Utility.EmailToMd5Hash(user.Email);
+
+                    try
+                    {
+                        // Download the new profile picture
+                        Image img = Utility.ResizeImage(
+                            Utility.DownloadImageFromUrl("https://graph.facebook.com/" + username + "/picture?type=normal"),
+                            new Size(PROFILE_PIC_WIDTH, PROFILE_PIC_HEIGHT));
+              
+
+                        img.Save(Server.MapPath("~/Content/images/profile_pictures/" + usernameHash + ".jpg"));
+
+                        // If user already has a profile picture, delete it
+                        if (user.DisplayPictureFileName != null)
+                            System.IO.File.Delete(@Server.MapPath("~/Content/images/profile_pictures/" + user.DisplayPictureFileName + ".jpg"));
+
+                        // Set db reference to the downloaded file
+                        user.DisplayPictureFileName = usernameHash + ".jpg";
+                        ctx.SaveChanges();
+
+                        return Json(true);
+                    }
+                    catch (Exception e) { }
+                }
+                catch (Exception e) { }
+            }
+
+            // If we got this far, something failed
+            // return Json(new { errors = GetErrorsFromModelState() });
+            return Json(false);
+        }
+
+        [HttpPost]
+        public JsonResult UploadUrlPicture(string url)
+        {
+            using (WebClient Client = new WebClient())
+            {
+                try
+                {
+                    string loggedInUsername = User.Identity.Name.ToString();
+                    TenantOrganiserDbContext ctx = new TenantOrganiserDbContext();
+                    User user = ctx.Users.Where(p => p.Email == loggedInUsername).SingleOrDefault();
+
+                    string emailHash = Utility.EmailToMd5Hash(user.Email);
+
+                    try
+                    {
+                        // Download the new profile picture
+                        Image img = Utility.ResizeImage(
+                            Utility.DownloadImageFromUrl(url),
+                            new Size(PROFILE_PIC_WIDTH, PROFILE_PIC_HEIGHT)); 
+
+                        if (img == null)
+                            return Json(false);
+
+                        img.Save(Server.MapPath("~/Content/images/profile_pictures/" + emailHash + ".jpg"));
+
+                        // If user already has a profile picture, delete it
+                        if (user.DisplayPictureFileName != null)
+                            System.IO.File.Delete(@Server.MapPath("~/Content/images/profile_pictures/" + user.DisplayPictureFileName + ".jpg"));
+
+                        // Set db reference to the downloaded file
+                        user.DisplayPictureFileName = emailHash + ".jpg";
+                        ctx.SaveChanges();
+
+                        return Json(true);
+                    }
+                    catch (Exception e) { }
+                }
+                catch (Exception e) { }
+            }
+
+            // If we got this far, something failed
+            // return Json(new { errors = GetErrorsFromModelState() });
+            return Json(false);
+        }
+
+        [HttpPost]
+        public JsonResult UploadFilePicture()
+        {
+            string loggedInUsername = User.Identity.Name.ToString();
+            TenantOrganiserDbContext ctx = new TenantOrganiserDbContext();
+            User user = ctx.Users.Where(p => p.Email == loggedInUsername).SingleOrDefault();
+
+            string emailHash = Utility.EmailToMd5Hash(user.Email);
+
+            try
+            {
+                HttpPostedFileBase hpf = Request.Files[0];
+
+                if (hpf.ContentType != "image/jpeg")
+                    return Json(false);
+
+                // Download the new profile picture
+                Image img = Utility.ResizeImage(Utility.CropImage(Image.FromStream(hpf.InputStream, true, true)), new Size(PROFILE_PIC_WIDTH, PROFILE_PIC_HEIGHT));
+
+                img.Save(Server.MapPath("~/Content/images/profile_pictures/" + emailHash + ".jpg"));
+
+                // If user already has a profile picture, delete it
+                if (user.DisplayPictureFileName != null)
+                    System.IO.File.Delete(@Server.MapPath("~/Content/images/profile_pictures/" + user.DisplayPictureFileName + ".jpg"));
+
+                // Set db reference to the downloaded file
+                user.DisplayPictureFileName = emailHash + ".jpg";
+                ctx.SaveChanges();
+
+                return Json(true);
+            }
+            catch (Exception e) { }
+
             return Json(false);
         }
 
@@ -234,13 +395,15 @@ namespace TenantOrganiser.Controllers
                 throw new MembershipCreateUserException(MembershipCreateStatus.DuplicateEmail);
             }
 
-            User newUser = new User { 
-                Email = user.Email, 
-                Password = user.Password, 
-                FirstName = user.FirstName, 
-                LastName = user.LastName, 
-                UserSettings = new UserSettings { EmailNotifications = true },
-                IsFacebookUser = isFacebookUser
+            User newUser = new User
+            {
+                Email = user.Email,
+                Password = user.Password,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserSettings = new UserSettings(),
+                IsFacebookUser = isFacebookUser,
+                EmailNotifications = true
             };
 
             ctx.Users.Add(newUser);

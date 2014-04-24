@@ -13,8 +13,8 @@ namespace TenantOrganiser.Controllers
     [BreezeController]
     public class BreezeController : ApiController
     {
-        private EFContextProvider<TenantOrganiserDbContext>  _contextProvider =
-            new EFContextProvider<TenantOrganiserDbContext>();
+        private TenantOrganiserContextProvider  _contextProvider =
+            new TenantOrganiserContextProvider();
 
         [HttpGet]
         public string Metadata()

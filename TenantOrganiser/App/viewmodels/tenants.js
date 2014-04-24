@@ -1,4 +1,5 @@
-﻿define(['services/logger', 'services/datacontext', 'services/session'], function (logger, datacontext, session) {
+﻿define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router'],
+    function (logger, datacontext, session, router) {
 
     var tenantsList = new ko.observableArray();
 
@@ -6,7 +7,8 @@
         activate: activate,
         title: 'Tenants',
 
-        tenantsList: tenantsList
+        tenantsList: tenantsList,
+        composeMessageToTenant: composeMessageToTenant
     };
 
     return vm;
@@ -16,6 +18,10 @@
         return refreshTenants().then(function () {
             logger.log('Tenants View Activated', null, 'tenants', true);
         });
+    }
+
+    function composeMessageToTenant(tenant) {
+        router.navigate('#messages/' + tenant.Id());
     }
 
     function refreshTenants() {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using TenantOrganiser.Controllers;
 
 namespace TenantOrganiser
 {
@@ -22,14 +23,12 @@ namespace TenantOrganiser
             InitHouseRequests(context);
 
             InitWishListItems(context);
-            //InitConversations(context);
 
             InitBillTypes(context);
             InitBillInvoices(context);
             InitInvoiceRecipients(context);
 
             InitCleaningRotas(context);
-            InitCleaningLogs(context);
             InitBinRotas(context);
 
             InitCommunalMessages(context);
@@ -68,20 +67,22 @@ namespace TenantOrganiser
             // Get 51 King Edwards Road house
             House ker = context.Houses.Where(h => h.HouseCode == "51KER").SingleOrDefault();
 
+            string defaultPassword = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8";
+
             // User to request to join house
-            users.Add(new User() { FirstName = "Chris", LastName = "Lewis", Password = "password", Email = "chris.lewis@gmail.com", DisplayPictureFileName = "profile-picture.jpg" });
+            users.Add(new User() { FirstName = "Chris", LastName = "Lewis", Password = Utility.EmailToMd5Hash("password"), Email = "chris.lewis@gmail.com", DisplayPictureFileName = "profile-picture.jpg" });
 
             // Create users and attach the house
-            users.Add(new User() { FirstName = "Tom", LastName = "Milner", Password = "password", Email = "tom.milner@gmail.com", DisplayPictureFileName = "profile-picture.jpg", House = ker });
-            users.Add(new User() { FirstName = "Tom", LastName = "Walton", Password = "password", Email = "tom.walton@gmail.com", DisplayPictureFileName = "profile-picture-2.jpg", House = ker });
-            users.Add(new User() { FirstName = "Joss", LastName = "Whittle", Password = "password", Email = "joss.whittle@gmail.com", DisplayPictureFileName = "profile-picture-3.jpg", House = ker });
-            users.Add(new User() { FirstName = "Toby", LastName = "Webster", Password = "password", Email = "toby.webster@gmail.com", DisplayPictureFileName = "profile-picture.jpg", House = ker });
-            users.Add(new User() { FirstName = "Hannah", LastName = "Marriott", Password = "password", Email = "hannah.marriott@gmail.com", DisplayPictureFileName = "profile-picture-2.jpg", House = ker });
+            users.Add(new User() { FirstName = "Tom", LastName = "Milner", Password = defaultPassword, Email = "a.j.barrell@gmail.com", DisplayPictureFileName = "profile-picture.jpg", House = ker, EmailNotifications = true });
+            users.Add(new User() { FirstName = "Tom", LastName = "Walton", Password = defaultPassword, Email = "tom.walton@gmail.com", DisplayPictureFileName = "profile-picture-2.jpg", House = ker });
+            users.Add(new User() { FirstName = "Joss", LastName = "Whittle", Password = defaultPassword, Email = "joss.whittle@gmail.com", DisplayPictureFileName = "profile-picture-3.jpg", House = ker });
+            users.Add(new User() { FirstName = "Toby", LastName = "Webster", Password = defaultPassword, Email = "toby.webster@gmail.com", DisplayPictureFileName = "profile-picture.jpg", House = ker });
+            users.Add(new User() { FirstName = "Hannah", LastName = "Marriott", Password = defaultPassword, Email = "hannah.marriott@gmail.com", DisplayPictureFileName = "profile-picture-2.jpg", House = ker });
 
             // Add created users to the context
             foreach (User u in users)
             {
-                u.UserSettings = new UserSettings() { EmailNotifications = true };
+                u.UserSettings = new UserSettings();
                 context.Users.Add(u);
             }
 
@@ -211,19 +212,6 @@ namespace TenantOrganiser
             context.SaveChanges();
         }
 
-        private void InitCleaningLogs(TenantOrganiserDbContext context)
-        {
-            User toby = context.Users.Where(u => u.FirstName == "Toby").SingleOrDefault();
-            User tom = context.Users.Where(u => u.LastName == "Walton").SingleOrDefault();
-
-            CleaningRota kitchen = context.CleaningRotas.Where(a => a.Name == "Kitchen").SingleOrDefault();
-
-            context.CleaningLogs.Add(new CleaningLog { Date = DateTime.Parse("11/05/2014"), CleaningRota = kitchen, User = toby });
-            context.CleaningLogs.Add(new CleaningLog { Date = DateTime.Parse("11/05/2014"), CleaningRota = kitchen, User = tom });
-
-            context.SaveChanges();
-        }
-
         private void InitCommunalMessages(TenantOrganiserDbContext context)
         {
             House ker = context.Houses.Where(h => h.HouseCode == "51KER").SingleOrDefault();
@@ -247,11 +235,11 @@ namespace TenantOrganiser
 
             House ker = context.Houses.Where(h => h.HouseCode == "51KER").SingleOrDefault();
 
-            context.ActivityLogs.Add(new ActivityLog { LogName = "Bill", ActionMessage = "Paid the Water bill.", Date = DateTime.Parse("20/03/2014"), User = toby, House = ker });
-            context.ActivityLogs.Add(new ActivityLog { LogName = "Bill", ActionMessage = "Paid the Gas bill.", Date = DateTime.Parse("21/03/2014"), User = walton, House = ker });
-            context.ActivityLogs.Add(new ActivityLog { LogName = "Cleaning Rota", ActionMessage = "Cleaned the Living Room.", Date = DateTime.Parse("22/03/2014"), User = marriott, House = ker });
-            context.ActivityLogs.Add(new ActivityLog { LogName = "Bin Rota", ActionMessage = "Added a Pink Bins rota.", Date = DateTime.Parse("23/03/2014"), User = whittle, House = ker });
-            context.ActivityLogs.Add(new ActivityLog { LogName = "Wish List", ActionMessage = "Purchased the Dish-o-Matic.", Date = DateTime.Parse("24/03/2014"), User = lewis, House = ker });
+            context.ActivityLogs.Add(new ActivityLog { LogName = Log.BILL, ActionMessage = "Paid the Water bill.", Date = DateTime.Parse("20/03/2014"), User = toby, House = ker });
+            context.ActivityLogs.Add(new ActivityLog { LogName = Log.BILL, ActionMessage = "Paid the Gas bill.", Date = DateTime.Parse("21/03/2014"), User = walton, House = ker });
+            context.ActivityLogs.Add(new ActivityLog { LogName = Log.CLEANING_ROTA, ActionMessage = "Cleaned the Living Room.", Date = DateTime.Parse("22/03/2014"), User = marriott, House = ker });
+            context.ActivityLogs.Add(new ActivityLog { LogName = Log.BIN_ROTA, ActionMessage = "Added a Pink Bins rota.", Date = DateTime.Parse("23/03/2014"), User = whittle, House = ker });
+            context.ActivityLogs.Add(new ActivityLog { LogName = Log.WISH_LIST, ActionMessage = "Purchased the Dish-o-Matic.", Date = DateTime.Parse("24/03/2014"), User = lewis, House = ker });
 
             context.SaveChanges();
         }

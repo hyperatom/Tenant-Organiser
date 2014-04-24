@@ -57,7 +57,7 @@
 
             <br />
 
-            <img id="profile-pic-select" class="img-circle" data-bind="attr: { src: displayPictureURL }">
+            <img id="profile-pic-select" class="img-circle" data-bind="attr: { src: sessionUser().DisplayPictureFilePath }">
 
             <button data-toggle="modal" data-target="#fb-pic-modal" class="btn btn-primary">Facebook</button>
             <button data-toggle="modal" data-target="#file-pic-modal" class="btn btn-primary">File</button>
@@ -196,7 +196,7 @@
                     <div class="form-group">
                         <label for="inputFacebookPicture" class="col-sm-2 control-label">Username/ID</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputFacebookPicture" placeholder="E.g. bill.stephens">
+                            <input data-bind="value: facebookUsername" type="text" class="form-control" id="inputFacebookPicture" placeholder="E.g. bill.stephens">
                         </div>
                     </div>
                 </form>
@@ -204,7 +204,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button data-bind="click: pictureUploaded" type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
+                <button data-bind="click: $root.uploadFacebookPicture" type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
             </div>
         </div>
     </div>
@@ -226,17 +226,17 @@
 
                 <br />
 
-                <form role="form">
+                <form id="imageUploadForm" role="form" enctype="multipart/form-data" method="post">
                     <div class="form-group">
-                        <label for="exampleInputFile">File Browser</label>
-                        <input type="file" id="exampleInputFile">
+                        <label for="imageFile">File Browser</label>
+                        <input type="file" id="imageFile">
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button data-bind="click: pictureUploaded" type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
+                <button data-bind="click: $root.uploadFilePicture" type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
             </div>
         </div>
     </div>
@@ -261,7 +261,7 @@
                     <div class="form-group">
                         <label for="inputURLPicture" class="col-sm-1 control-label">URL</label>
                         <div class="col-sm-11">
-                            <input type="text" class="form-control" id="inputURLPicture" placeholder="E.g. http://www.somewebsite/picture.jpg">
+                            <input data-bind="value: profilePictureUrl" type="text" class="form-control" id="inputURLPicture" placeholder="E.g. http://www.somewebsite/picture.jpg">
                         </div>
                     </div>
                 </form>
@@ -269,7 +269,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button data-bind="click: pictureUploaded" type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
+                <button data-bind="click: $root.uploadUrlPicture" type="button" class="btn btn-primary" data-dismiss="modal">Upload</button>
             </div>
         </div>
     </div>

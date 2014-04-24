@@ -19,8 +19,8 @@
                 <tbody data-bind="foreach: CurrentCleaningRotas">
                     <tr>
                         <td>
-                            <button data-bind="click: $root.cleanStatusClicked" type="button" class="btn btn-default btn-sm btn-paid">
-                                <span class="glyphicon glyphicon-unchecked"></span>
+                            <button data-bind="click: $root.cleanStatusClicked, enable: $root.distinctCleaningGroups() > 0" type="button" class="btn btn-default btn-sm btn-paid">
+                                <span class="glyphicon" data-bind="css: { 'glyphicon-unchecked': !Cleaned(), 'glyphicon-check': Cleaned() }"></span>
                             </button>
                         </td>
                         <td data-bind="text: Name"></td>

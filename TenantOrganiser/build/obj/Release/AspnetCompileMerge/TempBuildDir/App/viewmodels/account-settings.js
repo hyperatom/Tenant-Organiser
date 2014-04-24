@@ -1,5 +1,5 @@
-﻿define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router', 'durandal/app'],
-    function (logger, datacontext, session, router, app) {
+﻿define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router', 'durandal/app', './upload-facebook-picture'],
+    function (logger, datacontext, session, router, app, UploadPictureModal) {
 
         var subscriptions = [];
 
@@ -12,7 +12,7 @@
         var houseCode = new ko.observable();
 
         var emailNotifications = ko.observable();
-        var displayPictureURL = new ko.observable();
+        var displayPictureURL = ko.observable();
 
         var fullName = new ko.observable();
         var email = new ko.observable();
@@ -24,9 +24,13 @@
 
         var tenantMarkedDelete = new ko.observable();
 
+        var profilePictureUrl = new ko.observable();
+        var facebookUsername = new ko.observable();
+
         var vm = {
             activate: activate,
             deactivate: deactivate,
+            attached: attached,
             canDeactivate: canDeactivate,
             title: 'Account Settings',
 
@@ -62,7 +66,15 @@
             leaveHouseConfirmed: leaveHouseConfirmed,
             pictureUploaded: pictureUploaded,
 
-            isFacebookUser: isFacebookUser
+            isFacebookUser: isFacebookUser,
+
+            uploadFacebookPicture: uploadFacebookPicture,
+            uploadFilePicture: uploadFilePicture,
+            uploadUrlPicture: uploadUrlPicture,
+
+            profilePictureUrl: profilePictureUrl,
+            facebookUsername: facebookUsername,
+            sessionUser: session.sessionUser
         };
 
         return vm;
@@ -77,6 +89,39 @@
                 initFormFields();
 
                 logger.log('Account Settings Activated', null, 'account-settings', true);
+            });
+        }
+
+        function attached() {
+        }
+
+        function uploadFacebookPicture() {
+            return datacontext.uploadFacebookPicture(facebookUsername()).then(function (response) {
+                if (!response)
+                    logger.logError('This picture could not be found.', null, 'account-settings', true);
+
+                return session.refreshSession();
+            });
+        }
+
+        function uploadFilePicture() {
+            var formData = new FormData();
+            formData.append("profilePicture", $("#imageFile").get(0).files[0]);
+
+            return datacontext.uploadFilePicture(formData).then(function (response) {
+                if (!response)
+                    logger.logError('This picture could not be found.', null, 'account-settings', true);
+
+                return session.refreshSession();
+            });
+        }
+
+        function uploadUrlPicture() {
+            return datacontext.uploadUrlPicture(profilePictureUrl()).then(function (response) {
+                if (!response)
+                    logger.logError('This picture could not be found.', null, 'account-settings', true);
+
+                return session.refreshSession();
             });
         }
 
@@ -135,8 +180,12 @@
 
         function acceptTenant(joinRequest) {
 
+            pendingRequests.remove(joinRequest);
+
             return datacontext.joinTenantToHouse(joinRequest.User, joinRequest.House)
-                .then(refreshAllTenantsLists)
+                .then(function () {
+                    return refreshAllTenantsLists();
+                })
                 .then(function () {
                     logger.logSuccess('Tenant Accepted!', null, 'account-settings', true);
                 });
@@ -210,12 +259,15 @@
 
                     user().FirstName(fullNameArray[0]);
                     user().LastName(fullNameArray[fullNameArray.length - 1]);
-                    user().Email(email());
 
                     return datacontext.saveChanges().then(function (data) {
                         hasUserInfoChanged(false);
                         logger.logSuccess('User Settings Saved!', null, 'account-settings', true);
-                        return session.login(user().Email(), password1());
+
+                        return session.changeEmail(email()).then(function() {
+                            return session.refreshSession();
+                        });
+                
                     }).fail(function () {
                         user().entityAspect.rejectChanges();
                     });

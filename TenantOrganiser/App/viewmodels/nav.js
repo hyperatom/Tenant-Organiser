@@ -4,7 +4,7 @@
     var vm = {
         activate: activate,
         title: 'Navigation View',
-
+        houseName: session.sessionUser().House().HouseName,
         messagesTag: '/#messages',
         tenantsTag: '/#tenants',
         settingsTag: '/#account-settings',

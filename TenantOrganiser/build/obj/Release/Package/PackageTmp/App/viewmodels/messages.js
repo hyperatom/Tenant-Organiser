@@ -4,6 +4,8 @@
 define(['services/logger', 'services/datacontext', 'services/session'],
     function (logger, datacontext, session) {
 
+        var recipientParam = new ko.observable();
+
         var tenantsList = new ko.observableArray();
         var conversationsList = new ko.observableArray();
         var activeConversation = new ko.observable();
@@ -11,6 +13,7 @@ define(['services/logger', 'services/datacontext', 'services/session'],
 
         var vm = {
             activate: activate,
+            attached: attached,
             title: 'Messages',
 
             tenantsList: tenantsList,
@@ -29,11 +32,35 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         return vm;
 
 
-        function activate() {
+        function activate(recipId) {
+            return Q.all([refreshTenants(), refreshConversations()]).then(function () {
 
-            logger.log('Messages View Activated', null, 'messages', true);
+                if (recipId) {
+                    recipientParam(recipId);
+                }
 
-            return Q.all([refreshTenants(), refreshConversations()]);
+                logger.log('Messages View Activated', null, 'messages', true);
+            });
+        }
+
+        function attached() {
+            if (recipientParam()) {
+                var recip = $.grep(tenantsList(), function (tenant, i) {
+                    console.log("Tenant Id: " + tenant.Id() + " / Param Id: " + recipientParam());
+                    console.log(tenant.Id() === parseInt(recipientParam()));
+                    return tenant.Id() === parseInt(recipientParam());
+                });
+
+                if (parseInt(recipientParam()) === session.sessionUser().Id())
+                    return createNewConversation();
+
+                createNewConversation().then(function () {
+                    recipientAdded(recip[0]);
+                    recipientParam(null);
+                });
+            } else if (conversationsList().length > 0) {
+                conversationClicked(conversationsList()[0]);
+            }
         }
 
         function refreshTenants() {
@@ -64,8 +91,10 @@ define(['services/logger', 'services/datacontext', 'services/session'],
 
         function removeRecipsFromTenantsList() {
 
-            // Remove all tenants who are already recipients of convo
-            tenantsList(tenantsList().filter(filterTenants));
+            return refreshTenants().then(function () {
+                // Remove all tenants who are already recipients of convo
+                tenantsList(tenantsList().filter(filterTenants));
+            });
 
             function filterTenants(tenant) {
                 var results = $.grep(activeConversation().ConversationUsers(), isTenantRecipient);
@@ -134,7 +163,9 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         function recipientAdded(data) {
             var convoUser = datacontext.createConversationUser(activeConversation(), data);
 
-            return datacontext.saveChanges();
+            return datacontext.saveChanges().then(function () {
+                removeRecipsFromTenantsList();
+            });
         }
 
         function createNewConversation() {
@@ -146,7 +177,11 @@ define(['services/logger', 'services/datacontext', 'services/session'],
                 conversationClicked(newConvo);
             }
 
-            return datacontext.saveChanges().then(showCreatedConvo).then(refreshConversations);
+            return datacontext.saveChanges().then(function() {
+                return refreshConversations().then(function () {
+                    return showCreatedConvo();
+                });
+            });
         }
 
         function leaveConversation() {

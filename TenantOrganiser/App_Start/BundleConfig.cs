@@ -22,6 +22,7 @@ namespace TenantOrganiser
                 .Include("~/scripts/bootstrap-datepicker.js")
                 .Include("~/scripts/moment.js")
                 .Include("~/scripts/less-{version}.min.js")
+                .Include("~/scripts/sha256.js")
               );
 
             // Include style sheets

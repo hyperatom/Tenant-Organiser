@@ -1,3 +1,13 @@
+.page-splash {
+    text-align: center;
+    margin-top: 300px;
+}
+
+.img-circle {
+    border-radius: 8% !important;
+    box-shadow: 1px 1px 5px #888888;
+}
+
 .container {
     margin: 20px 0px 0px 240px;
 
@@ -9,11 +19,12 @@
         margin: 0px;
     }
 
-    .module-nav-panel { position: absolute; bottom: 10px; }
+    .module-nav-panel { position: absolute; bottom: 30px; }
 
     .module-panel {
         overflow: hidden;
-        margin-bottom: 40px;
+        /* Override Bootstrap well margin */
+        margin-bottom: 20px !important;
 
         .panel-table {
             margin-top: 10px;

@@ -5,6 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TenantOrganiser
 {
+    public class Log
+    {
+        public static string BIN_ROTA = "Bin Rota";
+        public static string CLEANING_ROTA = "Cleaning Rota";
+        public static string MESSAGE = "Message";
+        public static string TENANT = "Tenant";
+        public static string BILL = "Bill";
+        public static string WISH_LIST = "Wish List";
+    }
+
     public class ActivityLog
     {
         public ActivityLog() 

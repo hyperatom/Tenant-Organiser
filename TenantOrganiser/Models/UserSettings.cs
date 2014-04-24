@@ -12,9 +12,6 @@ namespace TenantOrganiser
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public bool EmailNotifications { get; set; }
-
         // Optional group memberships
         public int? CleaningRotaGroup { get; set; }
 

@@ -6,55 +6,52 @@
     <span class="glyphicon glyphicon-plus"></span>Add Bill
 </button>
 
-<div data-bind="foreach: bills">
+<div class="row" data-bind="foreach: bills">
 
-    <div class="well col-md-5 module-panel bill-panel">
+    <div class="col-md-6">
+        <div class="well module-panel bill-panel">
 
-        <img class="img-circle bill-manager-pic" data-bind="attr: { src: Manager().DisplayPictureFilePath }">
+            <img class="img-circle bill-manager-pic" data-bind="attr: { src: Manager().DisplayPictureFilePath }">
 
-        <h3 data-bind="text: Name"></h3>
+            <h3 data-bind="text: Name"></h3>
 
-        <button data-bind="click: $root.deleteBill" type="button" class="close">&times;</button>
+            <p class="invoice-ctrls">
+                <button data-bind="click: $root.navToAddInvoice" type="button" class="btn btn-primary btn-xs btn-add">
+                    <span class="glyphicon glyphicon-plus"></span>Add
+                </button>
+                <button data-bind="click: $root.navToEditInvoice" type="button" class="btn btn-primary btn-xs btn-edit">
+                    <span class="glyphicon glyphicon-cog"></span>Edit
+                </button>
+            </p>
 
-        <p class="invoice-ctrls">
-            <button data-bind="click: $root.navToAddInvoice" type="button" class="btn btn-primary btn-xs btn-add">
-                <span class="glyphicon glyphicon-plus"></span>Add
-            </button>
-            <button data-bind="click: $root.navToEditInvoice" type="button" class="btn btn-primary btn-xs btn-edit">
-                <span class="glyphicon glyphicon-cog"></span>Edit
-            </button>
-        </p>
+            <h4 data-bind="if: !currentInvoice">No Invoices To Display</h4>
 
-        <h4 data-bind="if: !currentInvoice">No Invoices To Display</h4>
+            <table data-bind="if: currentInvoice" class="panel-table">
+                <tbody data-bind="foreach: currentInvoice().Recipients()">
+                    <tr>
+                        <td>
+                            <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-sm btn-paid">
+                                <span class="glyphicon" data-bind="css: { 'glyphicon-check': Paid(), 'glyphicon-unchecked': !Paid() }"></span>
+                            </button>
+                        </td>
+                        <td data-bind="text: User().FullName">Adam Barrell</td>
+                        <td data-bind="text: PrettyAmount">&pound;30</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <table data-bind="if: currentInvoice" class="panel-table">
-            <tbody data-bind="foreach: currentInvoice().Recipients()">
-                <tr>
-                    <td>
-                        <button data-bind="click: $root.checkboxClicked" type="button" class="btn btn-default btn-sm btn-paid">
-                            <span class="glyphicon" data-bind="css: { 'glyphicon-check': Paid(), 'glyphicon-unchecked': !Paid() }"></span>
-                        </button>
-                    </td>
-                    <td data-bind="text: User().FullName">Adam Barrell</td>
-                    <td data-bind="text: PrettyAmount">&pound;30</td>
-                </tr>
-            </tbody>
-        </table>
+            <div data-bind="if: BillInvoices().length > 0" class="module-nav-panel">
+                <button data-bind="click: $root.navPreviousInvoice, enable: $root.isPreviousEnabled($data)" type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </button>
 
-        <div data-bind="if: BillInvoices().length > 0" class="module-nav-panel">
-            <button data-bind="click: $root.navPreviousInvoice, enable: $root.isPreviousEnabled($data)" type="button" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </button>
+                <span><strong data-bind="text: currentInvoice().PrettyDueDate" class="text-info"></strong></span>
 
-            <span><strong data-bind="text: currentInvoice().PrettyDueDate" class="text-info"></strong></span>
+                <button data-bind="click: $root.navNextInvoice, enable: $root.isNextEnabled($data)" type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            </div>
 
-            <button data-bind="click: $root.navNextInvoice, enable: $root.isNextEnabled($data)" type="button" class="btn btn-default btn-sm">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
         </div>
-
     </div>
-
-    <div class="col-md-1 module-spacer"></div>
-
 </div>

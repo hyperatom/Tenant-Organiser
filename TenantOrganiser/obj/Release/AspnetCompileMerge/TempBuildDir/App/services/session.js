@@ -10,7 +10,8 @@
             facebookLogin: facebookLogin,
             logout: logout,
             register: register,
-            changePassword: changePassword
+            changePassword: changePassword,
+            changeEmail: changeEmail
         };
 
         return session;
@@ -19,7 +20,9 @@
 
             // Attempt login and refresh session user
             // Also refresh forgery token because it changes for authenticated users
-            return datacontext.login(username, password).then(refreshSession);
+            return datacontext.login(username, password).then(function () {
+                return refreshSession();
+            });
         }
 
         function facebookLogin(token) {
@@ -43,6 +46,10 @@
 
         function changePassword(newPassword) {
             return datacontext.changePassword(newPassword);
+        }
+
+        function changeEmail(newEmail) {
+            return datacontext.changeEmail(newEmail);
         }
 
         function refreshAntiForgeryToken() {

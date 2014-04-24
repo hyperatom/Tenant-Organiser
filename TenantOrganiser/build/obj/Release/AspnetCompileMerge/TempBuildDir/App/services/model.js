@@ -226,6 +226,10 @@
             }
         });
 
+        binRotaObservable.Log = ko.observable();
+        binRotaObservable.TaskTenants = ko.observable();
+        binRotaObservable.RotaGroup = ko.observable();
+
         binRotaObservable.PrettyStartDate = ko.computed({
 
             read: function () {
@@ -259,6 +263,11 @@
                 }
             }
         });
+
+        cleaningRotaObservable.Cleaned = ko.observable(false);
+        cleaningRotaObservable.Log = ko.observable();
+        cleaningRotaObservable.TaskTenants = ko.observable();
+        cleaningRotaObservable.RotaGroup = ko.observable();
 
         cleaningRotaObservable.PrettyStartDate = ko.computed({
 

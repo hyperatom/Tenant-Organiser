@@ -1,0 +1,1 @@
+define(["plugins/dialog","services/datacontext","services/session","services/logger"],function(e){var t,n=function(){t=this};return n.prototype.ok=function(){e.close(this,this.input())},n.show=function(){return e.show(new n)},n});

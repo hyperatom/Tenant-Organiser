@@ -21,7 +21,7 @@
                 <td data-bind="text: ItemName()"></td>
                 <td data-bind="text: UserAdded().FullName()"></td>
                 <td>
-                    <button data-bind="click: $root.wishListItemPurchasedClicked" type="button" class="btn btn-default btn-xs btn-paid">
+                    <button data-bind="click: $root.wishListItemPurchasedClicked" type="button" class="btn btn-default btn-paid">
                         <span data-bind="css: { 'glyphicon-unchecked': !AquiredOn(), 'glyphicon-check': AquiredOn() }" class="glyphicon"></span>
                     </button>
                 </td>

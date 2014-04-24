@@ -56,6 +56,7 @@
             return Q.all([refreshTenants(), refreshInvoice(invoiceId), refreshBillType()]).then(function () {
                 pageHeader("Edit " + billType().Name() + " Invoice");
                 invoiceRecipients(billInvoice().Recipients().slice());
+                removeRecipsFromTenantsList();
 
                 initNewRecipient();
 
@@ -72,6 +73,25 @@
 
                 logger.log('Add Bill Invoice Activated', null, 'edit-bill-invoice', true);
             });
+        }
+
+        function removeRecipsFromTenantsList() {
+
+            return refreshTenants().then(function () {
+                // Remove all tenants who are already recipients of convo
+                tenantsList(tenantsList().filter(filterTenants));
+            });
+
+            function filterTenants(tenant) {
+                var results = $.grep(invoiceRecipients(), isTenantRecipient);
+
+                function isTenantRecipient(invoiceRecip) {
+                    return invoiceRecip.UserId() === tenant.Id();
+                }
+
+                // If user is not in the active convo, include them in tenants list
+                return results.length === 0;
+            }
         }
 
         function refreshTenants() {
@@ -134,6 +154,7 @@
             invoiceRecipients([]);
             datacontext.rejectChanges();
             invoiceRecipients(billInvoice().Recipients().slice());
+            removeRecipsFromTenantsList();
 
             initNewRecipient();
 
@@ -206,6 +227,8 @@
             newRecip.Amount.subscribe(recipientAmountChanged);
             newRecip.Amount.notifySubscribers();
 
+            removeRecipsFromTenantsList();
+
             initNewRecipient();
         }
 
@@ -215,6 +238,8 @@
             recipient.entityAspect.setDeleted();
             //billInvoice().Recipients.remove(recipient);
             recipient.Amount.notifySubscribers();
+
+            removeRecipsFromTenantsList();
         }
 
         function initNewRecipient() {

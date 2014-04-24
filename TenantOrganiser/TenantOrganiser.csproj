@@ -198,18 +198,17 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BreezeController.cs" />
     <Compile Include="Controllers\HotTowelController.cs" />
+    <Compile Include="Controllers\Mailer.cs" />
+    <Compile Include="Controllers\TenantOrganiserContextProvider.cs" />
+    <Compile Include="Controllers\Utility.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Filters\ValidateHttpAntiForgeryTokenAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201404161020159_InitialCreate.cs" />
-    <Compile Include="Migrations\201404161020159_InitialCreate.Designer.cs">
-      <DependentUpon>201404161020159_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201404161447240_FacebookUser.cs" />
-    <Compile Include="Migrations\201404161447240_FacebookUser.Designer.cs">
-      <DependentUpon>201404161447240_FacebookUser.cs</DependentUpon>
+    <Compile Include="Migrations\201404182342199_InitialCreate.cs" />
+    <Compile Include="Migrations\201404182342199_InitialCreate.Designer.cs">
+      <DependentUpon>201404182342199_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ActivityLog.cs" />
@@ -261,6 +260,7 @@
     <Content Include="App\viewmodels\shell.js" />
     <Content Include="App\viewmodels\tasks.js" />
     <Content Include="App\viewmodels\tenants.js" />
+    <Content Include="App\viewmodels\upload-facebook-picture.js" />
     <Content Include="App\viewmodels\wish-list.js" />
     <Content Include="App\views\account-settings.html" />
     <Content Include="App\views\add-bill-invoice.html" />
@@ -279,6 +279,9 @@
     <Content Include="App\views\shell.html" />
     <Content Include="App\views\tasks.html" />
     <Content Include="App\views\tenants.html" />
+    <Content Include="App\views\upload-facebook-picture.html" />
+    <Content Include="App\views\upload-file-picture.html" />
+    <Content Include="App\views\upload-url-picture.html" />
     <Content Include="App\views\wish-list.html" />
     <Content Include="Content\vendor\bootstrap-theme.css" />
     <Content Include="Content\vendor\bootstrap-theme.min.css" />
@@ -355,6 +358,7 @@
     <Content Include="Scripts\less-1.5.1.min.js" />
     <Content Include="Scripts\q.js" />
     <Content Include="Scripts\q.min.js" />
+    <Content Include="Scripts\sha256.js" />
     <Content Include="weyland-config.js" />
     <Content Include="Content\less\account-settings.less" />
     <Content Include="Content\less\bill-invoice.less" />
@@ -409,11 +413,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201404161020159_InitialCreate.resx">
-      <DependentUpon>201404161020159_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201404161447240_FacebookUser.resx">
-      <DependentUpon>201404161447240_FacebookUser.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201404182342199_InitialCreate.resx">
+      <DependentUpon>201404182342199_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

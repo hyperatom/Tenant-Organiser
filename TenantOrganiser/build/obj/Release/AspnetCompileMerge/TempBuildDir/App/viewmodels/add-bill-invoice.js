@@ -64,6 +64,27 @@
             dueDate(null);
         }
 
+        function removeRecipsFromTenantsList() {
+
+            return refreshTenants().then(function () {
+                // Remove all tenants who are already recipients of convo
+                tenantsList(tenantsList().filter(filterTenants));
+            });
+
+            function filterTenants(tenant) {
+                var results = $.grep(invoiceRecipients(), isTenantRecipient);
+
+                function isTenantRecipient(invoiceRecip) {
+                    console.log(invoiceRecip);
+                    console.log("Recip: " + invoiceRecip + " Tenant: " + tenant.Id());
+                    return invoiceRecip.User().Id() === tenant.Id();
+                }
+
+                // If user is not in the active convo, include them in tenants list
+                return results.length === 0;
+            }
+        }
+
         function refreshTenants() {
             return datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
         }
@@ -137,6 +158,8 @@
             totalAmount(0);
             dueDate('');
 
+            removeRecipsFromTenantsList();
+
             logger.log('Changes undone!', null, 'add-bill-invoice', true);
         }
 
@@ -184,6 +207,8 @@
             invoiceRecipients.push(recipient);
             recipient.Amount.notifySubscribers();
 
+            removeRecipsFromTenantsList();
+
             initNewRecipient();
         }
 
@@ -191,6 +216,8 @@
 
             invoiceRecipients.remove(recipient);
             recipient.Amount.notifySubscribers();
+
+            removeRecipsFromTenantsList();
         }
 
         function clickedCombo(tenant, newInvoiceRecipient) {

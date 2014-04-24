@@ -1,0 +1,31 @@
+﻿<div class="modal-content">
+    <div class="modal-header">
+        <button data-bind="click: close" type="button" class="close" aria-hidden="true">
+            &times;
+        </button>
+        <h4 class="modal-title">Upload Facebook Profile Picture</h4>
+    </div>
+    <div class="modal-body">
+        <p>Enter your Facebook username or user ID.</p>
+
+        <br />
+
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="inputFacebookPicture" class="col-sm-2 control-label">Username/ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputFacebookPicture" placeholder="E.g. bill.stephens">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button data-bind="click: $root.close" type="button" class="btn btn-default">
+            Close
+        </button>
+        <button data-bind="click: $root.uploadUrlPicture" type="submit" class="btn btn-success">
+            Upload
+        </button>
+    </div>
+</div>

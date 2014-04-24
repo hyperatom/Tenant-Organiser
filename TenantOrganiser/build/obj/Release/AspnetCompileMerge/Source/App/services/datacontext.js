@@ -107,6 +107,43 @@
             });
         };
 
+        var changeEmail = function (newEmail) {
+
+            return $.ajax({
+                type: "POST",
+                url: "account/changeemail",
+                data: { newEmail: newEmail }
+            });
+        };
+
+        var uploadFacebookPicture = function (username) {
+            return $.ajax({
+                type: "POST",
+                url: "account/uploadfacebookpicture",
+                data: { username: username }
+            });
+        };
+
+        var uploadUrlPicture = function (url) {
+            return $.ajax({
+                type: "POST",
+                url: "account/uploadurlpicture",
+                data: { url: url }
+            });
+        };
+
+        var uploadFilePicture = function (file) {
+
+            return $.ajax({
+                type: "POST",
+                url: "account/uploadfilepicture",
+                data: file,
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        };
+
         var createHouse = function (sessionUserObservable, houseName, houseCode) {
 
             var houseQuery = EntityQuery.from('Houses').where("HouseCode", "==", houseCode);
@@ -167,11 +204,9 @@
 
                     // Id property of house object is observable
                     manager.createEntity('HouseJoinRequest', { UserId: sessionUserObservable().Id(), HouseId: house.Id() });
-                    manager.saveChanges();
-
-                    logSuccess('Created house join request.', data, true);
-
-                    return;
+                    return manager.saveChanges().then(function () {
+                        logSuccess('Created house join request.', data, true);
+                    });
                 }
 
                 // If we get this far, house code didn't exist
@@ -185,8 +220,16 @@
 
         var joinTenantToHouse = function (tenantObservable, houseObservable) {
 
-            return removeUsersHouseRequests(tenantObservable).then(function () {
-                tenantObservable().House(houseObservable());
+            tenantObservable().HouseId(houseObservable().Id());
+
+            var query = EntityQuery.from('HouseJoinRequests').where("UserId", "==", tenantObservable().Id());
+
+            return manager.executeQuery(query).then(function (data) {
+
+                $.each(data.results, function (index, value) {
+                    value.entityAspect.setDeleted();
+                });
+
                 return manager.saveChanges();
             });
         };
@@ -296,7 +339,7 @@
 
         var getCleaningRotas = function (cleaningRotasObservable) {
 
-            var query = EntityQuery.from('CleaningRotas');
+            var query = EntityQuery.from('CleaningRotas').expand("CleaningLogs");
 
             function querySucceeded(data) {
 
@@ -451,7 +494,9 @@
 
         var getPendingRequests = function (requestsObservable, HouseId) {
 
-            var query = EntityQuery.from('HouseJoinRequests').where('HouseId', '==', HouseId);
+            var query = EntityQuery.from('HouseJoinRequests').where('HouseId', '==', HouseId)
+                .expand("User")
+                .expand("House");
 
             function querySucceeded(data) {
                 requestsObservable(data.results);
@@ -576,6 +621,10 @@
 
         var createCleaningRota = function (house) {
             return manager.createEntity('CleaningRota', { House: house });
+        };
+
+        var createCleaningRotaLog = function (rotaGroupId, cleaningRotaObservable, date) {
+            return manager.createEntity('CleaningLog');
         };
 
         var deleteInvoice = function (invoice) {
@@ -720,6 +769,7 @@
             logout: logout,
             register: register,
             changePassword: changePassword,
+            changeEmail: changeEmail,
 
             joinHouse: joinHouse,
             joinTenantToHouse: joinTenantToHouse,
@@ -733,22 +783,27 @@
             createBillType: createBillType,
             createBinRota: createBinRota,
             createCleaningRota: createCleaningRota,
+            createCleaningRotaLog: createCleaningRotaLog,
 
             getUsersJoinRequest: getUsersJoinRequest,
             cancelHouseRequest: cancelHouseRequest,
 
             deleteCommunalMessage: deleteCommunalMessage,
-            deleteInvoice: deleteInvoice
+            deleteInvoice: deleteInvoice,
+
+            uploadFacebookPicture: uploadFacebookPicture,
+            uploadUrlPicture: uploadUrlPicture,
+            uploadFilePicture: uploadFilePicture
         };
 
         return datacontext;
 
         function log(msg, data, showToast) {
-            logger.log(msg, data, system.getModuleId(datacontext), showToast);
+            //logger.log(msg, data, system.getModuleId(datacontext), showToast);
         }
 
         function logSuccess(msg, data, showToast) {
-            logger.logSuccess(msg, data, system.getModuleId(datacontext), showToast);
+            //logger.logSuccess(msg, data, system.getModuleId(datacontext), showToast);
         }
 
         function logError(msg, data, showToast) {
