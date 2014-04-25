@@ -77,7 +77,7 @@ namespace TenantOrganiser.Controllers
 
                     if (original.ContainsKey("HouseId") && item.HouseId == null)
                     {
-                        ActivityLog log = new ActivityLog { LogName = Log.TENANT, UserId = item.Id, HouseId = (int)item.HouseId, ActionMessage = "Left this house." };
+                        ActivityLog log = new ActivityLog { LogName = Log.TENANT, UserId = item.Id, HouseId = Int32.Parse(original["HouseId"].ToString()), ActionMessage = "Left this house." };
                         Context.ActivityLogs.Add(log);
                     }
                 }

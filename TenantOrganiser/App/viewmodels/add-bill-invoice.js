@@ -1,5 +1,12 @@
-﻿define(['services/logger', 'plugins/router', 'services/datacontext', 'services/session'],
-    function (logger, router, datacontext, session) {
+﻿/**
+ * View model for the Add Bill Invoice view. 
+ * Performs tasks which aids the creation of a new bill invoice.
+ * 
+ * @module viewmodels/add-bill-invoice
+ */
+define(['services/logger', 'plugins/router', 'services/datacontext', 'services/session', 'services/helper'],
+
+    function (logger, router, datacontext, session, helper) {
 
         var pageHeader = new ko.observable();
 
@@ -49,14 +56,30 @@
 
         return vm;
 
+        /** 
+         * Activates the view model by initialising required data.
+         * 
+         * @name module:viewmodels/add-bill-invoice#activate
+         * @public
+         * @function
+         * @param {number} billTypeId - ID of the bill type to create an invoice for.
+         * @returns {Object} A promise returned when all asynchronous queries have completed. 
+         */
         function activate(billTypeId) {
-
             return Q.all([refreshTenants(), refreshBillType(billTypeId), initNewBillInvoice(), initNewRecipient()]).then(function () {
                 pageHeader("New " + billType().Name() + " Invoice");
                 logger.log('Add Bill Invoice Activated', null, 'add-bill-invoice', true);
             });
         }
 
+        /** 
+         * Called when the page is exited.
+         * Resets data to default values to prevent duplications upon page re-entry.
+         * 
+         * @name module:viewmodels/add-bill-invoice#deactivate
+         * @public
+         * @function
+         */
         function deactivate() {
             billType(null);
             totalAmount(null);
@@ -64,46 +87,15 @@
             dueDate(null);
         }
 
-        function removeRecipsFromTenantsList() {
-
-            return refreshTenants().then(function () {
-                // Remove all tenants who are already recipients of convo
-                tenantsList(tenantsList().filter(filterTenants));
-            });
-
-            function filterTenants(tenant) {
-                var results = $.grep(invoiceRecipients(), isTenantRecipient);
-
-                function isTenantRecipient(invoiceRecip) {
-                    console.log(invoiceRecip);
-                    console.log("Recip: " + invoiceRecip + " Tenant: " + tenant.Id());
-                    return invoiceRecip.User().Id() === tenant.Id();
-                }
-
-                // If user is not in the active convo, include them in tenants list
-                return results.length === 0;
-            }
-        }
-
-        function refreshTenants() {
-            return datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
-        }
-
-        function refreshBillType(id) {
-            return datacontext.getBillTypeById(billType, id);
-        }
-
-        function initNewBillInvoice() {
-            //datacontext.createBillInvoice(billType())
-            return billInvoice({ BillType: billType(), Recipients : ko.observableArray() });
-        }
-
-        function initNewRecipient() {
-            newInvoiceRecipient({ User: ko.observable({ FullName: ko.observable('Select a recipient') }), BillInvoice: billInvoice(), Paid: ko.observable(false), Amount: ko.observable() });
-        }
-
+        /** 
+         * Called when the view is attached to this view model.
+         * Initialises the datepicker and subscribes to the total amount text field.
+         * 
+         * @name module:viewmodels/add-bill-invoice#viewAttached
+         * @public
+         * @function
+         */
         function viewAttached() {
-
             ko.observable.fn.beforeAndAfterSubscribe = function (callback, target) {
                 var _oldValue;
                 target.subscribe(function (oldValue) {
@@ -115,10 +107,68 @@
             };
 
             $(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
-
             ko.observable.fn.beforeAndAfterSubscribe(totalAmountChanged, totalAmount);
         }
 
+        /** 
+         * Refreshes the current list of tenants and removes those that are already an invoice recipient.
+         * This prevents users adding the same recipient twice.
+         * 
+         * @name module:viewmodels/add-bill-invoice#refreshTenants
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the query is complete.
+         */
+        function refreshTenants() {
+            return datacontext.getUsersByHouse(tenantsList, session.sessionUser().HouseId()).then(function() {
+                helper.removeCommonTenants(tenantsList, invoiceRecipients);
+            });
+        }
+
+        /** 
+         * Refreshes the current bill type being used to create the new invoice.
+         * 
+         * @name module:viewmodels/add-bill-invoice#refreshBillType
+         * @public
+         * @function
+         * @param {number} id - Id of the bill type to create the invoice for.
+         * @returns {Object} Promise returned when the query is complete.
+         */
+        function refreshBillType(id) {
+            return datacontext.getBillTypeById(billType, id);
+        }
+
+        /** 
+         * Initialises a new bill invoice using the current bill type and list of added recipients.
+         * 
+         * @name module:viewmodels/add-bill-invoice#initNewBillInvoice
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the query is complete.
+         */
+        function initNewBillInvoice() {
+            return billInvoice({ BillType: billType(), Recipients : ko.observableArray() });
+        }
+
+        /** 
+         * Initialises a new invoice recipient using the values of the associated observables.
+         * 
+         * @name module:viewmodels/add-bill-invoice#initNewRecipient
+         * @public
+         * @function
+         */
+        function initNewRecipient() {
+            newInvoiceRecipient({ User: ko.observable({ FullName: ko.observable('Select a recipient') }), BillInvoice: billInvoice(), Paid: ko.observable(false), Amount: ko.observable() });
+        }
+
+        /** 
+         * Creates a new bill invoice using the associated observable values.
+         * 
+         * @name module:viewmodels/add-bill-invoice#invoiceCreated
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the entity is saved.
+         */
         function invoiceCreated() {
 
             // Validate new invoice
@@ -152,17 +202,31 @@
             }
         }
 
+        /** 
+         * Resets the list of recipients, total amount and due date observables to their default values.
+         * 
+         * @name module:viewmodels/add-bill-invoice#invoiceUndone
+         * @public
+         * @function
+         */
         function invoiceUndone() {
-
             ko.utils.arrayForEach(invoiceRecipients(), function (recip) { invoiceRecipients.removeAll(); });
             totalAmount(0);
             dueDate('');
-
-            removeRecipsFromTenantsList();
-
+            refreshTenants();
             logger.log('Changes undone!', null, 'add-bill-invoice', true);
         }
 
+        /** 
+         * Updates the total amount to reflect the sum of all recipients invoices when
+         * a change in a recipients amount is detected.
+         * 
+         * @name module:viewmodels/add-bill-invoice#recipientAmountChanged
+         * @public
+         * @function
+         * @param {number} newValue - New value of a recipients invoice amount.
+         * @returns {Object} Promise returned when the entity is saved.
+         */
         function recipientAmountChanged(newValue) {
 
             recipientAmountChanging = true;
@@ -177,19 +241,36 @@
             recipientAmountChanging = false;
         }
 
-        function totalAmountChanged(target, oldValue, newValue) {
 
+        /** 
+         * Updates the invoice amount of all added invoice recipients to reflect
+         * a change detected for the total amount.
+         * 
+         * @name module:viewmodels/add-bill-invoice#totalAmountChanged
+         * @public
+         * @function
+         * @param {number} oldValue - Old value of the total amount.
+         * @param {number} newValue - New value of the total amount.
+         */
+        function totalAmountChanged(target, oldValue, newValue) {
             var size = invoiceRecipients().length;
 
             if (oldValue != newValue && newValue != "" && size > 0 && recipientAmountChanging == false) {
                 var sharedAmount = newValue / size;
-
                 totalAmountChanging = true;
                 ko.utils.arrayForEach(invoiceRecipients(), function (recip) { recip.Amount(sharedAmount) });
                 totalAmountChanging = false;
             }
         }
 
+        /** 
+         * Adds a specified recipient to the observable array of invoice recipients. 
+         * 
+         * @name module:viewmodels/add-bill-invoice#addNewRecipient
+         * @public
+         * @function
+         * @param {Object} recipient - Recipient to add to the list of observable recipients.
+         */
         function addNewRecipient(recipient) {
 
             // Validate new recipient
@@ -207,23 +288,48 @@
             invoiceRecipients.push(recipient);
             recipient.Amount.notifySubscribers();
 
-            removeRecipsFromTenantsList();
+            refreshTenants();
 
             initNewRecipient();
         }
 
+        /** 
+         * Removes a specified recipient from the observable array of invoice recipients. 
+         * 
+         * @name module:viewmodels/add-bill-invoice#removeRecipient
+         * @public
+         * @function
+         * @param {Object} recipient - Recipient to remove from the list of observable recipients.
+         */
         function removeRecipient(recipient) {
 
             invoiceRecipients.remove(recipient);
             recipient.Amount.notifySubscribers();
 
-            removeRecipsFromTenantsList();
+            refreshTenants();
         }
 
+        /** 
+         * Sets the value of the new invoice recipient to the specified tenant.
+         * 
+         * @name module:viewmodels/add-bill-invoice#clickedCombo
+         * @public
+         * @function
+         * @param {Object} tenant - Tenant to be set to the value of the new recipient.
+         * @param {Object} newInvoiceRecipient - New recipient to be set to the chosen tenant.
+         */
         function clickedCombo(tenant, newInvoiceRecipient) {
             newInvoiceRecipient.User(tenant);
         }
 
+        /** 
+         * Inverts the invoice paid status of a specified recipient.
+         * 
+         * @name module:viewmodels/add-bill-invoice#checkboxClicked
+         * @public
+         * @function
+         * @param {Object} newInvoiceRecipient - Recipient to have their paid status inverted.
+         */
         function checkboxClicked(newInvoiceRecipient) {
 
             if (!newInvoiceRecipient.Paid()) {

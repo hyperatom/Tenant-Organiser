@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: viewmodels/join-house.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: viewmodels/join-house.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>﻿/**
+ * View model for the Join House view. 
+ * Performs tasks associated with joining and creating houses.
+ * 
+ * @module viewmodels/join-house
+ */
+define(['services/logger', 'plugins/router', 'services/session', 'services/datacontext', 'services/fbhelper'],
+
+    function (logger, router, session, datacontext, fb) {
+
+        var pageHeader = new ko.observable();
+
+        var joinHouseCode = new ko.observable();
+
+        var createHouseName = new ko.observable();
+        var createHouseCode = new ko.observable();
+
+        var houseJoinRequest = new ko.observable();
+
+        var vm = {
+            activate: activate,
+            title: 'Join House',
+
+            pageHeader: pageHeader,
+
+            joinHouseCode: joinHouseCode,
+
+            createHouseName: createHouseName,
+            createHouseCode: createHouseCode,
+
+            joinExistingHouseClicked: joinExistingHouseClicked,
+            createNewHouseClicked: createNewHouseClicked,
+            cancelRequestClicked: cancelRequestClicked,
+            logoutClicked: logoutClicked,
+
+            houseJoinRequest: houseJoinRequest
+        };
+
+        return vm;
+
+        /** 
+         * Activates the view model by initialising required data.
+         * 
+         * @name module:viewmodels/join-house#activate
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the house join request has been retrieved.
+         */
+        function activate() {
+            initPageHeader(pageHeader);
+            logger.log('Join House View Activated', null, 'join-house', true);
+            return refreshHouseJoinRequest();
+        }
+
+        /** 
+         * Initialises the welcome page heading based on the user's first name.
+         *
+         * @name module:viewmodels/join-house#initPageHeader
+         * @public
+         * @function
+         */
+        function initPageHeader(pageHeaderObservable) {
+            pageHeaderObservable("Welcome " + session.sessionUser().FirstName() + "!");
+        }
+
+        /** 
+         * Refreshes the session user's house join request.
+         *
+         * @name module:viewmodels/join-house#refreshHouseJoinRequest
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the house join request has been retrieved.
+         */
+        function refreshHouseJoinRequest() {
+            return datacontext.getUsersJoinRequest(session.sessionUser, houseJoinRequest);
+        }
+
+        /** 
+         * Logs the session user out of the application.
+         * Navigates the user back to the login view.
+         * 
+         * @name module:viewmodels/join-house#logoutClicked
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the user has been logged out.
+         */
+        function logoutClicked() {
+            // Log user out of Facebook if they are a Facebook user
+            if (session.sessionUser().IsFacebookUser())
+                fb.logout()
+
+            return session.logout().then(function () { router.navigate('#login') });
+        }
+
+        /** 
+         * Creates a new house join request using associates observable values.
+         * 
+         * @name module:viewmodels/join-house#joinExistingHouseClicked
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the hosue join request has been created.
+         */
+        function joinExistingHouseClicked() {
+            return datacontext.requestHouseJoin(session.sessionUser, joinHouseCode()).then(function () {
+                return refreshHouseJoinRequest();
+            });
+        }
+
+        /** 
+         * Cancels the session user's existing house join request.
+         * 
+         * @name module:viewmodels/join-house#cancelRequestClicked
+         * @public
+         * @function
+         * @param {Object} request - House join request to be cancelled.
+         * @returns {Object} A promise returned when the house join request has been cancelled.
+         */
+        function cancelRequestClicked(request) {
+            // Copy to temp variable
+            var req = houseJoinRequest();
+            houseJoinRequest(null);
+            req.entityAspect.setDeleted();
+            return datacontext.saveChanges().then(refreshHouseJoinRequest);
+        }
+
+        /** 
+         * Creates a new house using associated observable values.
+         * Navigates the user to the home view of the new house.
+         *
+         * @name module:viewmodels/join-house#createNewHouseClicked
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the house has been created.
+         */
+        function createNewHouseClicked() {
+            return datacontext.createHouse(session.sessionUser, createHouseName(), createHouseCode()).then(session.refreshSession).then(function () {
+                router.navigate('#home');
+            });
+        }
+    });</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="datacontext.html">services/datacontext</a></li><li><a href="fbhelper.html">services/fbhelper</a></li><li><a href="helper.html">services/helper</a></li><li><a href="logger.html">services/logger</a></li><li><a href="model.html">services/model</a></li><li><a href="session.html">services/session</a></li><li><a href="account-settings.html">viewmodels/account-settings</a></li><li><a href="add-bill-invoice.html">viewmodels/add-bill-invoice</a></li><li><a href="bills.html">viewmodels/bills</a></li><li><a href="create-bill-modal.html">viewmodels/create-bill-modal</a></li><li><a href="edit-bill-invoice.html">viewmodels/edit-bill-invoice</a></li><li><a href="edit-bin-rota.html">viewmodels/edit-bin-rota</a></li><li><a href="edit-cleaning-rota.html">viewmodels/edit-cleaning-rota</a></li><li><a href="home.html">viewmodels/home</a></li><li><a href="join-house.html">viewmodels/join-house</a></li><li><a href="login.html">viewmodels/login</a></li><li><a href="nav.html">viewmodels/nav</a></li><li><a href="shell.html">viewmodels/shell</a></li><li><a href="tasks.html">viewmodels/tasks</a></li><li><a href="wish-list.html">viewmodels/wish-list</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Apr 26 2014 00:43:10 GMT+0100 (GMT Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

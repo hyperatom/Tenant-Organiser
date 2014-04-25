@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/logger.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/logger.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A logging service which provides an interface to toastr.js
+ * for showing toast notifications to the screen.
+ * 
+ * @module services/logger
+ */
+define(['durandal/system'],
+
+    function (system) {
+
+        var logger = {
+            log: log,
+            logError: logError,
+            logSuccess: logSuccess
+        };
+
+        return logger;
+
+        /** 
+         * Shows a toast information notification containing a specified message
+         * 
+         * @name module:services/logger#log
+         * @public
+         * @function
+         * @param {string} message - The message to be displayed in the toast.
+         * @param {Object} data - The data to be logged when the toast is displayed.
+         * @param {Object} source - The module from which the log has been created.
+         * @param {boolean} showToast - Whether to make the toast visible on the screen.
+         */
+        function log(message, data, source, showToast) {
+            logIt(message, data, source, showToast, 'info');
+        }
+
+        /** 
+         * Shows a toast success notification containing a specified message
+         * 
+         * @name module:services/logger#logSuccess
+         * @public
+         * @function
+         * @param {string} message - The message to be displayed in the toast.
+         * @param {Object} data - The data to be logged when the toast is displayed.
+         * @param {Object} source - The module from which the log has been created.
+         * @param {boolean} showToast - Whether to make the toast visible on the screen.
+         */
+        function logSuccess(message, data, source, showToast) {
+            logIt(message, data, source, showToast, 'success');
+        }
+
+        /** 
+         * Shows a toast error notification containing a specified message
+         * 
+         * @name module:services/logger#logError
+         * @public
+         * @function
+         * @param {string} message - The message to be displayed in the toast.
+         * @param {Object} data - The data to be logged when the toast is displayed.
+         * @param {Object} source - The module from which the log has been created.
+         * @param {boolean} showToast - Whether to make the toast visible on the screen.
+         */
+        function logError(message, data, source, showToast) {
+            logIt(message, data, source, showToast, 'error');
+        }
+
+        /** 
+         * Shows a toast notification containing a specified message.
+         * Toasts are displayed visaully as: information (blue), success (green) or error (red).
+         * 
+         * @name module:services/logger#logIt
+         * @private
+         * @function
+         * @param {string} message - The message to be displayed in the toast.
+         * @param {Object} data - The data to be logged when the toast is displayed.
+         * @param {Object} source - The module from which the log has been created.
+         * @param {boolean} showToast - Whether to make the toast visible on the screen.
+         * @param {string} toastType - The type of toast to display ('info', 'error' or 'success').
+         */
+        function logIt(message, data, source, showToast, toastType) {
+            source = source ? '[' + source + '] ' : '';
+
+            data ? system.log(source, message, data) : system.log(source, message);
+
+            if (showToast) {
+                if (toastType === 'error') {
+                    toastr.error(message);
+                } else if (toastType === 'info') {
+                    toastr.info(message);
+                } else if (toastType === 'success') {
+                    toastr.success(message);
+                }
+            }
+        }
+    });</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="datacontext.html">services/datacontext</a></li><li><a href="fbhelper.html">services/fbhelper</a></li><li><a href="helper.html">services/helper</a></li><li><a href="logger.html">services/logger</a></li><li><a href="model.html">services/model</a></li><li><a href="session.html">services/session</a></li><li><a href="account-settings.html">viewmodels/account-settings</a></li><li><a href="add-bill-invoice.html">viewmodels/add-bill-invoice</a></li><li><a href="bills.html">viewmodels/bills</a></li><li><a href="create-bill-modal.html">viewmodels/create-bill-modal</a></li><li><a href="edit-bill-invoice.html">viewmodels/edit-bill-invoice</a></li><li><a href="edit-bin-rota.html">viewmodels/edit-bin-rota</a></li><li><a href="edit-cleaning-rota.html">viewmodels/edit-cleaning-rota</a></li><li><a href="home.html">viewmodels/home</a></li><li><a href="join-house.html">viewmodels/join-house</a></li><li><a href="login.html">viewmodels/login</a></li><li><a href="nav.html">viewmodels/nav</a></li><li><a href="shell.html">viewmodels/shell</a></li><li><a href="tasks.html">viewmodels/tasks</a></li><li><a href="wish-list.html">viewmodels/wish-list</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Apr 26 2014 00:43:10 GMT+0100 (GMT Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

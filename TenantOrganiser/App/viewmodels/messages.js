@@ -64,7 +64,7 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         }
 
         function refreshTenants() {
-            return datacontext.getTenants(tenantsList, session.sessionUser().HouseId());
+            return datacontext.getUsersByHouse(tenantsList, session.sessionUser().HouseId());
         }
 
         function refreshConversations() {

@@ -1,4 +1,10 @@
-﻿define(['config'], function (config) {
+﻿/**
+ * A module used to intercept breeze.js entities from the database for configuration.
+ * Additional properties and computed properties are added to entities from this module.
+ * 
+ * @module services/model
+ */
+define(['../config'], function (config) {
 
     var model = {
         configureMetadataStore: configureMetadataStore,
@@ -8,6 +14,14 @@
 
     return model;
 
+    /** 
+     * Configures the metadata store by specifying entity initialisers for each entity type.
+     * 
+     * @name module:services/model#configureMetadataStore
+     * @public
+     * @function
+     * @param {Object} metadataStore - The metadatastore to be used for entity initialisations.
+     */
     function configureMetadataStore(metadataStore) {
 
         metadataStore.registerEntityTypeCtor(
@@ -32,24 +46,14 @@
             'CleaningRota', null, cleaningRotaInitializer);
     }
 
-    function invoiceRecipientInitializer(invoiceRecipientObservable) {
-        invoiceRecipientObservable.PrettyAmount = ko.computed(function () {
-            return '£' + invoiceRecipientObservable.Amount().toFixed(2);
-        });
-    }
-    
-    function billInvoiceInitializer(invoiceObservable) {
-
-        invoiceObservable.PrettyDueDate = ko.computed(function () {
-            return moment(invoiceObservable.DueDate().toString()).format('MMMM Do YYYY').toString();
-        });
-    }
-
-    function billTypeInitializer(billTypeObservable) {
-        // Initialise the currently viewed invoice for the bill
-        billTypeObservable.currentInvoice = ko.observable(getNextBill(billTypeObservable));
-    }
-
+    /** 
+     * Gets the next bill that occurs based on state of the specified bill object.
+     * 
+     * @name module:services/model#getNextBill
+     * @public
+     * @function
+     * @param {Object} invoiceRecipientObservable - The invoice recipient object to be initialised.
+     */
     function getNextBill(billTypeObservable) {
         if (!billTypeObservable.BillInvoices())
             return null;
@@ -73,6 +77,56 @@
         return results[results.length - 1];
     }
 
+    /** 
+     * Initialises the invoice recipient entity with additional properties.
+     * 
+     * @name module:services/model#invoiceRecipientInitializer
+     * @private
+     * @function
+     * @param {Object} invoiceRecipientObservable - The invoice recipient object to be initialised.
+     */
+    function invoiceRecipientInitializer(invoiceRecipientObservable) {
+        invoiceRecipientObservable.PrettyAmount = ko.computed(function () {
+            return '£' + invoiceRecipientObservable.Amount().toFixed(2);
+        });
+    }
+
+    /** 
+     * Initialises the bill invoice entity with additional properties.
+     * 
+     * @name module:services/model#billInvoiceInitializer
+     * @private
+     * @function
+     * @param {Object} invoiceObservable - The bill invoice object to be initialised.
+     */
+    function billInvoiceInitializer(invoiceObservable) {
+
+        invoiceObservable.PrettyDueDate = ko.computed(function () {
+            return moment(invoiceObservable.DueDate().toString()).format('MMMM Do YYYY').toString();
+        });
+    }
+
+    /** 
+     * Initialises the bill type entity with additional properties.
+     * 
+     * @name module:services/model#billTypeInitializer
+     * @private
+     * @function
+     * @param {Object} billTypeObservable - The bill type object to be initialised.
+     */
+    function billTypeInitializer(billTypeObservable) {
+        // Initialise the currently viewed invoice for the bill
+        billTypeObservable.currentInvoice = ko.observable(getNextBill(billTypeObservable));
+    }
+
+    /** 
+     * Initialises the conversation entity with additional properties.
+     * 
+     * @name module:services/model#conversationInitializer
+     * @private
+     * @function
+     * @param {Object} conversationObservable - The conversation object to be initialised.
+     */
     function conversationInitializer(conversationObservable) {
         conversationObservable.RecipientsString = ko.computed({
 
@@ -102,6 +156,14 @@
         });
     }
 
+    /** 
+     * Initialises the communal message entity with additional properties.
+     * 
+     * @name module:services/model#communalMessageInitializer
+     * @private
+     * @function
+     * @param {Object} messageObservable - The communal message object to be initialised.
+     */
     function communalMessageInitializer(messageObservable) {
         messageObservable.TimeElapsed = ko.computed(function () {
             return moment.utc(messageObservable.SentDate()).fromNow();
@@ -124,6 +186,14 @@
         });
     }
 
+    /** 
+     * Initialises the activity log entity with additional properties.
+     * 
+     * @name module:services/model#activityLogInitializer
+     * @private
+     * @function
+     * @param {Object} activityObservable - The activity log object to be initialised.
+     */
     function activityLogInitializer(activityObservable) {
 
         activityObservable.TimeElapsed = ko.computed(function () {
@@ -173,6 +243,14 @@
         });
     }
 
+    /** 
+     * Initialises the user entity with additional properties.
+     * 
+     * @name module:services/model#userInitializer
+     * @public
+     * @function
+     * @param {Object} userObservable - The user object to be initialised.
+     */
     function userInitializer(userObservable) {
 
         userObservable.FullName = ko.computed(function () {
@@ -187,6 +265,14 @@
         });
     }
 
+    /** 
+     * Initialises the user settings entity with additional properties.
+     * 
+     * @name module:services/model#userSettingsInitializer
+     * @private
+     * @function
+     * @param {Object} userSettingsObservable - The user settings object to be initialised.
+     */
     function userSettingsInitializer(userSettingsObservable) {
 
         userSettingsObservable.PrettyBinRotaGroup = ko.computed(function () {
@@ -204,6 +290,14 @@
         });
     }
 
+    /** 
+     * Initialises the bin rota entity with additional properties.
+     * 
+     * @name module:services/model#binRotaInitializer
+     * @private
+     * @function
+     * @param {Object} binRotaObservable - The bin rota object to be initialised.
+     */
     function binRotaInitializer(binRotaObservable) {
 
         binRotaObservable.OccuranceDays = ko.computed({
@@ -242,6 +336,14 @@
         });
     }
 
+    /** 
+     * Initialises the cleaning rota entity with additional properties.
+     * 
+     * @name module:services/model#cleaningRotaInitializer
+     * @private
+     * @function
+     * @param {Object} cleaningRotaObservable - The cleaning rota object to be initialised.
+     */
     function cleaningRotaInitializer(cleaningRotaObservable) {
 
         cleaningRotaObservable.OccuranceDays = ko.computed({

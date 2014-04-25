@@ -1,4 +1,11 @@
-﻿define(['services/logger', 'services/datacontext', 'services/session'],
+﻿/**
+ * View model for the Tasks view.
+ * Performs tasks associated with calculating task rotas.
+ * 
+ * @module viewmodels/tasks
+ */
+define(['services/logger', 'services/datacontext', 'services/session'],
+
     function (logger, datacontext, session) {
 
         // Cached copy of all house bin rotas
@@ -45,7 +52,15 @@
 
         return vm;
 
-
+        /** 
+        * Activates the view model by initialising required data.
+        * Initialises the current cleaning and bin rotas to be displayed.
+        * 
+        * @name module:viewmodels/tasks#activate
+        * @public
+        * @function
+        * @returns {Object} Promise returned when all data has been primed.
+        */
         function activate() {
 
             configureMoment();
@@ -70,10 +85,26 @@
             });
         }
 
+        /** 
+        * Refreshes the list of tenants associated with the session user's house.
+        * 
+        * @name module:viewmodels/tasks#refreshTenants
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the tenants are retrieved.
+        */
         function refreshTenants() {
-            return datacontext.getTenants(houseTenants, session.sessionUser().HouseId());
+            return datacontext.getUsersByHouse(houseTenants, session.sessionUser().HouseId());
         }
 
+        /** 
+        * Refreshes the list of distinct cleaning rota groups.
+        * 
+        * @name module:viewmodels/tasks#refreshTenants
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the tenants are retrieved.
+        */
         function refreshDistinctCleaningGroups() {
             return distinctCleaningGroups(getDistinctCleaningRotaGroups(houseTenants()).length);
         }

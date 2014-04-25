@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: viewmodels/login.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: viewmodels/login.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>﻿/**
+ * View model for the Login view. 
+ * Performs tasks associated with logging a user into the application.
+ * 
+ * @module viewmodels/login
+ */
+define(['services/logger', 'plugins/router', 'services/session', 'services/fbhelper'],
+
+    function (logger, router, session, fb) {
+
+        var loginEmail = new ko.observable();
+        var loginPassword = new ko.observable();
+
+        var registerFullName = new ko.observable();
+        var registerEmail = new ko.observable();
+        var registerPassword1 = new ko.observable();
+        var registerPassword2 = new ko.observable();
+
+        var vm = {
+            activate: activate,
+            deactivate: deactivate,
+            title: 'Login',
+            attached: viewAttached,
+
+            loginEmail: loginEmail,
+            loginPassword: loginPassword,
+
+            loginClicked: loginClicked,
+            registerClicked: registerClicked,
+
+            registerFullName: registerFullName,
+            registerEmail: registerEmail,
+            registerPassword1: registerPassword1,
+            registerPassword2: registerPassword2,
+        };
+
+        return vm;
+
+        /** 
+         * Activates the view model by initialising required data.
+         * 
+         * @name module:viewmodels/login#activate
+         * @public
+         * @function
+         * @returns {boolean} True if the view model activates successfully, false otherwise.
+         */
+        function activate() {
+            logger.log('Login View Activated', null, 'login', true);
+            return true;
+        }
+
+        /** 
+         * Resets observables to default values when view is deactivated.
+         * Prevents user's credentials from remaining once they have logged out.
+         * 
+         * @name module:viewmodels/login#deactivate
+         * @public
+         * @function
+         */
+        function deactivate() {
+            loginEmail('');
+            loginPassword('');
+        }
+
+        /** 
+         * Initialises Facebook.js once a view has been attached to this view model.
+         * 
+         * @name module:viewmodels/login#viewAttached
+         * @public
+         * @function
+         */
+        function viewAttached() {
+            fb.init();
+        }
+
+        /** 
+         * Hashes the user's provided password and logs the user into the application.
+         * Navigates the user to the home page if they have joined a house or the
+         * join house page otherwise.
+         * 
+         * @name module:viewmodels/login#loginClicked
+         * @public
+         * @function
+         */
+        function loginClicked() {
+            var hash = CryptoJS.SHA256(loginPassword()).toString();
+
+            session.login(loginEmail, hash).then(function (data) {
+
+                // If no data returned just return
+                if (!data) {
+                    logger.logError('Incorrect username or password!', null, 'login', true);
+                    return;
+                }
+
+                // If user is assigned to a house navigate home
+                if (data.House) {
+                    router.navigate('#home');
+                } else {
+                    router.navigate('#join-house');
+                }
+            });
+        }
+
+        /** 
+         * Registers a new user in the database using associated observable values.
+         * 
+         * @name module:viewmodels/login#registerClicked
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the new account has been registered.
+         */
+        function registerClicked() {
+
+            var fullNameArray = registerFullName().split(' ');
+
+            // If passwords don't match, just return
+            if (registerPassword1() !== registerPassword2()) {
+                logger.logError('Both passwords must match!', null, 'login', true);
+                return;
+            }
+
+            // Check empty full name
+            if (!registerFullName()) {
+                logger.logError('Full name cannot be empty.', null, 'login', true);
+                return;
+            }
+
+            // Check full name is two or more names
+            if (fullNameArray.length &lt; 2) {
+                logger.logError('Please enter a full name with two or more parts.', null, 'login', true);
+                return;
+            }
+
+            // Check empty full name
+            if (!registerFullName()) {
+                logger.logError('Full name cannot be empty.', null, 'login', true);
+                return;
+            }
+
+            // Check empty email
+            if (!registerEmail()) {
+                logger.logError('Email cannot be empty.', null, 'login', true);
+                return;
+            }
+
+            // Check empty passwords
+            if (!registerPassword1() || !registerPassword2()) {
+                logger.logError('Passwords cannot be empty.', null, 'login', true);
+                return;
+            }
+
+            var hash = CryptoJS.SHA256(registerPassword1()).toString();
+            var firstName = fullNameArray[0],
+                // Get last name declared
+                lastName = fullNameArray[fullNameArray.length - 1];
+
+            // Attempt registration
+            return session.register(firstName, lastName, registerEmail(), hash, printRegistrationErrors)
+                // If registration was successful
+                // OR user registered with his own pre-existing account
+                .then(function (sessionUser) {
+                    if (sessionUser) {
+                        router.navigate('#join-house');
+                        return router.activate('join-house');
+                    }
+                });
+        }
+
+        /** 
+         * Displays errors that have occured during registration via toast messages.
+         * 
+         * @name module:viewmodels/login#printRegistrationErrors
+         * @public
+         * @function
+         * @param {Object} data - Data object used to extract errors.
+         */
+        function printRegistrationErrors(data) {
+            // Notify user of errors if data comes back
+            if (data.errors) {
+                for (var i = 0; i &lt; data.errors.length; i++) {
+                    logger.logError(data.errors[i], null, 'login', true);
+                }
+            }
+        };
+
+    });</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="datacontext.html">services/datacontext</a></li><li><a href="fbhelper.html">services/fbhelper</a></li><li><a href="helper.html">services/helper</a></li><li><a href="logger.html">services/logger</a></li><li><a href="model.html">services/model</a></li><li><a href="session.html">services/session</a></li><li><a href="account-settings.html">viewmodels/account-settings</a></li><li><a href="add-bill-invoice.html">viewmodels/add-bill-invoice</a></li><li><a href="bills.html">viewmodels/bills</a></li><li><a href="create-bill-modal.html">viewmodels/create-bill-modal</a></li><li><a href="edit-bill-invoice.html">viewmodels/edit-bill-invoice</a></li><li><a href="edit-bin-rota.html">viewmodels/edit-bin-rota</a></li><li><a href="edit-cleaning-rota.html">viewmodels/edit-cleaning-rota</a></li><li><a href="home.html">viewmodels/home</a></li><li><a href="join-house.html">viewmodels/join-house</a></li><li><a href="login.html">viewmodels/login</a></li><li><a href="nav.html">viewmodels/nav</a></li><li><a href="shell.html">viewmodels/shell</a></li><li><a href="tasks.html">viewmodels/tasks</a></li><li><a href="wish-list.html">viewmodels/wish-list</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Apr 26 2014 00:43:10 GMT+0100 (GMT Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

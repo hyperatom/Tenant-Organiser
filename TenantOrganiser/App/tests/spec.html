@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="jasmine-1.2.0.js"></script>
+    <script type="text/javascript" src="jasmine.console_reporter.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="../../Scripts/knockout-2.3.0.js"></script>
+    <script type="text/javascript" src="../../Scripts/require.js"></script>
+    <script type="text/javascript">
+        require.config({
+            baseUrl: '../../',
+            paths: {
+                'specs': 'App/tests/specs/',
+                'text': 'Scripts/text',
+                'durandal': 'Scripts/durandal',
+                'plugins': 'Scripts/durandal/plugins',
+                'transitions': 'Scripts/durandal/transitions',
+                'knockout': 'Scripts/knockout-2.3.0',
+                'jquery': 'Scripts/jquery-2.1.0'
+            }
+        });
+        var runTests = function (specfiles) {
+            require(specfiles, function () {
+                var consoleReporter = new jasmine.ConsoleReporter();
+                jasmine.getEnv().addReporter(consoleReporter);
+                jasmine.getEnv().execute();
+            });
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>

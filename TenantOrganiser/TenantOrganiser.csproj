@@ -194,6 +194,12 @@
     <Compile Include="App_Start\HotTowelConfig.cs" />
     <Compile Include="App_Start\HotTowelRouteConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="App\tests\jasmine-1.2.0.js" />
+    <Content Include="App\tests\jasmine.console_reporter.js" />
+    <Content Include="App\tests\phantomjs.exe" />
+    <Content Include="App\tests\spec.html" />
+    <Content Include="App\tests\spec.js" />
+    <Content Include="App\tests\README.md" />
     <None Include="Content\less\join-house.less" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BreezeController.cs" />
@@ -244,6 +250,7 @@
     <Content Include="App\services\model.js" />
     <Content Include="App\services\session.js" />
     <Content Include="App\services\fbhelper.js" />
+    <Content Include="App\tests\specs\helper.spec.js" />
     <Content Include="App\viewmodels\account-settings.js" />
     <Content Include="App\viewmodels\add-bill-invoice.js" />
     <Content Include="App\viewmodels\create-bill-modal.js" />
@@ -256,7 +263,6 @@
     <Content Include="App\viewmodels\login.js" />
     <Content Include="App\viewmodels\messages.js" />
     <Content Include="App\viewmodels\nav.js" />
-    <Content Include="App\viewmodels\new-message.js" />
     <Content Include="App\viewmodels\shell.js" />
     <Content Include="App\viewmodels\tasks.js" />
     <Content Include="App\viewmodels\tenants.js" />
@@ -275,7 +281,6 @@
     <Content Include="App\views\login.html" />
     <Content Include="App\views\messages.html" />
     <Content Include="App\views\nav.html" />
-    <Content Include="App\views\new-message.html" />
     <Content Include="App\views\shell.html" />
     <Content Include="App\views\tasks.html" />
     <Content Include="App\views\tenants.html" />
@@ -316,6 +321,14 @@
     <Content Include="Content\images\profile_pictures\profile-picture.jpg" />
     <Content Include="Content\vendor\toastr.css" />
     <Content Include="Content\vendor\toastr.min.css" />
+    <Content Include="Docs\index.html" />
+    <Content Include="Docs\scripts\linenumber.js" />
+    <Content Include="Docs\scripts\prettify\Apache-License-2.0.txt" />
+    <Content Include="Docs\scripts\prettify\lang-css.js" />
+    <Content Include="Docs\scripts\prettify\prettify.js" />
+    <Content Include="Docs\styles\jsdoc-default.css" />
+    <Content Include="Docs\styles\prettify-jsdoc.css" />
+    <Content Include="Docs\styles\prettify-tomorrow.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

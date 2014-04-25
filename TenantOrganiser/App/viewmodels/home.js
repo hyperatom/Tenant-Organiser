@@ -1,86 +1,150 @@
-﻿define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router'], function (logger, datacontext, session, router) {
+﻿/**
+ * View model for the Home view. 
+ * Performs tasks associated with displaying an activity feed and communal message panel.
+ * 
+ * @module viewmodels/home
+ */
+define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router'],
 
-    var houseName = ko.observable();
+    function (logger, datacontext, session, router) {
 
-    var messageFeed = ko.observableArray();
-    var activityFeed = ko.observableArray();
+        var houseName = ko.observable();
 
-    var messageInput = ko.observable();
+        var messageFeed = ko.observableArray();
+        var activityFeed = ko.observableArray();
 
-    var vm = {
-        activate: activate,
-        attached: viewAttached,
-        title: 'Home',
+        var messageInput = ko.observable();
 
-        activityFeed: activityFeed,
-        messageFeed: messageFeed,
+        var vm = {
+            activate: activate,
+            attached: viewAttached,
+            title: 'Home',
 
-        messageInput: messageInput,
+            activityFeed: activityFeed,
+            messageFeed: messageFeed,
 
-        addMessage: addMessage,
-        deleteMessage: deleteMessage,
+            messageInput: messageInput,
 
-        houseName: houseName
-    };
+            addMessage: addMessage,
+            deleteMessage: deleteMessage,
 
-    return vm;
+            houseName: houseName
+        };
 
-    function activate() {
+        return vm;
 
-        houseName(session.sessionUser().House().HouseName);
-
-        return Q.all([refreshAnnouncements(), refreshActivityLogs()]).then(function () {
-            logger.log('Home View Activated', null, 'home', true);
-        });
-    }
-
-    function viewAttached() {
-
-        $('#message-box').keypress(checkEnterKeyPressed);
-    }
-
-    function refreshAnnouncements() {
-        return datacontext.getAnnouncements(messageFeed, session.sessionUser().HouseId());
-    }
-
-    function refreshActivityLogs() {
-        return datacontext.getActivitiyLogs(activityFeed, session.sessionUser().HouseId());
-    }
-
-    function deleteMessage(message) {
-        var tmp = message;
-        messageFeed.remove(message);
-        return datacontext.deleteCommunalMessage(tmp).then(refreshAnnouncements);
-    }
-
-    function checkEnterKeyPressed(event) {
-
-        var keycode = (event.keyCode ? event.keyCode : event.which);
-
-        if (keycode == '13') {
-            addMessage();
-        }
-    }
-
-    function addMessage() {
-
-        if (!messageInput()) {
-            logger.logError('Message cannot be empty.', null, 'home', true);
-            return;
+        /** 
+         * Activates the view model by initialising required data.
+         * 
+         * @name module:viewmodels/home#activate
+         * @public
+         * @function
+         * @returns {Object} A promise returned when all asynchronous queries have completed. 
+         */
+        function activate() {
+            houseName(session.sessionUser().House().HouseName);
+            return Q.all([refreshAnnouncements(), refreshActivityLogs()]).then(function () {
+                logger.log('Home View Activated', null, 'home', true);
+            });
         }
 
-        var messageEntity = datacontext.createAnnouncement();
+        /** 
+         * Called when a view is attached to this view model.
+         * Attaches a keypress event listener to the message box.
+         * 
+         * @name module:viewmodels/home#viewAttached
+         * @public
+         * @function
+         */
+        function viewAttached() {
+            $('#message-box').keypress(checkEnterKeyPressed);
+        }
 
-        messageEntity.Content(messageInput());
-        messageEntity.SentDate(moment().toString());
-        messageEntity.User(session.sessionUser());
-        messageEntity.House(session.sessionUser().House());
+        /** 
+         * Refreshes the announements associated with the session user's house.
+         * 
+         * @name module:viewmodels/home#refreshAnnouncements
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the announements are retrieved.
+         */
+        function refreshAnnouncements() {
+            return datacontext.getAnnouncementsByHouse(messageFeed, session.sessionUser().HouseId());
+        }
 
-        $('#message-box').prop('disabled', true);
+        /** 
+         * Refreshes the activity logs associated with the session user's house.
+         * 
+         * @name module:viewmodels/home#refreshActivityLogs
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the activity logs are retrieved.
+         */
+        function refreshActivityLogs() {
+            return datacontext.getActivitiyLogsByHouse(activityFeed, session.sessionUser().HouseId());
+        }
 
-        return datacontext.saveChanges().then(function () {
-            $('#message-box').prop('disabled', false);
-            messageInput('');
-        }).then(refreshAnnouncements);
-    }
-});
+        /** 
+         * Deletes a specified communal message from the messages feed.
+         * 
+         * @name module:viewmodels/home#deleteMessage
+         * @public
+         * @function
+         * @param {Object} message - Message to be deleted.
+         * @returns {Object} Promise returned when the message has been deleted.
+         */
+        function deleteMessage(message) {
+            var tmp = message;
+            messageFeed.remove(message);
+            tmp.entityAspect.setDeleted();
+            return datacontext.saveChanges().then(refreshAnnouncements);
+        }
+
+        /** 
+         * Adds the new communal message to the feed when the enter key is pressed.
+         * 
+         * @name module:viewmodels/home#checkEnterKeyPressed
+         * @public
+         * @function
+         * @param {Object} event - Key press event.
+         */
+        function checkEnterKeyPressed(event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                addMessage();
+            }
+        }
+
+        /** 
+         * Creates a new communal message and adds it to the messges feed.
+         * 
+         * @name module:viewmodels/home#checkEnterKeyPressed
+         * @public
+         * @function
+         * @param {Object} event - Key press event.
+         * @returns {Object} Promise returned when the message has been added.
+         */
+        function addMessage() {
+
+            if (!messageInput()) {
+                logger.logError('Message cannot be empty.', null, 'home', true);
+                return;
+            }
+
+            var messageEntity = datacontext.createAnnouncement();
+
+            // Populate entity with observable values
+            messageEntity.Content(messageInput());
+            messageEntity.SentDate(moment().toString());
+            messageEntity.User(session.sessionUser());
+            messageEntity.House(session.sessionUser().House());
+
+            // Ensure no other messages can be created
+            $('#message-box').prop('disabled', true);
+
+            return datacontext.saveChanges().then(function () {
+                $('#message-box').prop('disabled', false);
+                messageInput('');
+            }).then(refreshAnnouncements);
+        }
+    });

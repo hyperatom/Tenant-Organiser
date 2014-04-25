@@ -1,4 +1,11 @@
-﻿define(['services/logger', 'plugins/router', 'services/session', 'services/fbhelper'],
+﻿/**
+ * View model for the Login view. 
+ * Performs tasks associated with logging a user into the application.
+ * 
+ * @module viewmodels/login
+ */
+define(['services/logger', 'plugins/router', 'services/session', 'services/fbhelper'],
+
     function (logger, router, session, fb) {
 
         var loginEmail = new ko.observable();
@@ -18,8 +25,6 @@
             loginEmail: loginEmail,
             loginPassword: loginPassword,
 
-            fbLoginClicked: fbLoginClicked,
-
             loginClicked: loginClicked,
             registerClicked: registerClicked,
 
@@ -31,31 +36,54 @@
 
         return vm;
 
+        /** 
+         * Activates the view model by initialising required data.
+         * 
+         * @name module:viewmodels/login#activate
+         * @public
+         * @function
+         * @returns {boolean} True if the view model activates successfully, false otherwise.
+         */
         function activate() {
-
             logger.log('Login View Activated', null, 'login', true);
-
             return true;
         }
 
+        /** 
+         * Resets observables to default values when view is deactivated.
+         * Prevents user's credentials from remaining once they have logged out.
+         * 
+         * @name module:viewmodels/login#deactivate
+         * @public
+         * @function
+         */
         function deactivate() {
             loginEmail('');
             loginPassword('');
         }
 
+        /** 
+         * Initialises Facebook.js once a view has been attached to this view model.
+         * 
+         * @name module:viewmodels/login#viewAttached
+         * @public
+         * @function
+         */
         function viewAttached() {
             fb.init();
         }
 
-        function fbLoginClicked() {
-
-        }
-
-
+        /** 
+         * Hashes the user's provided password and logs the user into the application.
+         * Navigates the user to the home page if they have joined a house or the
+         * join house page otherwise.
+         * 
+         * @name module:viewmodels/login#loginClicked
+         * @public
+         * @function
+         */
         function loginClicked() {
             var hash = CryptoJS.SHA256(loginPassword()).toString();
-
-            console.log(hash);
 
             session.login(loginEmail, hash).then(function (data) {
 
@@ -74,6 +102,14 @@
             });
         }
 
+        /** 
+         * Registers a new user in the database using associated observable values.
+         * 
+         * @name module:viewmodels/login#registerClicked
+         * @public
+         * @function
+         * @returns {Object} Promise returned when the new account has been registered.
+         */
         function registerClicked() {
 
             var fullNameArray = registerFullName().split(' ');
@@ -131,14 +167,18 @@
                 });
         }
 
+        /** 
+         * Displays errors that have occured during registration via toast messages.
+         * 
+         * @name module:viewmodels/login#printRegistrationErrors
+         * @public
+         * @function
+         * @param {Object} data - Data object used to extract errors.
+         */
         function printRegistrationErrors(data) {
-
             // Notify user of errors if data comes back
             if (data.errors) {
-
                 for (var i = 0; i < data.errors.length; i++) {
-
-                    console.log(data.errors[i]);
                     logger.logError(data.errors[i], null, 'login', true);
                 }
             }

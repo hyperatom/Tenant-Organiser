@@ -1,0 +1,3 @@
+20140424 201923.020 [07824] CLI Starting up; pid 7824
+20140424 201923.020 [07824] CLI Sauce Connect 4.1, build 905 bd71d37
+20140424 201923.020 [07824] CLI Command line arguments: c:\Users\Adam\Documents\Visual Studio 2012\Projects\TenantOrganiser\node_modules\intern\node_modules\sauce-connect-launcher\sc\sc-4.1-win32\bin\sc -u adambarrell -k **** -P 4444 --tunnel-identifier 1398367156882 --readyfile C:\Users\Adam\AppData\Local\Temp\sc-launcher-readyfile

@@ -1,4 +1,11 @@
-﻿define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router', 'durandal/app', './upload-facebook-picture'],
+﻿/**
+ * View model for the Account Settings view. 
+ * Performs tasks which modify a users account and house settings.
+ * 
+ * @module viewmodels/account-settings
+ */
+define(['services/logger', 'services/datacontext', 'services/session', 'plugins/router', 'durandal/app', './upload-facebook-picture'],
+
     function (logger, datacontext, session, router, app, UploadPictureModal) {
 
         var subscriptions = [];
@@ -30,7 +37,6 @@
         var vm = {
             activate: activate,
             deactivate: deactivate,
-            attached: attached,
             canDeactivate: canDeactivate,
             title: 'Account Settings',
 
@@ -64,7 +70,6 @@
             rejectTenant: rejectTenant,
 
             leaveHouseConfirmed: leaveHouseConfirmed,
-            pictureUploaded: pictureUploaded,
 
             isFacebookUser: isFacebookUser,
 
@@ -79,22 +84,32 @@
 
         return vm;
 
-
+        /** 
+         * Activates the view model by initialising required data.
+         * 
+         * @name module:viewmodels/account-settings#activate
+         * @public
+         * @function
+         * @returns {Object} A promise returned when all asynchronous queries have completed. 
+         */
         function activate() {
-
             isFacebookUser(session.sessionUser().IsFacebookUser());
 
             return Q.all([refreshHouseJoinRequests(), refreshTenantsList()]).then(function () {
-
                 initFormFields();
-
                 logger.log('Account Settings Activated', null, 'account-settings', true);
             });
         }
 
-        function attached() {
-        }
-
+        /** 
+         * Uses a facebook id or account name to indentify a profile picture to use for display
+         * as the session user's account picture.
+         * 
+         * @name module:viewmodels/account-settings#uploadFacebookPicture
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the facebook picture has been uploaded. 
+         */
         function uploadFacebookPicture() {
             return datacontext.uploadFacebookPicture(facebookUsername()).then(function (response) {
                 if (!response)
@@ -104,6 +119,14 @@
             });
         }
 
+        /** 
+         * Uploads an image file from a user's file system to use as their account picture. 
+         * 
+         * @name module:viewmodels/account-settings#uploadFilePicture
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the file has been uploaded. 
+         */
         function uploadFilePicture() {
             var formData = new FormData();
             formData.append("profilePicture", $("#imageFile").get(0).files[0]);
@@ -116,6 +139,14 @@
             });
         }
 
+        /** 
+         * Uses a web image as the profile picture to use for the session users display picture.
+         * 
+         * @name module:viewmodels/account-settings#uploadUrlPicture
+         * @public
+         * @function
+         * @returns {Object} A promise returned when the file has been uploaded. 
+         */
         function uploadUrlPicture() {
             return datacontext.uploadUrlPicture(profilePictureUrl()).then(function (response) {
                 if (!response)
@@ -125,6 +156,15 @@
             });
         }
 
+        /** 
+         * Asks a user exiting the page to confirm that their data changes will be lost
+         * if they navigate away, or to stay on the page and retain the data.
+         * 
+         * @name module:viewmodels/account-settings#canDeactivate
+         * @public
+         * @function
+         * @returns {boolean} True if the user wants to navigate away and lose changes, false otherwise.
+         */
         function canDeactivate() {
             if (!datacontext.hasChanges())
                 return true;
@@ -146,31 +186,67 @@
             });
         }
 
+        /** 
+         * Removes all subscriptions to knockout observables to prevent duplications on page re-entry.
+         * 
+         * @name module:viewmodels/account-settings#deactivate
+         * @public
+         * @function
+         */
         function deactivate() {
             for (var i in subscriptions)
                 subscriptions[i].dispose();
         }
 
+        /** 
+        * Sets the value of the pendingRequests observable to the collection of house join requests.
+        * 
+        * @name module:viewmodels/account-settings#refreshHouseJoinRequests
+        * @public
+        * @function
+        * @returns {Object} Promise returned by the query which retrives pending house join requests.
+        */
         function refreshHouseJoinRequests() {
-            return datacontext.getPendingRequests(pendingRequests, session.sessionUser().HouseId());
+            return datacontext.getPendingRequestsByHouse(pendingRequests, session.sessionUser().HouseId());
         }
 
+        /** 
+        * Sets the value of the tenants observable to the collection of users joined to the house.
+        * 
+        * @name module:viewmodels/account-settings#refreshTenantsList
+        * @public
+        * @function
+        * @returns {Object} Promise returned by the query which retrives users joined to the house.
+        */
         function refreshTenantsList() {
-            return datacontext.getTenants(tenants, session.sessionUser().HouseId());
+            return datacontext.getUsersByHouse(tenants, session.sessionUser().HouseId());
         }
 
+        /** 
+        * Refreshes the house join requests and tenants list observables.
+        * 
+        * @name module:viewmodels/account-settings#refreshAllTenantsLists
+        * @public
+        * @function
+        * @returns {Object} Promise returned by both queries to fetch house join requests and house tenants.
+        */
         function refreshAllTenantsLists() {
             return Q.all([refreshHouseJoinRequests(), refreshTenantsList()]);
         }
 
-        function pictureUploaded() {
-
-            logger.logSuccess('Picture Uploaded!', null, 'account-settings', true);
-        }
-
+        /** 
+        * Removes the session user from their current house and re-directs them to the join house view.
+        * 
+        * @name module:viewmodels/account-settings#leaveHouseConfirmed
+        * @public
+        * @function
+        * @returns {Object} Promise returned by the session.refreshSession() function.
+        */
         function leaveHouseConfirmed() {
 
-            datacontext.leaveHouse(session.sessionUser).done(function () {
+            session.sessionUser().HouseId(null);
+
+            return datacontext.saveChanges().then(function () {
                 return session.refreshSession().then(function () {
                     router.navigate('#join-house');
                     logger.logSuccess('You have left the house!', null, 'account-settings', true);
@@ -178,8 +254,16 @@
             });
         }
 
+        /** 
+        * Joins the user to their requested house and removes their associated join request.
+        * 
+        * @name module:viewmodels/account-settings#acceptTenant
+        * @public
+        * @function
+        * @param {Object} joinRequest - User's request object to join the house.
+        * @returns {Object} Promise returned when the function completes.
+        */
         function acceptTenant(joinRequest) {
-
             pendingRequests.remove(joinRequest);
 
             return datacontext.joinTenantToHouse(joinRequest.User, joinRequest.House)
@@ -191,6 +275,15 @@
                 });
         }
 
+        /** 
+        * Removes a tenant's join request and does not join them to the associated house.
+        * 
+        * @name module:viewmodels/account-settings#rejectTenant
+        * @public
+        * @function
+        * @param {Object} joinRequest - User's request object to join the house.
+        * @returns {Object} Promise returned when the function completes.
+        */
         function rejectTenant(joinRequest) {
             var req = joinRequest;
             pendingRequests.remove(joinRequest);
@@ -198,11 +291,27 @@
             return Q.all([datacontext.saveChanges(), refreshHouseJoinRequests()]);
         }
 
+        /** 
+        * Marks a tenant for removal from the house. When the removal is confirmed,
+        * the tenant will be permanently removed from the house.
+        * 
+        * @name module:viewmodels/account-settings#markDeleteTenant
+        * @public
+        * @function
+        * @param {Object} data - Tenant to mark for house removal.
+        */
         function markDeleteTenant(data) {
-
             tenantMarkedDelete(data);
         }
 
+        /** 
+        * Removes a tenant which has been marked for removal from their associated house.
+        * 
+        * @name module:viewmodels/account-settings#deleteTenant
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the changes are saved.
+        */
         function deleteTenant() {
             tenantMarkedDelete().HouseId(null);
 
@@ -211,6 +320,15 @@
             });
         }
 
+        /** 
+        * Sets the value of the session user's email notification preference.
+        * 
+        * @name module:viewmodels/account-settings#emailNotificationsClicked
+        * @public
+        * @function
+        * @param {boolean} newValue - True if the user should receive email notifications, false otherwise.
+        * @returns {Object} Promise returned when the changes are saved.
+        */
         function emailNotificationsClicked(newValue) {
 
             session.sessionUser().EmailNotifications(newValue);
@@ -225,18 +343,27 @@
             });
         }
 
+        /** 
+        * Saves changes to the user's account details based on the associated observables.
+        * 
+        * @name module:viewmodels/account-settings#saveUserInfoClicked
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the changes are saved.
+        */
         function saveUserInfoClicked() {
 
+            var user = ko.observable();
+
+            // Both passwords must match to ensure no typo's
             if (password1() !== password2()) {
                 logger.logError('Both passwords must match.', null, 'account-settings', true);
                 return;
             }
 
-            var user = ko.observable();
-
             return datacontext.getUserById(session.sessionUser().Id(), user).then(function () {
 
-                // If passwords are blank, just save the email/full name
+                // If passwords are blank, just save the email and full name
                 if (!password1())
                     return saveUserInfo();
 
@@ -256,6 +383,7 @@
                     }
                 }
 
+                // Save all other user details except for the password which requires separate function
                 function saveUserInfo() {
                     var fullNameArray = fullName().split(' ');
 
@@ -277,6 +405,14 @@
             });
         }
 
+        /** 
+        * Saves changes to the user's house details based on the associated observables.
+        * 
+        * @name module:viewmodels/account-settings#saveHousePanelClicked
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the changes are saved.
+        */
         function saveHousePanelClicked() {
 
             session.sessionUser().House().HouseName(houseName());
@@ -290,36 +426,58 @@
             });
         }
 
+        /** 
+        * Reverts changes made to the house details since they were last saved.
+        * 
+        * @name module:viewmodels/account-settings#undoHousePanelClicked
+        * @public
+        * @function
+        */
         function undoHousePanelClicked() {
-
             houseCode(session.sessionUser().House().HouseCode());
             houseName(session.sessionUser().House().HouseName());
-
             hasHouseChanged(false);
-
             logger.logSuccess('House Settings Reset!', null, 'account-settings', true);
         }
 
+        /** 
+        * Reverts changes made to the user's account details since they were last saved.
+        * 
+        * @name module:viewmodels/account-settings#undoUserInfoClicked
+        * @public
+        * @function
+        */
         function undoUserInfoClicked() {
-
             fullName(session.sessionUser().FullName());
             email(session.sessionUser().Email());
             password1('');
             password2('');
             session.sessionUser().entityAspect.rejectChanges();
-
             hasUserInfoChanged(false);
 
             logger.logSuccess('User Settings Reset!', null, 'account-settings', true);
         }
 
+        /** 
+        * Initialises settings data based on session user's account and house details.
+        * 
+        * @name module:viewmodels/account-settings#initFormFields
+        * @public
+        * @function
+        */
         function initFormFields() {
-
             initHouseInfo();
             initPreferences();
             initUserInfo();
         }
 
+        /** 
+        * Initialises house data using the session user's joined house.
+        * 
+        * @name module:viewmodels/account-settings#initHouseInfo
+        * @public
+        * @function
+        */
         function initHouseInfo() {
             houseName(session.sessionUser().House().HouseName());
             houseCode(session.sessionUser().House().HouseCode());
@@ -333,15 +491,27 @@
             }));
         }
 
+        /** 
+        * Initialises preferences data using the session user's current preferences.
+        * 
+        * @name module:viewmodels/account-settings#initPreferences
+        * @public
+        * @function
+        */
         function initPreferences() {
             emailNotifications(session.sessionUser().EmailNotifications());
             displayPictureURL(session.sessionUser().DisplayPictureFilePath());
-
             subscriptions.push(emailNotifications.subscribe(emailNotificationsClicked));
         }
 
+        /** 
+        * Initialises user account details using the session user's current account details.
+        * 
+        * @name module:viewmodels/account-settings#initUserInfo
+        * @public
+        * @function
+        */
         function initUserInfo() {
-
             fullName(session.sessionUser().FullName());
             email(session.sessionUser().Email());
             password1('');

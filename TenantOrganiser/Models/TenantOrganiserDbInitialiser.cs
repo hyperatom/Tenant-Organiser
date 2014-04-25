@@ -70,7 +70,7 @@ namespace TenantOrganiser
             string defaultPassword = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8";
 
             // User to request to join house
-            users.Add(new User() { FirstName = "Chris", LastName = "Lewis", Password = Utility.EmailToMd5Hash("password"), Email = "chris.lewis@gmail.com", DisplayPictureFileName = "profile-picture.jpg" });
+            users.Add(new User() { FirstName = "Chris", LastName = "Lewis", Password = defaultPassword, Email = "chris.lewis@gmail.com", DisplayPictureFileName = "profile-picture.jpg" });
 
             // Create users and attach the house
             users.Add(new User() { FirstName = "Tom", LastName = "Milner", Password = defaultPassword, Email = "a.j.barrell@gmail.com", DisplayPictureFileName = "profile-picture.jpg", House = ker, EmailNotifications = true });

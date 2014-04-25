@@ -1,4 +1,11 @@
-﻿define(['durandal/system', 'plugins/router', 'services/logger', 'services/datacontext', 'services/session'],
+﻿/**
+ * Module for the application shell.
+ * Performs tasks associated with loading the application and managing routing.
+ * 
+ * @module viewmodels/shell
+ */
+define(['durandal/system', 'plugins/router', 'services/logger', 'services/datacontext', 'services/session'],
+
     function (system, router, logger, datacontext, session) {
 
         // Redirecting from / to first route in route.map
@@ -37,17 +44,31 @@
             router: router,
             sessionUser: session.sessionUser
         };
-        
+
         return shell;
 
-        //#region Internal Methods
+        /** 
+        * Activates the view model by initialising required data.
+        * 
+        * @name module:viewmodels/shell#activate
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the application has booted and data is primed.
+        */
         function activate() {
-
-            return datacontext.primeData().then(function() {
+            return datacontext.primeData().then(function () {
                 return session.refreshSession();
             }).then(boot);
         }
 
+        /** 
+        * Registers the routes available in the application.
+        * 
+        * @name module:viewmodels/shell#boot
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the application has booted.
+        */
         function boot() {
 
             // moduleId: 'viewmodels/xxx', becomes moduleId: 'xxx'
@@ -65,7 +86,6 @@
                 { route: 'login', moduleId: 'login', nav: true },
                 { route: 'messages', moduleId: 'messages', nav: true },
                 { route: 'messages/:recipId', moduleId: 'messages', nav: true },
-                { route: 'new-message', moduleId: 'new-message', nav: true },
                 { route: 'tasks', moduleId: 'tasks', nav: true },
                 { route: 'tenants', moduleId: 'tenants', nav: true },
                 { route: 'wish-list', moduleId: 'wish-list', nav: true },
@@ -74,9 +94,4 @@
               .mapUnknownRoutes('home')
               .activate();
         }
-
-        function log(msg, data, showToast) {
-            logger.log(msg, data, system.getModuleId(shell), showToast);
-        }
-        //#endregion
     });
