@@ -1,7 +1,14 @@
 ﻿/*jslint browser: true*/
 /*global define, ko, requirejs, $, ko, Q*/
 
+/**
+ * View model for the Messages view.
+ * Performs tasks associated with sending and receiving chat messages.
+ * 
+ * @module viewmodels/messages
+ */
 define(['services/logger', 'services/datacontext', 'services/session'],
+
     function (logger, datacontext, session) {
 
         var recipientParam = new ko.observable();
@@ -32,22 +39,34 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         return vm;
 
 
+        /** 
+        * Activates the view model by initialising required data.
+        * Adds a user to a new conversation if specified.
+        * 
+        * @name module:viewmodels/messages#activate
+        * @public
+        * @function
+        * @param {number} recipId - Id of the recipient to add to a new conversation.
+        * @returns {Object} Promise returned when all data has been primed.
+        */
         function activate(recipId) {
             return Q.all([refreshTenants(), refreshConversations()]).then(function () {
-
-                if (recipId) {
-                    recipientParam(recipId);
-                }
-
+                recipId ? recipientParam(recipId) : null;
                 logger.log('Messages View Activated', null, 'messages', true);
             });
         }
 
+        /** 
+        * Called when a view is attached to this view model.
+        * Retrieves the user object using the specified Id passed into activate().
+        * 
+        * @name module:viewmodels/messages#attached
+        * @public
+        * @function
+        */
         function attached() {
             if (recipientParam()) {
                 var recip = $.grep(tenantsList(), function (tenant, i) {
-                    console.log("Tenant Id: " + tenant.Id() + " / Param Id: " + recipientParam());
-                    console.log(tenant.Id() === parseInt(recipientParam()));
                     return tenant.Id() === parseInt(recipientParam());
                 });
 
@@ -63,14 +82,37 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             }
         }
 
+        /** 
+        * Refreshes the list of tenants associated with the session user's house.
+        * 
+        * @name module:viewmodels/messages#refreshTenants
+        * @private
+        * @function
+        * @returns {Object} Promise returned when the tenants are retrieved.
+        */
         function refreshTenants() {
             return datacontext.getUsersByHouse(tenantsList, session.sessionUser().HouseId());
         }
 
+        /** 
+        * Refreshes the list of conversations associated with the session user.
+        * 
+        * @name module:viewmodels/messages#refreshConversations
+        * @private
+        * @function
+        * @returns {Object} Promise returned when the conversations are retrieved.
+        */
         function refreshConversations() {
             return datacontext.getConversationsByHouse(conversationsList, session.sessionUser().HouseId()).then(filterConversations);
         }
 
+        /** 
+        * Excludes any conversations that the user is not a part of.
+        * 
+        * @name module:viewmodels/messages#filterConversations
+        * @private
+        * @function
+        */
         function filterConversations() {
             // Only include conversations the session user is in
             conversationsList(conversationsList().filter(isSessionUserIncluded));
@@ -89,6 +131,14 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             }
         }
 
+        /** 
+        * Removes users from the tenants list who area already recipients of the active conversation.
+        * This prevents users from being added twice to the same conversation.
+        * 
+        * @name module:viewmodels/messages#removeRecipsFromTenantsList
+        * @private
+        * @function
+        */
         function removeRecipsFromTenantsList() {
 
             return refreshTenants().then(function () {
@@ -108,19 +158,29 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             }
         }
 
+        /** 
+        * Sends the message currently being composed if the enter key is pressed.
+        * 
+        * @name module:viewmodels/messages#filterConversations
+        * @private
+        * @function
+        * @param {Object} event - Keypress event.
+        */
         function checkEnterKeyPressed(event) {
-
             var keycode = (event.keyCode ? event.keyCode : event.which);
-
-            if (keycode == '13') {
-                messageSent();
-            }
+            keycode == '13' ? messageSent() : null;
         }
 
+        /** 
+        * Send the composed message to the specified recipients.
+        * 
+        * @name module:viewmodels/messages#messageSent
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the message is sent.
+        */
         function messageSent() {
-
             if (composingMessage()) {
-
                 var msg = datacontext.createMessage(),
                     newMessage = composingMessage();
 
@@ -137,16 +197,32 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             }
         }
 
+        /** 
+        * Scrolls the chat box to the bottom each time a message is sent to
+        * ensure the most recent messages can be viewed.
+        * 
+        * @name module:viewmodels/messages#scrollChatBox
+        * @private
+        * @function
+        */
         function scrollChatBox() {
             // Scroll the chat view pane to the bottom to show most recent message
             $("#convo-panel").off('scrollTop');
             $("#convo-panel").scrollTop($("#convo-panel")[0].scrollHeight);
         }
 
-        function conversationClicked(data) {
+        /** 
+        * Sets the conversation being viewed to the specified conversation.
+        * 
+        * @name module:viewmodels/messages#conversationClicked
+        * @public
+        * @function
+        * @param {Object} selectedConvo - Conversation selected for viewing.
+        */
+        function conversationClicked(selectedConvo) {
             // Reset active conversation
             activeConversation(null);
-            activeConversation(data);
+            activeConversation(selectedConvo);
 
             removeRecipsFromTenantsList();
 
@@ -160,14 +236,30 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             scrollChatBox();
         }
 
-        function recipientAdded(data) {
-            var convoUser = datacontext.createConversationUser(activeConversation(), data);
+        /** 
+        * Adds the specified recipient to the conversation being viewed.
+        * 
+        * @name module:viewmodels/messages#recipientAdded
+        * @public
+        * @function
+        * @param {Object} recipient - Recipient to be added to the current conversation.
+        */
+        function recipientAdded(recipient) {
+            var convoUser = datacontext.createConversationUser(activeConversation(), recipient);
 
             return datacontext.saveChanges().then(function () {
                 removeRecipsFromTenantsList();
             });
         }
 
+        /** 
+        * Creates a new conversation containing only the session user as a recipient.
+        * 
+        * @name module:viewmodels/messages#recipientAdded
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the new conversation has been created.
+        */
         function createNewConversation() {
             var newConvo = datacontext.createConversation(session.sessionUser);
             newConvo.DateStarted(moment().toString());
@@ -184,6 +276,14 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             });
         }
 
+        /** 
+        * Removes the session user from the conversation currently being viewed.
+        * 
+        * @name module:viewmodels/messages#leaveConversation
+        * @public
+        * @function
+        * @returns {Object} Promise returned when the session user has been removed from the conversation.
+        */
         function leaveConversation() {
             // Get the convo user which the session user is part of
             var results = $.grep(activeConversation().ConversationUsers(), isSessionUser);

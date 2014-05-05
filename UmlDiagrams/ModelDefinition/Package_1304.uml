@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="85c32a12-773e-455e-8af5-b638b2a6d9ff"
+  name="Controllers" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <suppliersInternal>
+    <dependency
+      Id="1d270889-d3bf-41df-942c-272e19f7356c">
+      <classMoniker
+        Id="9c1579b2-16f1-419c-9a9c-bce2b9c70000"
+        LastKnownName="TenantOrganiserDbContext"
+        LastKnownLocation="UmlDiagrams.uml" />
+    </dependency>
+  </suppliersInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="fc8d52c0-fda8-4b71-8357-66b612d6208b"
+        name="AccountController"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="216592e6-e945-431d-82b8-cc41fa86faee">
+            <classMoniker
+              Id="884b83be-dd10-4fae-a154-b9b255d4d03c"
+              LastKnownName="Utility"
+              LastKnownLocation="Package_1304.uml" />
+          </dependency>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="04825a83-5273-46e4-ad02-fc2adb789709"
+        name="BreezeController"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="968f0ade-cda2-42db-b97c-3851996725f2"
+        name="HotTowelController"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="dbfa30ce-39cd-403f-87b1-4f147792766e"
+        name="Mailer"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="c56a3f65-484b-4ff9-b7e0-dffae81e80d1"
+        name="TenantOrganiserContextProvider"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="bb0ad353-0444-4e70-b46f-d7745db74429"
+            isDerived="false"
+            sourceEndRoleName="TenantOrganiserContextProvider"
+            targetEndRoleName="Mailer"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="dbfa30ce-39cd-403f-87b1-4f147792766e"
+              LastKnownName="Mailer"
+              LastKnownLocation="Package_1304.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="4f012134-0d25-421c-af35-63c1dde82d6a"
+                  name="TenantOrganiserContextProvider"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="5af5c3cc-1029-4487-b664-25c5b79e153d"
+                  name="Mailer"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="884b83be-dd10-4fae-a154-b9b255d4d03c"
+        name="Utility"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

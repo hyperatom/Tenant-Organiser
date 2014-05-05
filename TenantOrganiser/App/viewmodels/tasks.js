@@ -62,9 +62,7 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         * @returns {Object} Promise returned when all data has been primed.
         */
         function activate() {
-
             configureMoment();
-
             CurrentBinDate(initCurrentDate(moment().format("L")));
             CurrentCleaningDate(initCurrentDate(moment().format("L")));
 
@@ -89,7 +87,7 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         * Refreshes the list of tenants associated with the session user's house.
         * 
         * @name module:viewmodels/tasks#refreshTenants
-        * @public
+        * @private
         * @function
         * @returns {Object} Promise returned when the tenants are retrieved.
         */
@@ -100,23 +98,49 @@ define(['services/logger', 'services/datacontext', 'services/session'],
         /** 
         * Refreshes the list of distinct cleaning rota groups.
         * 
-        * @name module:viewmodels/tasks#refreshTenants
-        * @public
+        * @name module:viewmodels/tasks#refreshDistinctCleaningGroups
+        * @private
         * @function
-        * @returns {Object} Promise returned when the tenants are retrieved.
+        * @returns {Object} The array of distinct cleaning rota groups.
         */
         function refreshDistinctCleaningGroups() {
             return distinctCleaningGroups(getDistinctCleaningRotaGroups(houseTenants()).length);
         }
 
+        /** 
+        * Retrieves all bin rotas associated with the session user's house.
+        * 
+        * @name module:viewmodels/tasks#refreshAllBinRotas
+        * @private
+        * @function
+        * @returns {Object} Promise returned when the bin rotas have been retrieved.
+        */
         function refreshAllBinRotas() {
             return datacontext.getBinRotasByHouse(AllBinRotas, session.sessionUser().HouseId());
         }
 
+        /** 
+        * Retrieves all cleaning rotas associated with the session user's house.
+        * 
+        * @name module:viewmodels/tasks#refreshAllCleaningRotas
+        * @private
+        * @function
+        * @returns {Object} Promise returned when the cleaning rotas have been retrieved.
+        */
         function refreshAllCleaningRotas() {
             return datacontext.getCleaningRotasByHouse(AllCleaningRotas, session.sessionUser().HouseId());
         }
 
+        /** 
+        * Creates a new date object containing attributes representing the specified date,
+        * a relative date and a date to be displayed ajacent to the date navigation.
+        * 
+        * @name module:viewmodels/tasks#initCurrentDate
+        * @private
+        * @function
+        * @param {Object} date - Date object to be used to initialise return date.
+        * @returns {Object} Date object containing a date, relative date and formatted date.
+        */
         function initCurrentDate(date) {
             var myDate = moment(date);
 
@@ -136,8 +160,17 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             return new obj();
         }
 
+        /** 
+        * Adds an alternative calendar() function to moment in order to remove
+        * the timestamp from the end of calendar() formatted dates.
+        * 
+        * @name module:viewmodels/tasks#configureMoment
+        * @private
+        * @function
+        * @param {Object} date - Date object to be used to initialise return date.
+        * @returns {Object} Date object containing a date, relative date and formatted date.
+        */
         function configureMoment() {
-
             if (!moment.fn.oldcalendar) {
                 var oldcal = moment.langData()._calendar;
                 var newcal = {
@@ -165,9 +198,17 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             }
         }
 
-        /**
-        * Gets the bin rota(s) which occurs on the given date.
-        * If more than one occurs, multiple bin rotas will be returned.
+        /** 
+        * Gets the rota(s) which occur on the specified date.
+        * If more than one occurs on that date, multiple rotas will be returned.
+        * 
+        * @name module:viewmodels/tasks#getRotasByDate
+        * @private
+        * @function
+        * @param {string} rotaType - The type of rota, can be 'cleaning' or 'bin'.
+        * @param {Object} rotas - Array of rotas to be searched for rotas which fall on the specified date.
+        * @param {Object} date - Used to retrieve rotas which occur on this date.
+        * @param {Object} rotasObservable - Observable array to be populated with the resulting rotas.
         */
         function getRotasByDate(rotaType, rotas, date, rotasObservable) {
             rotasObservable([]);
@@ -177,56 +218,40 @@ define(['services/logger', 'services/datacontext', 'services/session'],
 
                 // If bin collection occurs on the navigated day
                 if ((diff % rota.OccuranceDays()) === 0) {
-                    setTaskTenants(rotaType, houseTenants(), rota, diff, date, rotasObservable().length);
+                    setTaskTenants(rotaType, houseTenants(), rota, date, rotasObservable().length);
                     rotasObservable.push(rota);
                 }
             });
         }
 
+        /** 
+        * Gets the difference in days between two specified dates.
+        * 
+        * @name module:viewmodels/tasks#getDateDifference
+        * @private
+        * @function
+        * @param {Object} startDate - The start date to be compared.
+        * @param {Object} endDate - The end date to be compared.
+        * @return {number} Number of days difference between the two dates, returned as an absolute number (non-negative).
+        */
         function getDateDifference(startDate, endDate) {
             var start = moment(startDate);
             var testDate = moment(endDate);
             return Math.abs(testDate.diff(start, 'days'));
         }
 
-
-        // Increment the chosenGroupNum with modulus every time a bin rota
-        // date comes around! When we invoke this method, we enter a 'date'
-        // we KNOW a rota falls on.
-        function getTaskTenantsForRota(rotaType, tenants, allRotas, date) {
-
-            var distinctGroups = rotaType === 'bin' ? getDistinctBinRotaGroups(tenants) : getDistinctCleaningRotaGroups(tenants);
-
-            var chosenGroupIndex = 0;
-
-            var dateReached = false;
-
-            // For each of the rotas, make an auxillery date so we can increment it
-            $.each(allRotas, function (i, myRota) {
-                myRota.AuxDate = new ko.observable(moment(myRota.StartDate()));
-                myRota.GroupNum = new ko.observable();
-            });
-
-            // If incrementing the date of each rota by its occurance does not exeed the given date
-            while (!dateReached) {
-
-                $.each(allRotas, function (i, myRota) {
-                    // Increment each rota by its occurance days
-                    myRota.AuxDate(moment(myRota.AuxDate()).add('days', myRota.OccuranceDays()));
-
-                    if (moment(myRota.AuxDate()).isBefore(moment(date))) {
-                        // Increment the pointer of the chosen group
-                        chosenGroupIndex = (chosenGroupIndex + 1) % distinctGroups.length;
-                        myRota.GroupNum(distinctGroups[chosenGroupIndex]);
-                        console.log(chosenGroupIndex);
-                    } else {
-                        dateReached = true;
-                    }
-                });
-            }
-        }
-
-        function setTaskTenants(rotaType, tenants, rota, diff, date, occurances) {
+        /** 
+        * Sets the names of the tenants assigned to a rota task using a modulus rota system.
+        * 
+        * @name module:viewmodels/tasks#setTaskTenants
+        * @private
+        * @function
+        * @param {string} rotaType - The type of rotas being used to have tenants assigned, can be 'bin' or 'cleaning'.
+        * @param {Object} tenants - The array of tenants that are associated with the session user's house.
+        * @param {Object} date - The date used to compute the tasks that fall on that day.
+        * @param {number} occurances - The number of occurances the specified rota has had since the specified date.
+        */
+        function setTaskTenants(rotaType, tenants, rota, date, occurances) {
             var distinctGroups = (rotaType === 'bin') ? getDistinctBinRotaGroups(tenants) : getDistinctCleaningRotaGroups(tenants);
 
             // Initialise default values
@@ -303,6 +328,15 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             }
         }
 
+        /** 
+        * Gets an array of distinct numbers representing the bin rota group numbers of tenants in a specified array.
+        * 
+        * @name module:viewmodels/tasks#getDistinctBinRotaGroups
+        * @private
+        * @function
+        * @param {Object} tenantsList - Array of house tenants associated with the session user's house.
+        * @returns {Object} Array of disinct group numbers.
+        */
         function getDistinctBinRotaGroups(tenantsList) {
             var groupNums = [];
 
@@ -316,6 +350,15 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             return groupNums;
         }
 
+        /** 
+        * Gets an array of distinct numbers representing the cleaning rota group numbers of tenants in a specified array.
+        * 
+        * @name module:viewmodels/tasks#getDistinctCleaningRotaGroups
+        * @private
+        * @function
+        * @param {Object} tenantsList - Array of house tenants associated with the session user's house.
+        * @returns {Object} Array of disinct group numbers.
+        */
         function getDistinctCleaningRotaGroups(tenantsList) {
             var groupNums = [];
 
@@ -329,6 +372,15 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             return groupNums;
         }
 
+        /** 
+        * Navigates to the next bin rota to occur from that currently being displayed.
+        * Looks ahead one day at a time until at least one rota is found, the current bin rotas
+        * observable is set to those found.
+        * 
+        * @name module:viewmodels/tasks#navNextBinRota
+        * @public
+        * @function
+        */
         function navNextBinRota() {
             var binRotasByDate = new ko.observableArray();
 
@@ -340,6 +392,15 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             CurrentBinRotas(binRotasByDate());
         }
 
+        /** 
+        * Navigates to the previous bin rota to occur from that currently being displayed.
+        * Looks behind one day at a time until at least one rota is found, the current bin rotas
+        * observable is set to those found.
+        * 
+        * @name module:viewmodels/tasks#navPreviousBinRota
+        * @public
+        * @function
+        */
         function navPreviousBinRota() {
             var binRotasByDate = new ko.observableArray();
 
@@ -351,41 +412,15 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             CurrentBinRotas(binRotasByDate());
         }
 
-        function cleanStatusClicked(data) {
-
-            // TODO: Delete cleaning log when unchecked!!
-
-            // If a log exists, delete it
-
-            if (data.Cleaned()) {
-                console.log(data);
-                data.Log().entityAspect.setDeleted();
-                data.Log(null);
-                data.Cleaned(false);
-
-                return datacontext.saveChanges().then(function () {
-                    logger.logSuccess(data.Name() + " Un-Cleaned!", null, 'tasks', true);
-                });
-            }
-
-            // Else create a log
-
-            var log = datacontext.createCleaningRotaLog();
-            log.Date(CurrentCleaningDate().Date().toString());
-            console.log(CurrentCleaningDate().Date().toString());
-            log.RotaGroup(data.RotaGroup());
-            console.log(data.RotaGroup());
-            log.CleaningRota(data);
-            console.log(data);
-
-            data.Cleaned(true);
-            data.Log(log);
-
-            datacontext.saveChanges().then(function () {
-                logger.logSuccess(data.Name() + " Cleaned!", null, 'tasks', true);
-            });
-        }
-
+        /** 
+        * Navigates to the next cleaning rota to occur from that currently being displayed.
+        * Looks ahead one day at a time until at least one rota is found, the current cleaning rotas
+        * observable is set to those found.
+        * 
+        * @name module:viewmodels/tasks#navNextCleaningRota
+        * @public
+        * @function
+        */
         function navNextCleaningRota() {
             var cleaningRotasByDate = new ko.observableArray();
 
@@ -397,6 +432,15 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             CurrentCleaningRotas(cleaningRotasByDate());
         }
 
+        /** 
+        * Navigates to the previous cleaning rota to occur from that currently being displayed.
+        * Looks behind one day at a time until at least one rota is found, the current cleaning rotas
+        * observable is set to those found.
+        * 
+        * @name module:viewmodels/tasks#navPreviousCleaningRota
+        * @public
+        * @function
+        */
         function navPreviousCleaningRota() {
             var cleaningRotasByDate = new ko.observableArray();
 
@@ -408,4 +452,38 @@ define(['services/logger', 'services/datacontext', 'services/session'],
             CurrentCleaningRotas(cleaningRotasByDate());
         }
 
+        /** 
+        * Inverts the cleaned status of a cleaning log for the communal area
+        * associated with the specified cleaning rota.
+        * 
+        * @name module:viewmodels/tasks#cleanStatusClicked
+        * @public
+        * @function
+        * @param {Object} cleaningRota - Cleaning rota used to be marked as cleaned or uncleaned.
+        */
+        function cleanStatusClicked(cleaningRota) {
+            if (cleaningRota.Cleaned()) {
+                console.log(cleaningRota);
+                cleaningRota.Log().entityAspect.setDeleted();
+                cleaningRota.Log(null);
+                cleaningRota.Cleaned(false);
+
+                return datacontext.saveChanges().then(function () {
+                    logger.logSuccess(cleaningRota.Name() + " Un-Cleaned!", null, 'tasks', true);
+                });
+            }
+
+            // Else create a log
+            var log = datacontext.createCleaningRotaLog();
+            log.Date(CurrentCleaningDate().Date().toString());
+            log.RotaGroup(cleaningRota.RotaGroup());
+            log.CleaningRota(cleaningRota);
+
+            dacleaningRotata.Cleaned(true);
+            cleaningRota.Log(log);
+
+            datacontext.saveChanges().then(function () {
+                logger.logSuccess(cleaningRota.Name() + " Cleaned!", null, 'tasks', true);
+            });
+        }
     });

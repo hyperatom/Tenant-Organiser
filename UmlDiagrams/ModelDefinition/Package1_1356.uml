@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="ed987d65-c5e2-4015-bc03-35f934062661"
+  name="Client" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <suppliersInternal>
+    <dependency
+      Id="d0be03a8-e786-43b2-a69c-e90c10bcda9e">
+      <packageMoniker
+        Id="0888e766-f9ff-4b95-8b75-dad3e71bd799"
+        LastKnownName="Server"
+        LastKnownLocation="Package_1356.uml" />
+    </dependency>
+  </suppliersInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="b45d541b-880e-456a-be77-478b029a2778"
+        LastKnownName="ViewModels"
+        LastKnownLocation="Package_1401.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="8fb26dc5-0f8f-44e0-8fff-f410afba2e8e"
+        LastKnownName="Views"
+        LastKnownLocation="Package_1418.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="bbfb0a84-0819-4996-9c1e-a9abcc96d1e7"
+        LastKnownName="Services"
+        LastKnownLocation="Package1_1418.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="e72b1333-964e-478c-9fd2-f8f976c2c9af" name="ServerClassDiagram" linkedPackageId="be3f21bd-e2cc-4189-a79a-bf2ed223d222" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="fb14e88a-f5c4-4931-ad72-43c8e8565847">
+      <profileInstance Id="36f76ba0-a318-4a46-9e02-657d0de3c552" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="516f025e-7a2d-496d-bfae-969bbe733809">
+      <profileInstance Id="ca31d85e-1bc5-489d-a6a2-f43c77be54dd" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="28b6b379-6b63-4788-9d2b-cad59cfbdefd" name="Configurations">
+        <elementDefinition Id="49b15efb-079c-435d-9537-f75cce6cdba9" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="9c8a3619-2d63-4c3c-91b9-cf656633f179" name="AuthConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="6909d2f3-773a-4cfe-9df6-01887486bcbf" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="06fa5f8e-7612-4250-a2d9-db6ec612e909" name="BreezeWebApiConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="cf1e14e8-0377-41ef-9a54-848192ca573b" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="7066e651-db8a-4888-935e-f1014026ec7f" name="RouteConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="e610a937-24dd-4238-83c4-9c7f9114cb42" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="13fa2cbe-5282-4626-a6ea-f9644074ddcb" name="BundleConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="854733be-e840-4add-b00d-a33a10ad4ace" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="21644e5a-60e6-4798-8e46-ddc934393f73" name="HowTowelConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="d7ddf1ea-0be1-4e6b-8832-63f95beb39bf" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="3205d49f-e8e6-4e27-8995-96e8b4492e58" name="FilterConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="ad8f773c-1441-4a15-9705-8fc6f37389ba" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="1864bb5d-925f-49c4-b955-3788207a52ef" name="HotTowelRouteConfig" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="dc204ad5-246a-4878-a7aa-f5bff711e6a9" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="0065fd12-f128-4db5-85c4-aeba5fa46e13" name="Controllers">
+        <elementDefinition Id="85c32a12-773e-455e-8af5-b638b2a6d9ff" />
+        <suppliersInternal>
+          <dependency Id="deb905c5-87de-4428-876b-4fa591d8eb20">
+            <classMoniker Id="a2df4cca-7bc1-4dc0-986a-3e6b5adb7bc7" LastKnownName="TenantOrganiserDbContext" />
+            <elementDefinition Id="1d270889-d3bf-41df-942c-272e19f7356c" />
+          </dependency>
+        </suppliersInternal>
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="e2bd5831-ae4c-45f6-a1c7-0889fdca8e15" name="AccountController" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="fc8d52c0-fda8-4b71-8357-66b612d6208b" />
+              <suppliersInternal>
+                <dependency Id="d43f79b5-c04d-4459-b656-fa549b498b5c">
+                  <classMoniker Id="9f58982b-fed2-4d35-9c4e-7c09d5619f89" LastKnownName="Utility" />
+                  <elementDefinition Id="216592e6-e945-431d-82b8-cc41fa86faee" />
+                </dependency>
+              </suppliersInternal>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="42a6e4d5-f8a9-45cb-b7be-4dae958fea3f" name="Mailer" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="dbfa30ce-39cd-403f-87b1-4f147792766e" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="e355775a-1683-47df-8e09-ead4396d20be" name="TenantOrganiserContextProvider" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="c56a3f65-484b-4ff9-b7e0-dffae81e80d1" />
+              <targetEnds>
+                <association Id="d8e166fb-b2b0-422e-801e-9006f0071771" isDerived="false" sourceEndRoleName="TenantOrganiserContextProvider" targetEndRoleName="Mailer" isLeaf="false" isAbstract="false">
+                  <classMoniker Id="42a6e4d5-f8a9-45cb-b7be-4dae958fea3f" LastKnownName="Mailer" />
+                  <relationshipOwnedElementsInternal>
+                    <associationHasOwnedEnds>
+                      <memberEnd Id="d3989a7c-52ba-4138-bd67-19d024e7c3c7" name="TenantOrganiserContextProvider" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                        <elementDefinition Id="4f012134-0d25-421c-af35-63c1dde82d6a" />
+                      </memberEnd>
+                    </associationHasOwnedEnds>
+                    <associationHasOwnedEnds>
+                      <memberEnd Id="77c776a7-07c6-43e7-bd70-163b5905e005" name="Mailer" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                        <elementDefinition Id="5af5c3cc-1029-4487-b664-25c5b79e153d" />
+                      </memberEnd>
+                    </associationHasOwnedEnds>
+                  </relationshipOwnedElementsInternal>
+                  <elementDefinition Id="bb0ad353-0444-4e70-b46f-d7745db74429" />
+                </association>
+              </targetEnds>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="9f58982b-fed2-4d35-9c4e-7c09d5619f89" name="Utility" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="884b83be-dd10-4fae-a154-b9b255d4d03c" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="b0882b9a-170a-4f4d-a847-c98748565422" name="HotTowelController" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="968f0ade-cda2-42db-b97c-3851996725f2" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="4c9fad45-b7df-4c5c-a744-f766434c38ad" name="BreezeController" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="04825a83-5273-46e4-ad02-fc2adb789709" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="945bdd1c-66b2-4ec7-9d74-3e5c344e8661" name="Models">
+        <elementDefinition Id="5a712a14-3fb9-42d8-9c2b-9899174540bd" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="b81e9b3e-540b-4b33-bacb-60fafa5ac6d7" name="ActivityLog" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="ab5a2bf5-c81b-4840-8228-c79875a944c8" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="24105d7d-c393-4d50-bea8-aaa90269874b" name="BillInvoice" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="3bd5db8a-fb05-40f0-91b7-76eec311e25e" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="978a7422-f078-429a-8c63-d629c4d6f9e6" name="BillType" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b06eb825-ec36-46fb-8321-1a634aeecc4f" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="09dec439-39ec-4787-b4cb-26e1fc90a6ca" name="BinRota" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="f3899a04-5bdd-4881-9c67-747b63b4b14a" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="a0a508d9-3eb0-4813-9b33-d3d2660397d7" name="CleaningLog" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="18265384-a15c-488b-9ceb-170bda42c8a1" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="d0c9a163-3cb9-4154-b272-42406b5daed1" name="CleaningRota" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="c8e7725a-2fe0-43fb-9e97-6bc1b588e138" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="c474ca6d-6668-4102-80da-75bdb3c50288" name="CommunalMessage" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="bc7cca6f-1953-4ac5-85af-438fd4a6f8a8" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="208619a3-078d-4985-a517-a23e0be3fb23" name="Conversation" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="18868ab5-4ab4-4b6b-804b-28b287b019e5" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="78f1a350-92e9-4442-828b-81320e654291" name="ConversationUser" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b39118fa-939f-4891-898a-bea55c905f1e" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="f3d3c97e-7604-46a4-870c-9ae38c5ec822" name="House" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="997ad436-43e0-4308-92c5-be089b0f1999" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="99b91c93-404f-43f1-945b-946b1e79d9a1" name="HouseJoinRequest" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="d286cd5f-e174-4e90-a4a6-d86ddd7f649e" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="6b7d10ff-98ed-49d5-bd5d-25a9b5bdc6c4" name="InvoiceRecipient" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="1a200e34-90a0-4c34-8ffa-1332accc2e39" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="f12de269-8f36-4fce-beb8-4d5c14d4a823" name="Message" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="08aa750f-7c2b-4f7e-a394-4703a258dc0c" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="0f8fc0d9-96cd-45e1-83eb-2cc0f5ead5aa" name="PasswordModel" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="d6f402e0-30b0-4ccc-9a75-083f11c59c8d" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="4aa57afb-595d-455a-86e5-ff807c5ad001" name="RegisterUser" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="8387cdd4-50f8-4016-ab26-4863a3395b7c" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="8c2fe3f1-f500-4b6e-ac7d-e853ab5058ef" name="User" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="f119ff3b-c87e-484f-a94f-87e1c40fa7d0" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="2c4951a7-5af2-4656-a2a9-6d09f7b250dc" name="UserSettings" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="848043b7-6414-444c-a06e-e4d41d39dd86" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="b30d524e-ebe7-47e4-95ca-1c380596ca24" name="WishListItem" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="36d455a3-91b2-4726-b342-c26f3548b74d" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="a2df4cca-7bc1-4dc0-986a-3e6b5adb7bc7" name="TenantOrganiserDbContext" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="9c1579b2-16f1-419c-9a9c-bce2b9c70000" />
+        <suppliersInternal>
+          <dependency Id="b1b7dc38-970d-4a96-80b9-3b546cbdca35">
+            <packageMoniker Id="945bdd1c-66b2-4ec7-9d74-3e5c344e8661" LastKnownName="Models" />
+            <elementDefinition Id="162dd84d-b070-42d1-ad41-c4f2cfa291e4" />
+          </dependency>
+        </suppliersInternal>
+        <targetEnds>
+          <association Id="5f27a651-2884-48e8-8ce9-bf7d0c84a153" isDerived="false" sourceEndRoleName="TenantOrganiserDbContext" targetEndRoleName="TenantOrganiserDbInitialiser" isLeaf="false" isAbstract="false">
+            <classMoniker Id="03aca1b6-50de-4c5d-81ba-bde241b3d6b8" LastKnownName="TenantOrganiserDbInitialiser" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="0d8f9e2d-3fb9-42da-acb1-d716c1a1483c" name="TenantOrganiserDbContext" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="3fe8d3d6-ab24-49e8-bc7d-2fbd2a4a2860" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="8bb74e0e-2a18-448b-ab50-2103341f26bd" name="TenantOrganiserDbInitialiser" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                  <elementDefinition Id="0949561b-9db5-4a64-926a-fe4d6a98ce25" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="b020cf1d-ee28-4895-bea2-192f82b8334e" />
+          </association>
+        </targetEnds>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="03aca1b6-50de-4c5d-81ba-bde241b3d6b8" name="TenantOrganiserDbInitialiser" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="319fff1b-904d-473b-bf34-3f3edaf3be00" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="5e90bb51-a6fe-4ea1-803c-df90ba644d4f" name="Security">
+        <elementDefinition Id="b624ba34-6893-44a0-a77f-fa8e0107c091" />
+        <suppliersInternal>
+          <dependency Id="51d0fcd1-a58d-4756-9bd0-2f5fa86e305b">
+            <classMoniker Id="a2df4cca-7bc1-4dc0-986a-3e6b5adb7bc7" LastKnownName="TenantOrganiserDbContext" />
+            <elementDefinition Id="e9bd4795-d131-44dd-a798-d038ac0f02c8" />
+          </dependency>
+        </suppliersInternal>
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="32ea9bae-4c85-4f84-a290-a0999ee9fde1" name="MembershipProvider" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="4ffea648-379b-4cba-b724-7143d42d6ed5" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+  </packagedElements>
+  <package Id="be3f21bd-e2cc-4189-a79a-bf2ed223d222" name="UmlDiagrams">
+    <elementDefinition Id="72d23c2e-9868-4b8c-8428-e312a36b9e38" />
+    <profileInstances>
+      <packageHasProfileInstances Id="f738a22b-7365-4ea5-b470-48db40c25afd">
+        <profileInstance Id="3ca85574-9900-46c5-b07f-10e762b59347" name="TextTemplateBindings">
+          <elementDefinition Id="6d555dd3-ed12-49cc-a094-282379f780b9" />
+        </profileInstance>
+        <elementDefinition Id="52638d17-3154-4756-a6b2-06559221fecd" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</logicalClassDesignerModel>

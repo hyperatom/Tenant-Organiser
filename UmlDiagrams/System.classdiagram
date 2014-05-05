@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="276658c4-cd4d-4cae-9405-b7ce22365c7b" name="System" linkedPackageId="5063bd34-ab4a-4fc0-a6d7-24531fe67d81" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="7721550b-f68a-4fcb-b788-9e217bfa501b">
+      <profileInstance Id="6fe7bfdb-09ed-4b8b-92c6-71d8be4ded3a" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="beeb0594-cf5f-4c24-bf79-442e9d4b8e20">
+      <profileInstance Id="11056ba5-9b1c-41ee-86a0-bfb57f92a775" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="b1bbff9c-0434-4adb-babe-d6069c323790">
+      <profileInstance Id="81ca8203-0152-4cf3-af49-b3846bae2894" name="TextTemplateBindings">
+        <elementDefinition Id="6d555dd3-ed12-49cc-a094-282379f780b9" />
+      </profileInstance>
+      <elementDefinition Id="52638d17-3154-4756-a6b2-06559221fecd" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="5fde3119-028f-448f-850e-40eb8a782cac" name="Server">
+        <elementDefinition Id="0888e766-f9ff-4b95-8b75-dad3e71bd799" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="9924f089-bbac-49f3-8167-ed3ecfafac4c" name="Database" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="c4ba432b-2469-4d5f-886d-a309787dadde" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="7cb8720f-ff66-4d61-a46a-b6675bc6e930" name="Configurations">
+              <elementDefinition Id="7aab9ed7-8494-4735-821f-6218173f2e62" />
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="7c9df6a2-ceb3-4a40-93a6-815badb844bd" name="Controllers">
+              <elementDefinition Id="63d16393-4de4-4929-8402-30012a6c7fa2" />
+              <suppliersInternal>
+                <dependency Id="426159b6-ddec-4dd1-a7a9-7cacf7e9346d">
+                  <classMoniker Id="10624b1e-9de4-45d8-adcc-5f2a74ed8385" LastKnownName="DbContext" />
+                  <elementDefinition Id="55ef4d25-e076-47c7-908d-83851806b7c2" />
+                </dependency>
+              </suppliersInternal>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="87ebb56f-315a-42ac-84db-76e2bf686a92" name="Models">
+              <elementDefinition Id="6388b0d5-2be8-45ac-8105-33f756483b1e" />
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="10624b1e-9de4-45d8-adcc-5f2a74ed8385" name="DbContext" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="4a3efb18-7348-4801-ae39-613761114fc4" />
+              <suppliersInternal>
+                <dependency Id="b8788831-4c6d-414f-91ad-cd172c5cad65">
+                  <classMoniker Id="9924f089-bbac-49f3-8167-ed3ecfafac4c" LastKnownName="Database" />
+                  <elementDefinition Id="95c35a17-dd78-4358-8bac-f0a0c3622e9f" />
+                </dependency>
+                <dependency Id="270692b2-b9f9-470c-9e8a-1babb92fcd55">
+                  <packageMoniker Id="87ebb56f-315a-42ac-84db-76e2bf686a92" LastKnownName="Models" />
+                  <elementDefinition Id="56f790b7-f449-4375-9659-ef09335b5613" />
+                </dependency>
+              </suppliersInternal>
+              <targetEnds>
+                <association Id="066d688c-0a35-40c7-8f6f-dfd2fe0d05c6" isDerived="false" sourceEndRoleName="DbContext" targetEndRoleName="DbInitialiser" isLeaf="false" isAbstract="false">
+                  <classMoniker Id="37e785f9-c935-423f-87d2-7aa5e334537c" LastKnownName="DbInitialiser" />
+                  <relationshipOwnedElementsInternal>
+                    <associationHasOwnedEnds>
+                      <memberEnd Id="3ee96659-9df3-4b72-969b-20aebba740d8" name="DbContext" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                        <elementDefinition Id="f81e44d9-7485-4c07-b159-874a74ccd17d" />
+                      </memberEnd>
+                    </associationHasOwnedEnds>
+                    <associationHasOwnedEnds>
+                      <memberEnd Id="1f8434a4-32e4-4962-b2b7-be6e07e34e9d" name="DbInitialiser" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                        <elementDefinition Id="318fcaa8-bbc2-49a0-bd95-b7f5f81e8b63" />
+                      </memberEnd>
+                    </associationHasOwnedEnds>
+                  </relationshipOwnedElementsInternal>
+                  <elementDefinition Id="62834130-53ea-4cb7-b61c-553a887f308b" />
+                </association>
+              </targetEnds>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="37e785f9-c935-423f-87d2-7aa5e334537c" name="DbInitialiser" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="88c1f0d5-4b95-47a9-89d6-b7d21ba5df30" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="a7dbc59a-b653-488f-bc18-0c7872064131" name="Security">
+              <elementDefinition Id="4e77acb3-e14a-40d1-8861-93a35b1264b0" />
+              <suppliersInternal>
+                <dependency Id="7d8907ad-03eb-4e65-9c3c-0687f82e5915">
+                  <classMoniker Id="10624b1e-9de4-45d8-adcc-5f2a74ed8385" LastKnownName="DbContext" />
+                  <elementDefinition Id="a137518b-77e5-43b8-ab0c-246f75492215" />
+                </dependency>
+              </suppliersInternal>
+            </package>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="37b2cef0-cba8-4b0c-bebe-71195abe185b" name="Client">
+        <elementDefinition Id="ed987d65-c5e2-4015-bc03-35f934062661" />
+        <suppliersInternal>
+          <dependency Id="22483b0e-2e8a-4da3-8bb9-018d13901ed7">
+            <packageMoniker Id="5fde3119-028f-448f-850e-40eb8a782cac" LastKnownName="Server" />
+            <elementDefinition Id="d0be03a8-e786-43b2-a69c-e90c10bcda9e" />
+          </dependency>
+        </suppliersInternal>
+        <packagedElements>
+          <packageHasNamedElement>
+            <package Id="f6e990d1-0cce-4626-9134-53a1a2dc7c9c" name="ViewModels">
+              <elementDefinition Id="b45d541b-880e-456a-be77-478b029a2778" />
+              <suppliersInternal>
+                <dependency Id="fbd8cf1b-d10e-43a5-bff2-0047e470bfdc">
+                  <packageMoniker Id="3b87f4b0-30a7-43db-989c-0c28f3160e49" LastKnownName="Services" />
+                  <elementDefinition Id="b2b6f7af-95b7-4a9f-a2ff-83f0c0286d43" />
+                </dependency>
+              </suppliersInternal>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="49bebc14-3330-4ec8-b41d-caef296a5e35" name="Views">
+              <elementDefinition Id="8fb26dc5-0f8f-44e0-8fff-f410afba2e8e" />
+              <suppliersInternal>
+                <dependency Id="f3b70906-3944-4e7f-9d48-3a518e3a12bb">
+                  <packageMoniker Id="f6e990d1-0cce-4626-9134-53a1a2dc7c9c" LastKnownName="ViewModels" />
+                  <elementDefinition Id="186cc819-517b-4bc6-b918-9f0539f606ec" />
+                </dependency>
+              </suppliersInternal>
+            </package>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <package Id="3b87f4b0-30a7-43db-989c-0c28f3160e49" name="Services">
+              <elementDefinition Id="bbfb0a84-0819-4996-9c1e-a9abcc96d1e7" />
+            </package>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+  </packagedElements>
+  <package Id="5063bd34-ab4a-4fc0-a6d7-24531fe67d81" name="UmlDiagrams">
+    <elementDefinition Id="72d23c2e-9868-4b8c-8428-e312a36b9e38" />
+  </package>
+</logicalClassDesignerModel>

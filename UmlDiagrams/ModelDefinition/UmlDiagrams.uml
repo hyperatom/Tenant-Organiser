@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<modelStoreModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="72d23c2e-9868-4b8c-8428-e312a36b9e38"
+  name="UmlDiagrams" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <profileInstances>
+    <packageHasProfileInstances
+      Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
+      <profileInstance
+        Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791"
+        name="StandardProfileL2" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="29349502-908c-4fda-9054-c48619c59ed0">
+      <profileInstance
+        Id="532ea607-fb19-44b8-8502-3351b05452be"
+        name="StandardProfileL3" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances
+      Id="52638d17-3154-4756-a6b2-06559221fecd">
+      <profileInstance
+        Id="6d555dd3-ed12-49cc-a094-282379f780b9"
+        name="TextTemplateBindings" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="6b0aae9a-ae15-4343-8534-41d004c0190d"
+        LastKnownName="View Models"
+        LastKnownLocation="Package_1120.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="83cbc1f1-b56b-40be-92e3-112d9e6e697c"
+        LastKnownName="Services"
+        LastKnownLocation="Package_1121.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="4bb2832c-1c4e-4696-bf11-5ea4e8bdb254"
+        name="config"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="52d0cfe6-cc86-4845-ad95-42c30085d288"
+        LastKnownName="Views"
+        LastKnownLocation="Package_1257.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="d09acd75-e3c4-44d8-bdb8-fd95ec6032d7"
+        LastKnownName="View Models"
+        LastKnownLocation="Package1_1257.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="c5ea2d72-59f7-4239-beff-586f926c3689"
+        LastKnownName="Services"
+        LastKnownLocation="Package_1259.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="49b15efb-079c-435d-9537-f75cce6cdba9"
+        LastKnownName="Configurations"
+        LastKnownLocation="Package_1301.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="85c32a12-773e-455e-8af5-b638b2a6d9ff"
+        LastKnownName="Controllers"
+        LastKnownLocation="Package_1304.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="68b72285-05ac-4fb2-8b8f-789f028a36e1"
+        name="Class1"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="5a712a14-3fb9-42d8-9c2b-9899174540bd"
+        LastKnownName="Models"
+        LastKnownLocation="Package_1310.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="9c1579b2-16f1-419c-9a9c-bce2b9c70000"
+        name="TenantOrganiserDbContext"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="162dd84d-b070-42d1-ad41-c4f2cfa291e4">
+            <packageMoniker
+              Id="5a712a14-3fb9-42d8-9c2b-9899174540bd"
+              LastKnownName="Models"
+              LastKnownLocation="Package_1310.uml" />
+          </dependency>
+        </suppliersInternal>
+        <targetEnds>
+          <association
+            Id="b020cf1d-ee28-4895-bea2-192f82b8334e"
+            isDerived="false"
+            sourceEndRoleName="TenantOrganiserDbContext"
+            targetEndRoleName="TenantOrganiserDbInitialiser"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="319fff1b-904d-473b-bf34-3f3edaf3be00"
+              LastKnownName="TenantOrganiserDbInitialiser"
+              LastKnownLocation="UmlDiagrams.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="3fe8d3d6-ab24-49e8-bc7d-2fbd2a4a2860"
+                  name="TenantOrganiserDbContext"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="0949561b-9db5-4a64-926a-fe4d6a98ce25"
+                  name="TenantOrganiserDbInitialiser"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="319fff1b-904d-473b-bf34-3f3edaf3be00"
+        name="TenantOrganiserDbInitialiser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="b624ba34-6893-44a0-a77f-fa8e0107c091"
+        LastKnownName="Security"
+        LastKnownLocation="Package_1328.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="dacd40a9-afe9-47b1-9c4c-b57677030a0a"
+        LastKnownName="Views"
+        LastKnownLocation="Package_1350.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="de965f72-602d-422b-b010-ac5e113e7453"
+        LastKnownName="Views"
+        LastKnownLocation="Package_1352.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="0888e766-f9ff-4b95-8b75-dad3e71bd799"
+        LastKnownName="Server"
+        LastKnownLocation="Package_1356.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="ed987d65-c5e2-4015-bc03-35f934062661"
+        LastKnownName="Client"
+        LastKnownLocation="Package1_1356.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+  <primitiveType
+    Id="220a3521-e091-4221-bae9-3ef9018e845c"
+    name="Integer"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="8943dc84-709e-4f62-b15a-a3273aa6f165"
+    name="Boolean"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="59259974-6d55-42c6-b7bd-763d77ac8ef9"
+    name="String"
+    isAbstract="false"
+    isLeaf="false" />
+  <primitiveType
+    Id="3ab42e7d-4969-445a-b209-471f5cb8209c"
+    name="UnlimitedNatural"
+    isAbstract="false"
+    isLeaf="false" />
+</modelStoreModel>

@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="5a712a14-3fb9-42d8-9c2b-9899174540bd"
+  name="Models" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="ab5a2bf5-c81b-4840-8228-c79875a944c8"
+        name="ActivityLog"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="3bd5db8a-fb05-40f0-91b7-76eec311e25e"
+        name="BillInvoice"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="b06eb825-ec36-46fb-8321-1a634aeecc4f"
+        name="BillType"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="f3899a04-5bdd-4881-9c67-747b63b4b14a"
+        name="BinRota"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="18265384-a15c-488b-9ceb-170bda42c8a1"
+        name="CleaningLog"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="c8e7725a-2fe0-43fb-9e97-6bc1b588e138"
+        name="CleaningRota"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="bc7cca6f-1953-4ac5-85af-438fd4a6f8a8"
+        name="CommunalMessage"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="18868ab5-4ab4-4b6b-804b-28b287b019e5"
+        name="Conversation"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="b39118fa-939f-4891-898a-bea55c905f1e"
+        name="ConversationUser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="997ad436-43e0-4308-92c5-be089b0f1999"
+        name="House"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="d286cd5f-e174-4e90-a4a6-d86ddd7f649e"
+        name="HouseJoinRequest"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="1a200e34-90a0-4c34-8ffa-1332accc2e39"
+        name="InvoiceRecipient"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="08aa750f-7c2b-4f7e-a394-4703a258dc0c"
+        name="Message"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="d6f402e0-30b0-4ccc-9a75-083f11c59c8d"
+        name="PasswordModel"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="8387cdd4-50f8-4016-ab26-4863a3395b7c"
+        name="RegisterUser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="c984deed-eb72-4429-8c95-47776396491b"
+        name="TenantOrganiserDbContext"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="7b3d88a9-a119-4980-982d-9e287404bc8c"
+            name="TextTemplateBindings"
+            profile="TextTemplateBindings">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="d1bec55b-e4f8-405a-9b5b-e9c4ff6cd5d8">
+                <propertyInstance
+                  Id="c3ac94ed-0295-43a0-9c39-5fb73a5d8575"
+                  name="Alias" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="67b007a1-a3dc-4c67-8fa1-89baf3d93dd3">
+                <propertyInstance
+                  Id="59eae2a9-dc33-46f4-af19-6555fea5cef3"
+                  name="TemplateFilePath" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="c719379b-5c3d-43d2-b927-7772c996de9e">
+                <propertyInstance
+                  Id="851ad55a-7dbb-46b2-9197-dea33768ca6c"
+                  name="ProjectPath" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="b75d10a9-f897-4988-95ad-9fea8e179aba">
+                <propertyInstance
+                  Id="8d962f66-edae-4d00-a5ef-1828cfc1952a"
+                  name="TargetDirectory" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="b95fafe9-e5e6-46a5-95da-9a7c6f234394">
+                <propertyInstance
+                  Id="adfde24b-98d6-4e58-92a4-5a64c867e9ca"
+                  name="TargetName" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="94d4a06f-43fb-4b64-a921-7a831800f35b">
+                <propertyInstance
+                  Id="0651f475-36d8-4ea9-8906-ec84fac4502c"
+                  name="Overwrite" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="653cc8e3-213e-43d2-af85-a13d668e418b">
+                <propertyInstance
+                  Id="f0b773d9-abc7-446c-aa4d-aef1ce7820ee"
+                  name="Parameters" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+        <targetEnds>
+          <association
+            Id="d25c5438-0fd5-44a6-acf5-cf604c128260"
+            isDerived="false"
+            sourceEndRoleName="TenantOrganiserDbContext"
+            targetEndRoleName="TenantOrganiserDbInitialiser"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="356e1c94-b608-4483-8639-3160187a94a3"
+              LastKnownName="TenantOrganiserDbInitialiser"
+              LastKnownLocation="Package_1310.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="abac2572-4950-45dc-bb3e-f85e72c013c3"
+                  name="TenantOrganiserDbContext"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="b2c9902b-a170-4629-ba37-d298d3de300f"
+                  name="TenantOrganiserDbInitialiser"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="356e1c94-b608-4483-8639-3160187a94a3"
+        name="TenantOrganiserDbInitialiser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="f119ff3b-c87e-484f-a94f-87e1c40fa7d0"
+        name="User"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="848043b7-6414-444c-a06e-e4d41d39dd86"
+        name="UserSettings"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="36d455a3-91b2-4726-b342-c26f3548b74d"
+        name="WishListItem"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

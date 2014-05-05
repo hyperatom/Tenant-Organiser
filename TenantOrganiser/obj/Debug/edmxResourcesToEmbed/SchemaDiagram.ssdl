@@ -1,0 +1,525 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TenantOrganiserModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ActivityLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="HouseId" Type="int" Nullable="false" />
+    <Property Name="LogName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ActionMessage" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BillInvoice">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DueDate" Type="datetime" Nullable="false" />
+    <Property Name="BillTypeId" Type="int" />
+  </EntityType>
+  <EntityType Name="BillType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ManagerId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BinRota">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Colour" Type="nvarchar(max)" />
+    <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="Occurance" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HouseId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CleaningLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="CleaningRotaId" Type="int" Nullable="false" />
+    <Property Name="RotaGroup" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CleaningRota">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="Occurance" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HouseId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CommunalMessage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="SentDate" Type="datetime" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="HouseId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Conversation">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateStarted" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ConversationUser">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ConversationId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ConversationId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="House">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HouseName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HouseCode" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HouseJoinRequest">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="HouseId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="HouseId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="InvoiceRecipient">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="BillInvoiceId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="BillInvoiceId" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="float" Nullable="false" />
+    <Property Name="Paid" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Message">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateSent" Type="datetime" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ConversationId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsFacebookUser" Type="bit" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" />
+    <Property Name="EmailNotifications" Type="bit" Nullable="false" />
+    <Property Name="DisplayPictureFileName" Type="nvarchar(max)" />
+    <Property Name="HouseId" Type="int" />
+    <Property Name="UserSettingsId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserSettings">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CleaningRotaGroup" Type="int" />
+    <Property Name="BinCollectionRotaGroup" Type="int" />
+  </EntityType>
+  <EntityType Name="WishListItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AquiredOn" Type="datetime" />
+    <Property Name="UserAcquiredId" Type="int" />
+    <Property Name="UserAddedId" Type="int" Nullable="false" />
+    <Property Name="HouseId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_dbo_ActivityLog_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="ActivityLog" Type="Self.ActivityLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ActivityLog">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_ActivityLog_dbo_User_UserId">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="ActivityLog" Type="Self.ActivityLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ActivityLog">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_BillInvoice_dbo_BillType_BillTypeId">
+    <End Role="BillType" Type="Self.BillType" Multiplicity="0..1" />
+    <End Role="BillInvoice" Type="Self.BillInvoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BillType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BillInvoice">
+        <PropertyRef Name="BillTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_BillType_dbo_User_ManagerId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="BillType" Type="Self.BillType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BillType">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_BinRota_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="BinRota" Type="Self.BinRota" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BinRota">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_CleaningLog_dbo_CleaningRota_CleaningRotaId">
+    <End Role="CleaningRota" Type="Self.CleaningRota" Multiplicity="1" />
+    <End Role="CleaningLog" Type="Self.CleaningLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CleaningRota">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CleaningLog">
+        <PropertyRef Name="CleaningRotaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_CleaningRota_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="CleaningRota" Type="Self.CleaningRota" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CleaningRota">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_CommunalMessage_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="CommunalMessage" Type="Self.CommunalMessage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommunalMessage">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_CommunalMessage_dbo_User_UserId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="CommunalMessage" Type="Self.CommunalMessage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommunalMessage">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_ConversationUser_dbo_Conversation_ConversationId">
+    <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+    <End Role="ConversationUser" Type="Self.ConversationUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Conversation">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ConversationUser">
+        <PropertyRef Name="ConversationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_ConversationUser_dbo_User_UserId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="ConversationUser" Type="Self.ConversationUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ConversationUser">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_HouseJoinRequest_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="HouseJoinRequest" Type="Self.HouseJoinRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HouseJoinRequest">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_HouseJoinRequest_dbo_User_UserId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="HouseJoinRequest" Type="Self.HouseJoinRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HouseJoinRequest">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_InvoiceRecipient_dbo_BillInvoice_BillInvoiceId">
+    <End Role="BillInvoice" Type="Self.BillInvoice" Multiplicity="1" />
+    <End Role="InvoiceRecipient" Type="Self.InvoiceRecipient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BillInvoice">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="InvoiceRecipient">
+        <PropertyRef Name="BillInvoiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_InvoiceRecipient_dbo_User_UserId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="InvoiceRecipient" Type="Self.InvoiceRecipient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="InvoiceRecipient">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Message_dbo_Conversation_ConversationId">
+    <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+    <End Role="Message" Type="Self.Message" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Conversation">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="ConversationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Message_dbo_User_UserId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Message" Type="Self.Message" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_User_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_User_dbo_UserSettings_UserSettingsId">
+    <End Role="UserSettings" Type="Self.UserSettings" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserSettings">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="UserSettingsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_WishListItem_dbo_House_HouseId">
+    <End Role="House" Type="Self.House" Multiplicity="1" />
+    <End Role="WishListItem" Type="Self.WishListItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="House">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WishListItem">
+        <PropertyRef Name="HouseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_WishListItem_dbo_User_UserAcquiredId">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="WishListItem" Type="Self.WishListItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WishListItem">
+        <PropertyRef Name="UserAcquiredId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_WishListItem_dbo_User_UserAddedId">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="WishListItem" Type="Self.WishListItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WishListItem">
+        <PropertyRef Name="UserAddedId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TenantOrganiserModelStoreContainer">
+    <EntitySet Name="ActivityLog" EntityType="Self.ActivityLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BillInvoice" EntityType="Self.BillInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BillType" EntityType="Self.BillType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BinRota" EntityType="Self.BinRota" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CleaningLog" EntityType="Self.CleaningLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CleaningRota" EntityType="Self.CleaningRota" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommunalMessage" EntityType="Self.CommunalMessage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Conversation" EntityType="Self.Conversation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ConversationUser" EntityType="Self.ConversationUser" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="House" EntityType="Self.House" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HouseJoinRequest" EntityType="Self.HouseJoinRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InvoiceRecipient" EntityType="Self.InvoiceRecipient" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserSettings" EntityType="Self.UserSettings" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WishListItem" EntityType="Self.WishListItem" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_dbo_ActivityLog_dbo_House_HouseId" Association="Self.FK_dbo_ActivityLog_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="ActivityLog" EntitySet="ActivityLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_ActivityLog_dbo_User_UserId" Association="Self.FK_dbo_ActivityLog_dbo_User_UserId">
+      <End Role="User" EntitySet="User" />
+      <End Role="ActivityLog" EntitySet="ActivityLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_BillInvoice_dbo_BillType_BillTypeId" Association="Self.FK_dbo_BillInvoice_dbo_BillType_BillTypeId">
+      <End Role="BillType" EntitySet="BillType" />
+      <End Role="BillInvoice" EntitySet="BillInvoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_BillType_dbo_User_ManagerId" Association="Self.FK_dbo_BillType_dbo_User_ManagerId">
+      <End Role="User" EntitySet="User" />
+      <End Role="BillType" EntitySet="BillType" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_BinRota_dbo_House_HouseId" Association="Self.FK_dbo_BinRota_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="BinRota" EntitySet="BinRota" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_CleaningLog_dbo_CleaningRota_CleaningRotaId" Association="Self.FK_dbo_CleaningLog_dbo_CleaningRota_CleaningRotaId">
+      <End Role="CleaningRota" EntitySet="CleaningRota" />
+      <End Role="CleaningLog" EntitySet="CleaningLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_CleaningRota_dbo_House_HouseId" Association="Self.FK_dbo_CleaningRota_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="CleaningRota" EntitySet="CleaningRota" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_CommunalMessage_dbo_House_HouseId" Association="Self.FK_dbo_CommunalMessage_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="CommunalMessage" EntitySet="CommunalMessage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_CommunalMessage_dbo_User_UserId" Association="Self.FK_dbo_CommunalMessage_dbo_User_UserId">
+      <End Role="User" EntitySet="User" />
+      <End Role="CommunalMessage" EntitySet="CommunalMessage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_ConversationUser_dbo_Conversation_ConversationId" Association="Self.FK_dbo_ConversationUser_dbo_Conversation_ConversationId">
+      <End Role="Conversation" EntitySet="Conversation" />
+      <End Role="ConversationUser" EntitySet="ConversationUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_ConversationUser_dbo_User_UserId" Association="Self.FK_dbo_ConversationUser_dbo_User_UserId">
+      <End Role="User" EntitySet="User" />
+      <End Role="ConversationUser" EntitySet="ConversationUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_HouseJoinRequest_dbo_House_HouseId" Association="Self.FK_dbo_HouseJoinRequest_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="HouseJoinRequest" EntitySet="HouseJoinRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_HouseJoinRequest_dbo_User_UserId" Association="Self.FK_dbo_HouseJoinRequest_dbo_User_UserId">
+      <End Role="User" EntitySet="User" />
+      <End Role="HouseJoinRequest" EntitySet="HouseJoinRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_InvoiceRecipient_dbo_BillInvoice_BillInvoiceId" Association="Self.FK_dbo_InvoiceRecipient_dbo_BillInvoice_BillInvoiceId">
+      <End Role="BillInvoice" EntitySet="BillInvoice" />
+      <End Role="InvoiceRecipient" EntitySet="InvoiceRecipient" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_InvoiceRecipient_dbo_User_UserId" Association="Self.FK_dbo_InvoiceRecipient_dbo_User_UserId">
+      <End Role="User" EntitySet="User" />
+      <End Role="InvoiceRecipient" EntitySet="InvoiceRecipient" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Message_dbo_Conversation_ConversationId" Association="Self.FK_dbo_Message_dbo_Conversation_ConversationId">
+      <End Role="Conversation" EntitySet="Conversation" />
+      <End Role="Message" EntitySet="Message" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Message_dbo_User_UserId" Association="Self.FK_dbo_Message_dbo_User_UserId">
+      <End Role="User" EntitySet="User" />
+      <End Role="Message" EntitySet="Message" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_User_dbo_House_HouseId" Association="Self.FK_dbo_User_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_User_dbo_UserSettings_UserSettingsId" Association="Self.FK_dbo_User_dbo_UserSettings_UserSettingsId">
+      <End Role="UserSettings" EntitySet="UserSettings" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_WishListItem_dbo_House_HouseId" Association="Self.FK_dbo_WishListItem_dbo_House_HouseId">
+      <End Role="House" EntitySet="House" />
+      <End Role="WishListItem" EntitySet="WishListItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_WishListItem_dbo_User_UserAcquiredId" Association="Self.FK_dbo_WishListItem_dbo_User_UserAcquiredId">
+      <End Role="User" EntitySet="User" />
+      <End Role="WishListItem" EntitySet="WishListItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_WishListItem_dbo_User_UserAddedId" Association="Self.FK_dbo_WishListItem_dbo_User_UserAddedId">
+      <End Role="User" EntitySet="User" />
+      <End Role="WishListItem" EntitySet="WishListItem" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

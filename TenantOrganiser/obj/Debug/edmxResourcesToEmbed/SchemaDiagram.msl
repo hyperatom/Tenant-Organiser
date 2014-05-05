@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TenantOrganiserModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="ActivityLogs">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.ActivityLog">
+        <MappingFragment StoreEntitySet="ActivityLog">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+          <ScalarProperty Name="LogName" ColumnName="LogName" />
+          <ScalarProperty Name="ActionMessage" ColumnName="ActionMessage" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BillInvoices">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.BillInvoice">
+        <MappingFragment StoreEntitySet="BillInvoice">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+          <ScalarProperty Name="BillTypeId" ColumnName="BillTypeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BillTypes">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.BillType">
+        <MappingFragment StoreEntitySet="BillType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BinRotas">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.BinRota">
+        <MappingFragment StoreEntitySet="BinRota">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Colour" ColumnName="Colour" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Occurance" ColumnName="Occurance" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CleaningLogs">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.CleaningLog">
+        <MappingFragment StoreEntitySet="CleaningLog">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="CleaningRotaId" ColumnName="CleaningRotaId" />
+          <ScalarProperty Name="RotaGroup" ColumnName="RotaGroup" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CleaningRotas">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.CleaningRota">
+        <MappingFragment StoreEntitySet="CleaningRota">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Occurance" ColumnName="Occurance" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommunalMessages">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.CommunalMessage">
+        <MappingFragment StoreEntitySet="CommunalMessage">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="SentDate" ColumnName="SentDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Conversations">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.Conversation">
+        <MappingFragment StoreEntitySet="Conversation">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DateStarted" ColumnName="DateStarted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Houses">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.House">
+        <MappingFragment StoreEntitySet="House">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="HouseName" ColumnName="HouseName" />
+          <ScalarProperty Name="HouseCode" ColumnName="HouseCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InvoiceRecipients">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.InvoiceRecipient">
+        <MappingFragment StoreEntitySet="InvoiceRecipient">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="BillInvoiceId" ColumnName="BillInvoiceId" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Paid" ColumnName="Paid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Messages">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.Message">
+        <MappingFragment StoreEntitySet="Message">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="DateSent" ColumnName="DateSent" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="IsFacebookUser" ColumnName="IsFacebookUser" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="EmailNotifications" ColumnName="EmailNotifications" />
+          <ScalarProperty Name="DisplayPictureFileName" ColumnName="DisplayPictureFileName" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+          <ScalarProperty Name="UserSettingsId" ColumnName="UserSettingsId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSettings">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.UserSetting">
+        <MappingFragment StoreEntitySet="UserSettings">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CleaningRotaGroup" ColumnName="CleaningRotaGroup" />
+          <ScalarProperty Name="BinCollectionRotaGroup" ColumnName="BinCollectionRotaGroup" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WishListItems">
+      <EntityTypeMapping TypeName="TenantOrganiserModel.WishListItem">
+        <MappingFragment StoreEntitySet="WishListItem">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="AquiredOn" ColumnName="AquiredOn" />
+          <ScalarProperty Name="UserAcquiredId" ColumnName="UserAcquiredId" />
+          <ScalarProperty Name="UserAddedId" ColumnName="UserAddedId" />
+          <ScalarProperty Name="HouseId" ColumnName="HouseId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ConversationUser" TypeName="TenantOrganiserModel.ConversationUser" StoreEntitySet="ConversationUser">
+      <EndProperty Name="Conversation">
+        <ScalarProperty Name="Id" ColumnName="ConversationId" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="HouseJoinRequest" TypeName="TenantOrganiserModel.HouseJoinRequest" StoreEntitySet="HouseJoinRequest">
+      <EndProperty Name="House">
+        <ScalarProperty Name="Id" ColumnName="HouseId" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

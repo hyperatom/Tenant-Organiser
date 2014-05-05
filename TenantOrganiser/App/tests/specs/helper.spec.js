@@ -15,7 +15,7 @@
 
             var token = {
                 __RequestVerificationToken: ''
-            }
+            };
 
             helper.addAntiForgeryToken(token);
 

@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="ee015bce-f3e8-4570-b77f-03aec1075b3f" name="ClientSubsystem" linkedPackageId="3d4be38b-4b0d-4c2d-b418-8f256a221dea" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="5caae35a-1181-4224-bc6e-2bb5ecf293e0">
+      <profileInstance Id="ae5a27b1-87eb-4692-94b6-1f87e31b0f08" name="TextTemplateBindings">
+        <elementDefinition Id="6d555dd3-ed12-49cc-a094-282379f780b9" />
+      </profileInstance>
+      <elementDefinition Id="52638d17-3154-4756-a6b2-06559221fecd" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="81937840-36a2-4c3e-b260-977696b099ef" name="View Models">
+        <elementDefinition Id="d09acd75-e3c4-44d8-bdb8-fd95ec6032d7" />
+        <suppliersInternal>
+          <dependency Id="be9ba8de-2189-48d4-84b7-05ce37d4cab1">
+            <packageMoniker Id="4b7630bb-332f-4344-905f-97fc77a9b84f" LastKnownName="Services" />
+            <elementDefinition Id="5544a77f-e0ad-479e-b862-35dc1725b842" />
+          </dependency>
+        </suppliersInternal>
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="554578d1-f74a-491f-9838-fd6ac432ca63" name="account-settings" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="a12961e2-1f6b-42c9-a124-a944156feccf" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="02771940-7da6-418c-966d-5cc4b1bc0fef" name="add-bill-invoice" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="5e970a44-bd8c-4ff6-9267-960ad07acce2" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="e83a10e5-539a-4426-a107-bdb6a656c5d4" name="bills" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="8f6b9515-1de2-4da1-b7a9-84f69ad82234" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="08470809-fff3-4dda-90e4-7dea80135097" name="create-bill-modal" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b10cde8b-3612-406b-83d2-a3fec8b6d10b" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="4593d439-8f73-4db2-b035-6b3a6a7d6180" name="edit-bill-invoice" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="255fc244-72d7-42c1-8b03-69ab9b4f1463" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="c00dc525-4b97-4f96-8c4d-9afdacdd23e5" name="edit-bin-rota" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="db0035ef-14a9-4ca7-95e9-4c1eb0a895bb" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="7e0793b7-2600-4c1f-b934-b3e0804a5997" name="edit-cleaning-rota" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="e6910754-66c0-42a7-8b6e-d949d6d302bd" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="6db65552-6077-4125-9fa0-8f5fa0a30049" name="home" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="d596fd2f-984a-4ee4-b8a4-6ee4db7ed87f" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="05bd302b-1b7f-4b80-b057-65a7f3a0aeb9" name="join-house" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="74eacdbd-7ac8-4cd6-bb18-7fdf3d5fa9da" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="94f371ab-4271-4ead-8c0e-8b0c2c89b05d" name="login" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="fb28fd05-3b68-480f-b747-c5d407a721c4" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="f8df4035-68f0-4255-832a-b07619385fdc" name="nav" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="d4e26d0d-71c8-4990-8e5b-5eaf55f81c96" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="450580d8-13b4-4f2b-923c-10f164b8c8e6" name="shell" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="f1e5b5c4-6fa0-4223-8ec6-4a2a1f2bb05f" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="1d581495-bf0a-4fdf-b793-c8d462d3f332" name="tasks" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="2adb38fe-2ec2-4c7d-8d1b-ec286b239ca0" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="de8358de-b395-4d06-b001-b06ea316fab7" name="tenants" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="65e94193-8219-454f-a630-384195c557d7" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="43c5c734-52fb-40d1-b776-b780682f086a" name="upload-facebook-picture" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="54e8ab8f-b56b-49b5-8c75-6823d96cfcc1" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="27d4bb25-5c40-45de-bc79-ed1bde6717a2" name="wish-list" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="6f85d92f-61d7-4a4d-b0f1-117381e8e545" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="1ac547a5-c56a-4c43-9ee2-516e24dc1564" name="messages" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b9a0f176-c27c-4e1b-8b48-75fbef85ad31" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="4b7630bb-332f-4344-905f-97fc77a9b84f" name="Services">
+        <elementDefinition Id="c5ea2d72-59f7-4239-beff-586f926c3689" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="5c61429e-d334-4de8-8d99-8731b70fc023" name="session" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="feb244fa-c9d4-4e0c-9a44-27dc7236847f" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="aeaff855-385c-4ee6-9b73-3d84290befcf" name="datacontext" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="86498c55-5445-4e7f-ba0a-1a8f7e05d3e9" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="a83fe1a4-82dd-4b74-b45d-d145f1107c3d" name="model" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="cb904553-0bee-4113-a9e0-bdfcaa5f51a6" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="744b8faa-8834-4160-a0c6-fa67b7e41329" name="fbhelper" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="2b48a4bd-5f37-4448-80dd-767f158049ca" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="e7b75232-5e5d-47b2-b138-a8f180c53c63" name="logger" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="67de86b0-7e89-4d80-8c87-5bfa1ac32982" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="7f7e4ce5-84a2-421a-b1cc-9a4d87e69942" name="helper" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="05ef9823-25ad-45d4-97fd-2c857b707cfd" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="1960f9de-2124-40e6-9dca-c05761f9e81b" name="Views">
+        <elementDefinition Id="de965f72-602d-422b-b010-ac5e113e7453" />
+        <suppliersInternal>
+          <dependency Id="fb9a357a-19c9-4371-aab1-c050b7e76084">
+            <packageMoniker Id="81937840-36a2-4c3e-b260-977696b099ef" LastKnownName="View Models" />
+            <elementDefinition Id="423f6b74-bbf1-4ced-a3ed-baf4817c69e3" />
+          </dependency>
+        </suppliersInternal>
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="a7ea0e19-f33a-427c-9069-8569eb04a4d5" name="account-settings" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="a914d731-7b7e-4f33-a7a6-c8db34d0b442" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="cf79bc0e-2315-4ebd-9f17-c95bef0e1c85" name="add-bill-invoice" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b5f4fc2f-18f8-4195-8c65-90f2fa13f698" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="72c32128-5c31-4eb4-9cc8-275965319d10" name="bills" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="6a3c46c3-90fb-4d4b-8d4c-db4e1d0c3613" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="a085e197-5395-48ec-a258-1e98a9a359bf" name="create-bill-modal" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="bacdd37f-a260-4e1f-b813-7450d6cbacdb" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="3d202384-581b-466f-b658-8d5fed9cb539" name="edit-bill-invoice" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="0fcbd93f-ec83-4343-8862-2c4184d181a1" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="0637c50e-baff-4f6a-95d0-d0668262ba63" name="edit-bin-rota" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="e32fa8d9-5b70-4c6f-a8d8-428bba93c85a" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="1977f00e-10a8-48e4-8288-eba355126477" name="edit-cleaning-rota" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="d077984c-6136-4ff8-b12f-eb184465190d" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="8cf6ca1e-e67e-4e8b-8fd1-32229a2810d5" name="home" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="3f7360b9-57e5-4f14-a263-4bfcb3608c3b" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="165a2d46-788d-4f30-9259-0f4290ee96bb" name="join-house" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="817567f4-d9c7-4158-aead-a5a596f23a8a" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="5c9be1a5-f45c-4937-9f3d-666cf0710323" name="login" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="f8133a29-2791-45dc-b845-1c46e02f62ba" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="c71c91e0-c6bd-427d-bbed-f089e45a495b" name="nav" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="e834b607-b363-4745-b97a-ed86a7a05402" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="77f6e4fd-e813-45bf-bea5-32f700f55c8b" name="shell" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="ea3aad18-3a60-490d-9a96-a02ec5a18519" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="504e782e-3871-49d1-8734-5eb3dcfccb5a" name="tasks" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="158a61b0-59de-4e22-a483-285326ab2147" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="078db961-eda5-4a92-9fa4-c0353606cd02" name="tenants" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="8f98ebf4-7ae5-456f-ba4a-33769570c74d" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="4d753d2b-382a-4c83-9afd-93e016e7c91b" name="upload-facebook-picture" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="c4c135ff-d36b-4fa4-a51f-115505746a54" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="d7a02b63-745b-48c7-9763-cea8e6ecf938" name="wish-list" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="7cddf843-e95e-421e-85cd-79f406e53509" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="d9e6d372-ecae-416a-bbf5-925994fb4a98" name="messages" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="39809d43-00ed-4337-a647-224f193ac158" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
+  </packagedElements>
+  <package Id="3d4be38b-4b0d-4c2d-b418-8f256a221dea" name="UmlDiagrams">
+    <elementDefinition Id="72d23c2e-9868-4b8c-8428-e312a36b9e38" />
+    <profileInstances>
+      <packageHasProfileInstances Id="b0ae0d6e-81c2-465c-8fcf-c87dafe241b4">
+        <profileInstance Id="ba97ebd3-71b5-42cd-8518-073dbb521eb5" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="52311497-23c2-40a6-a0c6-1cbfb6094fb7">
+        <profileInstance Id="53639dc2-490a-4011-ad0b-94b0cd578d04" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</logicalClassDesignerModel>

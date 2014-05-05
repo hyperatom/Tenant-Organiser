@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="0888e766-f9ff-4b95-8b75-dad3e71bd799"
+  name="Server" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="c4ba432b-2469-4d5f-886d-a309787dadde"
+        name="Database"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="7aab9ed7-8494-4735-821f-6218173f2e62"
+        LastKnownName="Configurations"
+        LastKnownLocation="Package1_1401.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="63d16393-4de4-4929-8402-30012a6c7fa2"
+        LastKnownName="Controllers"
+        LastKnownLocation="Package_1403.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="4e77acb3-e14a-40d1-8861-93a35b1264b0"
+        LastKnownName="Security"
+        LastKnownLocation="Package1_1403.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="6388b0d5-2be8-45ac-8105-33f756483b1e"
+        LastKnownName="Models"
+        LastKnownLocation="Package2_1403.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="7a69071c-8462-442d-8d6d-548aef3b511c"
+        name="DbContext"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="94cb94be-6b73-4640-8902-c8133eb210cb"
+            isDerived="false"
+            sourceEndRoleName="TenantOrganiserDbContext"
+            targetEndRoleName="TenantOrganiserDbInitialiser"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="cfd22e0c-c823-4ba0-89be-9fc2a1cf6df7"
+              LastKnownName="TenantOrganiserDbInitialiser"
+              LastKnownLocation="Package_1356.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="3c057485-9b7f-4698-b036-57e1c00d1d72"
+                  name="TenantOrganiserDbContext"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="9343b8c0-c924-4c05-ba48-ff95caa3cce7"
+                  name="TenantOrganiserDbInitialiser"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="cfd22e0c-c823-4ba0-89be-9fc2a1cf6df7"
+        name="TenantOrganiserDbInitialiser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="4a3efb18-7348-4801-ae39-613761114fc4"
+        name="DbContext"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <dependency
+            Id="95c35a17-dd78-4358-8bac-f0a0c3622e9f">
+            <classMoniker
+              Id="c4ba432b-2469-4d5f-886d-a309787dadde"
+              LastKnownName="Database"
+              LastKnownLocation="Package_1356.uml" />
+          </dependency>
+          <dependency
+            Id="56f790b7-f449-4375-9659-ef09335b5613">
+            <packageMoniker
+              Id="6388b0d5-2be8-45ac-8105-33f756483b1e"
+              LastKnownName="Models"
+              LastKnownLocation="Package2_1403.uml" />
+          </dependency>
+        </suppliersInternal>
+        <targetEnds>
+          <association
+            Id="62834130-53ea-4cb7-b61c-553a887f308b"
+            isDerived="false"
+            sourceEndRoleName="DbContext"
+            targetEndRoleName="DbInitialiser"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="88c1f0d5-4b95-47a9-89d6-b7d21ba5df30"
+              LastKnownName="DbInitialiser"
+              LastKnownLocation="Package_1356.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="f81e44d9-7485-4c07-b159-874a74ccd17d"
+                  name="DbContext"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="318fcaa8-bbc2-49a0-bd95-b7f5f81e8b63"
+                  name="DbInitialiser"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="88c1f0d5-4b95-47a9-89d6-b7d21ba5df30"
+        name="DbInitialiser"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>
